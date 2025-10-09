@@ -2,6 +2,8 @@
 title: "A primer on structured decision making for invasive species (using dynamic programming)"
 author:
   - Olivier Gimenez^1^*
+  - Abby Keller^2^*
+  - Cassie Speakman^3^*
 
 date: '`r Sys.Date()`'
 
@@ -42,6 +44,8 @@ links-as-notes: false
 \small
 
 ^1^ CEFE, Univ Montpellier, CNRS, EPHE, IRD, Montpellier, France
+^2^ address
+^3^ address
 
 `*` Corresponding author: olivier.gimenez@cefe.cnrs.fr
 
@@ -50,11 +54,11 @@ links-as-notes: false
 \vspace{1cm}
 \hrule
 
-Invasive species (IAS) pose significant ecological, economic, and public health challenges. Robust methods are needed for guiding effective management. Overall, I hope to demonstrate the flexibility and utility of structured decision making in invasive species management. 
+Invasive species (IAS) pose significant ecological, economic, and public health challenges. Robust methods are needed for guiding effective management. Overall, we hope to demonstrate the flexibility and utility of structured decision making in invasive species management. 
 
-Target journal: soit NeoBiota https://www.reabic.net/journals/mbi/Submission.aspx (1200 euros, plusieurs formats d’article pertinents) ou encore Biological invasions au format INVASION NOTES, ou encore Peer Community journal.
+Target journal: either Biological invasions (invasion notes?) or NeoBiota.
 
-voir NeoBiota,  ; repartir de cet article using structured decision-making to gain consensus on approaches to invasive species control, des articles qu’il cite, et des articles qui l’ont cité ; pour PC Journal ? Faire un petit shiny qui va bien? 
+Add a shiny for each case study so that folks can play around?
 
 \vspace{3mm}
 \hrule
@@ -82,11 +86,11 @@ cite_options(citation_format = "pandoc")
 
 Invasive species are a significant global issue, with wide-ranging impacts on ecosystems, economies, and public health [@Roy2024; @Petr2020]. 
 
-Effective management of invasive species requires the estimation of population abundance for guiding control efforts and evaluating the success of eradication or regulation programs [@Thompson2021; @Williams2002]. 
+Effective management of invasive species requires blabla for guiding control efforts and evaluating the success of eradication or regulation programs [@Thompson2021; @Williams2002]. 
 
-Pitch: SDM/AM plusieurs fois recommandées pour management of invasive species. Mais encore peu utilisée. Many reasons. Une d’entre elles est que c’est technique la partie determine trade-offs. Here on participe à l’effort en illustrant la SDP et qqs-unes des variantes (active/passive, POMDP) et dans des cas différents (single pop, metapop, two interacting pops). 
+Pitch: Structured decision-making (SDM) and adaptive management (AM) have been repeatedly recommended for the management of invasive species, yet they remain underused in practice. There are many reasons for this gap, one of which is the technical challenge of formally identifying and quantifying trade-offs among management objectives. Here, we contribute to ongoing efforts by illustrating the use of stochastic dynamic programming (SDP) and some of its variants — including active and passive adaptive management and partially observable Markov decision processes (POMDPs) — across different ecological contexts (a single population, a metapopulation, and two interacting populations).
 
-Plusieurs papiers qui préconisent/font de la SDM sur invasive species. Faire une petite review. 
+Several papers have recommended or implemented structured decision-making (SDM) for managing invasive species. It’s worth providing a short review of this literature.
 
 # A primer on structured decision making 
 
@@ -94,17 +98,17 @@ Plusieurs papiers qui préconisent/font de la SDM sur invasive species. Faire un
 
 ## Stochastic dynamic programming
 
-Example on computer maintenance pour bien expliquer la SDP
+Example on computer maintenance to explain SDP on a simple example?
 
 # Case studies with coypus
 
 ## Single population
 
-Reprendre l'exemple loup de Lulu dans l'article SDP
+Take wolf example and turn it into some invasive species example? 
 
 ## Two interacting species
 
-Competition or predator-prey, see SDP-species-interactions/ dans la biblio
+Competition or predator-prey, see SDP-species-interactions/ in my biblio repo.
 
 ## Metapopulation
 
@@ -112,11 +116,11 @@ Competition or predator-prey, see SDP-species-interactions/ dans la biblio
 
 ## POMDP
 
-llustrer POMDP (https://chatgpt.com/share/68814183-9078-8011-9697-c3ee73b27762)
+Illustrate POMDP, i have some code extending the computer maintenance example from above. 
 
 ## Adaptive management
 
-Sur une espèce (voir https://chatgpt.com/share/6873c9fd-4df4-8011-97cb-2b6147d505fe ; voir aussi le bouquin de Conroy sur SDM, il y a une figure qui l'explique bien).
+On a single species ; check out Conroy's book, there is a nice figure illustrating AM.
 
 # Discussion
 
@@ -130,7 +134,7 @@ Sur une espèce (voir https://chatgpt.com/share/6873c9fd-4df4-8011-97cb-2b6147d5
 
 ## Data availability statement
 
-Data and code are available at \href{https://github.com/oliviergimenez/counting-rodents}{https://github.com/oliviergimenez/counting-rodents}.
+Data and code are available at \href{https://github.com/oliviergimenez/SDPaper}{https://github.com/oliviergimenez/SDPaper}.
 
 # References
 
