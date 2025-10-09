@@ -1,0 +1,50 @@
+# Transition matrices P[[a]]
+P <- list(
+  # a = 1 : Stay
+  matrix(c(
+    0.8, 0.2,   # Good → Good, Good → Bad
+    0.0, 1.0    # Bad  → Good, Bad  → Bad
+  ), nrow=2, byrow=TRUE,
+  dimnames = list(c("Good","Bad"), c("Good","Bad"))),
+  # a = 2 : Repair
+  matrix(c(
+    1.0, 0.0,   # Good → Good, Good → Bad
+    1.0, 0.0    # Bad  → Good, Bad  → Bad
+  ), nrow=2, byrow=TRUE,
+  dimnames = list(c("Good","Bad"), c("Good","Bad")))
+)
+
+# Reward matrix R[s,a] = production - cost
+R <- matrix(c(
+  # Stay,  Repair
+  10,      6,    # Good: 10 - 0,  10 - 4
+  2,      -2     # Bad : 2 - 0,   2 - 4
+), nrow=2, byrow=TRUE,
+dimnames = list(c("Good","Bad"), c("Stay","Repair")))
+
+# Backward induction
+T <- 3 # horizon
+V <- matrix(0, nrow = 2, ncol = T + 1)
+policy <- matrix(0, nrow = 2, ncol = T)
+
+# V[,T+1] = 0 (beyond T, no further reward)
+for (t in T:1) {
+  for (s in 1:2) {
+    vals <- numeric(2)
+    for (a in 1:2) {
+      vals[a] <- R[s, a] + sum(P[[a]][s, ] * V[, t+1])
+    }
+    policy[s, t] <- which.max(vals)
+    V[s, t]      <- vals[policy[s, t]]
+  }
+}
+V
+policy
+
+
+#---------------------
+
+library(MDPtoolbox)
+res <- mdp_finite_horizon(P, R, discount = 1, T)
+res$V
+res$policy

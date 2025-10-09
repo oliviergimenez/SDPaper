@@ -1,0 +1,139 @@
+---
+title: "A primer on structured decision making for invasive species (using dynamic programming)"
+author:
+  - Olivier Gimenez^1^*
+
+date: '`r Sys.Date()`'
+
+output:
+  bookdown::pdf_document2:
+    fig_caption: yes
+    fig_width: 7
+    fig_height: 7
+    df_print: kable
+    keep_tex: yes
+    number_sections: no
+    toc: no
+    includes:
+      in_header: header.tex
+    
+documentclass: article
+papersize: a4
+pagestyle: plain
+geometry: margin=1in
+linestretch: 2
+fontfamily: mathpazo
+fontsize: 11pt
+
+bibliography: 
+  - references.bib
+  - knitcitations.bib
+csl: ecology.csl
+
+link-citations: yes
+linkcolor: RoyalBlue
+urlcolor: RoyalBlue
+links-as-notes: false
+
+---
+
+\linenumbers
+
+\small
+
+^1^ CEFE, Univ Montpellier, CNRS, EPHE, IRD, Montpellier, France
+
+`*` Corresponding author: olivier.gimenez@cefe.cnrs.fr
+
+\normalsize
+
+\vspace{1cm}
+\hrule
+
+Invasive species (IAS) pose significant ecological, economic, and public health challenges. Robust methods are needed for guiding effective management. Overall, I hope to demonstrate the flexibility and utility of structured decision making in invasive species management. 
+
+Target journal: soit NeoBiota https://www.reabic.net/journals/mbi/Submission.aspx (1200 euros, plusieurs formats d’article pertinents) ou encore Biological invasions au format INVASION NOTES, ou encore Peer Community journal.
+
+voir NeoBiota,  ; repartir de cet article using structured decision-making to gain consensus on approaches to invasive species control, des articles qu’il cite, et des articles qui l’ont cité ; pour PC Journal ? Faire un petit shiny qui va bien? 
+
+\vspace{3mm}
+\hrule
+\vspace{5mm}
+
+*Keywords*: Invasive species, Structured decision making, Adaptive management, Stochastic dynamic programming
+
+\newpage
+
+```{r setup, include=FALSE, cache=FALSE, message = FALSE}
+library("knitr")
+opts_chunk$set(echo = FALSE, warning = TRUE, message = TRUE)
+opts_chunk$set(tidy = TRUE, comment = NA, highlight = TRUE)
+opts_chunk$set(fig.path = "output/figures/")
+```
+
+
+```{r knitcitations, cache = FALSE}
+library(knitcitations)
+cleanbib()   
+cite_options(citation_format = "pandoc")
+```
+
+# Introduction
+
+Invasive species are a significant global issue, with wide-ranging impacts on ecosystems, economies, and public health [@Roy2024; @Petr2020]. 
+
+Effective management of invasive species requires the estimation of population abundance for guiding control efforts and evaluating the success of eradication or regulation programs [@Thompson2021; @Williams2002]. 
+
+Pitch: SDM/AM plusieurs fois recommandées pour management of invasive species. Mais encore peu utilisée. Many reasons. Une d’entre elles est que c’est technique la partie determine trade-offs. Here on participe à l’effort en illustrant la SDP et qqs-unes des variantes (active/passive, POMDP) et dans des cas différents (single pop, metapop, two interacting pops). 
+
+Plusieurs papiers qui préconisent/font de la SDM sur invasive species. Faire une petite review. 
+
+# A primer on structured decision making 
+
+## Why and what
+
+## Stochastic dynamic programming
+
+Example on computer maintenance pour bien expliquer la SDP
+
+# Case studies with coypus
+
+## Single population
+
+Reprendre l'exemple loup de Lulu dans l'article SDP
+
+## Two interacting species
+
+Competition or predator-prey, see SDP-species-interactions/ dans la biblio
+
+## Metapopulation
+
+# Acounting for uncertainty
+
+## POMDP
+
+llustrer POMDP (https://chatgpt.com/share/68814183-9078-8011-9697-c3ee73b27762)
+
+## Adaptive management
+
+Sur une espèce (voir https://chatgpt.com/share/6873c9fd-4df4-8011-97cb-2b6147d505fe ; voir aussi le bouquin de Conroy sur SDM, il y a une figure qui l'explique bien).
+
+# Discussion
+
+## Main messages
+
+## Limitations
+
+## Perspectives
+
+# Acknowledgments
+
+## Data availability statement
+
+Data and code are available at \href{https://github.com/oliviergimenez/counting-rodents}{https://github.com/oliviergimenez/counting-rodents}.
+
+# References
+
+::: {#refs}
+:::
+
