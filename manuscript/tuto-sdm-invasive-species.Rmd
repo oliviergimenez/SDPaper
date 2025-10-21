@@ -3,7 +3,8 @@ title: "A primer on structured decision making for invasive species (using dynam
 author:
   - Olivier Gimenez^1^*
   - Abby Keller^2^*
-  - Cassie Speakman^3^*
+  - Lucile Marescot^3^*
+  - Cassie Speakman^4^*
 
 date: '`r Sys.Date()`'
 
