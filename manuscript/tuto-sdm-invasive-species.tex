@@ -146,7 +146,7 @@
 
 \title{A primer on structured decision making for invasive species (using dynamic programming)}
 \author{Olivier Gimenez\textsuperscript{1}* \and Abby Keller\textsuperscript{2}* \and Lucile Marescot\textsuperscript{3}* \and Cassie Speakman\textsuperscript{4}*}
-\date{2025-10-21}
+\date{2025-10-25}
 
 \begin{document}
 \maketitle
@@ -159,6 +159,7 @@
 \textsuperscript{1} CEFE, Univ Montpellier, CNRS, EPHE, IRD, Montpellier, France
 \textsuperscript{2} address
 \textsuperscript{3} address
+\textsuperscript{4} address
 
 \texttt{*} Corresponding author: \href{mailto:olivier.gimenez@cefe.cnrs.fr}{\nolinkurl{olivier.gimenez@cefe.cnrs.fr}}
 
@@ -169,15 +170,13 @@
 
 Invasive species (IAS) pose significant ecological, economic, and public health challenges. Robust methods are needed for guiding effective management. Overall, we hope to demonstrate the flexibility and utility of structured decision making in invasive species management.
 
-Target journal: either Biological invasions (invasion notes?) or NeoBiota.
-
-Add a shiny for each case study so that folks can play around?
+Target journal: Biological invasions? NeoBiota?.
 
 \vspace{3mm}
 \hrule
 \vspace{5mm}
 
-\emph{Keywords}: Invasive species, Structured decision making, Adaptive management, Stochastic dynamic programming
+\emph{Keywords}: Adaptive management, Invasive species, Stochastic dynamic programming, Structured decision making
 
 \newpage
 
@@ -191,41 +190,57 @@ Pitch: Structured decision-making (SDM) and adaptive management (AM) have been r
 
 Several papers have recommended or implemented structured decision-making (SDM) for managing invasive species. It's worth providing a short review of this literature.
 
+Coypu (Myocastor coypu) as a case study throughout the paper. Code and tutorials available as appendices.
+
+Add a shiny for each case study so that folks can play around?
+
 \section{A primer on structured decision making}\label{a-primer-on-structured-decision-making}
 
-\subsection{Why and what}\label{why-and-what}
+\subsection{Why and what (all)}\label{why-and-what-all}
 
-\subsection{Stochastic dynamic programming}\label{stochastic-dynamic-programming}
+\subsection{Stochastic dynamic programming (Olivier)}\label{stochastic-dynamic-programming-olivier}
 
-Example on computer maintenance to explain SDP on a simple example?
+Example on computer maintenance (coverted into coypu example) to explain SDP on a simple example ?
 
 \section{Case studies with coypus}\label{case-studies-with-coypus}
 
-\subsection{Single population}\label{single-population}
+\subsection{Single population (Olivier)}\label{single-population-olivier}
 
-Take wolf example and turn it into some invasive species example?
+Take wolf example and turn it into a coypu example ?
 
-\subsection{Two interacting species}\label{two-interacting-species}
+\subsection{Two interacting species (Lucile)}\label{two-interacting-species-lucile}
 
-Competition or predator-prey, see SDP-species-interactions/ in my biblio repo.
+Competition or predator-prey, or host-pathogen / disease thing. See SDP-species-interactions/ in Olivier biblio repo.
 
-\subsection{Metapopulation}\label{metapopulation}
+\subsection{Metapopulation (Olivier)}\label{metapopulation-olivier}
 
 \section{Acounting for uncertainty}\label{acounting-for-uncertainty}
 
-\subsection{POMDP}\label{pomdp}
+\subsection{POMDP (Cassie)}\label{pomdp-cassie}
 
-Illustrate POMDP, i have some code extending the computer maintenance example from above.
+Illustrate POMDP, Olivier has some code extending the computer maintenance example from above.
 
-\subsection{Adaptive management}\label{adaptive-management}
+\url{https://besjournals.onlinelibrary.wiley.com/doi/10.1111/2041-210X.14374}
+
+\url{https://besjournals.onlinelibrary.wiley.com/doi/10.1111/2041-210X.13692}
+
+\subsection{Adaptive management (Abby)}\label{adaptive-management-abby}
+
+When is it useful. Start with value of information?
 
 On a single species ; check out Conroy's book, there is a nice figure illustrating AM.
 
-\section{Discussion}\label{discussion}
+\url{https://onlinelibrary.wiley.com/doi/10.1002/ece3.71176}
+
+\section{Discussion (all)}\label{discussion-all}
 
 \subsection{Main messages}\label{main-messages}
 
+How is SDM relevant.
+
 \subsection{Limitations}\label{limitations}
+
+Curse of dimensionality.
 
 \subsection{Perspectives}\label{perspectives}
 

@@ -47,6 +47,7 @@ links-as-notes: false
 ^1^ CEFE, Univ Montpellier, CNRS, EPHE, IRD, Montpellier, France
 ^2^ address
 ^3^ address
+^4^ address
 
 `*` Corresponding author: olivier.gimenez@cefe.cnrs.fr
 
@@ -57,15 +58,13 @@ links-as-notes: false
 
 Invasive species (IAS) pose significant ecological, economic, and public health challenges. Robust methods are needed for guiding effective management. Overall, we hope to demonstrate the flexibility and utility of structured decision making in invasive species management. 
 
-Target journal: either Biological invasions (invasion notes?) or NeoBiota.
-
-Add a shiny for each case study so that folks can play around?
+Target journal: Biological invasions? NeoBiota?.
 
 \vspace{3mm}
 \hrule
 \vspace{5mm}
 
-*Keywords*: Invasive species, Structured decision making, Adaptive management, Stochastic dynamic programming
+*Keywords*: Adaptive management, Invasive species, Stochastic dynamic programming, Structured decision making
 
 \newpage
 
@@ -93,41 +92,58 @@ Pitch: Structured decision-making (SDM) and adaptive management (AM) have been r
 
 Several papers have recommended or implemented structured decision-making (SDM) for managing invasive species. It’s worth providing a short review of this literature.
 
+Coypu (Myocastor coypu) as a case study throughout the paper. Code and tutorials available as appendices. 
+
+Add a shiny for each case study so that folks can play around?
+
 # A primer on structured decision making 
 
-## Why and what
+## Why and what (all)
 
-## Stochastic dynamic programming
+## Stochastic dynamic programming (Olivier)
 
-Example on computer maintenance to explain SDP on a simple example?
+Example on computer maintenance (coverted into coypu example) to explain SDP on a simple example ? 
 
 # Case studies with coypus
 
-## Single population
+## Single population (Olivier)
 
-Take wolf example and turn it into some invasive species example? 
+Take wolf example and turn it into a coypu example ?
 
-## Two interacting species
+## Two interacting species (Lucile)
 
-Competition or predator-prey, see SDP-species-interactions/ in my biblio repo.
+Competition or predator-prey, or host-pathogen / disease thing. See SDP-species-interactions/ in Olivier biblio repo.
 
-## Metapopulation
+## Metapopulation (Olivier)
 
 # Acounting for uncertainty
 
-## POMDP
+## POMDP (Cassie)
 
-Illustrate POMDP, i have some code extending the computer maintenance example from above. 
+Illustrate POMDP, Olivier has some code extending the computer maintenance example from above. 
 
-## Adaptive management
+<https://besjournals.onlinelibrary.wiley.com/doi/10.1111/2041-210X.14374>
 
-On a single species ; check out Conroy's book, there is a nice figure illustrating AM.
+<https://besjournals.onlinelibrary.wiley.com/doi/10.1111/2041-210X.13692>
 
-# Discussion
+
+## Adaptive management (Abby)
+
+When is it useful. Start with value of information? 
+
+On a single species ; check out Conroy's book, there is a nice figure illustrating AM. 
+
+<https://onlinelibrary.wiley.com/doi/10.1002/ece3.71176>
+
+# Discussion (all)
 
 ## Main messages
 
+How is SDM relevant. 
+
 ## Limitations
+
+Curse of dimensionality.
 
 ## Perspectives
 
