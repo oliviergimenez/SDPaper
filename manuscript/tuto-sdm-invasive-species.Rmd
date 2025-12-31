@@ -92,6 +92,10 @@ Pitch: Structured decision-making (SDM) and adaptive management (AM) have been r
 
 Several papers have recommended or implemented structured decision-making (SDM) for managing invasive species. It’s worth providing a short review of this literature.
 
+In a recent review on impacts, the use of ML to guide management actions identified as a future research direction (see Appendix 3 in @Haubrock2025). 
+
+"Another recent research direction is the use of machine learning to aid the development of conservation management strategies. These methods involve models that integrate geospatial, climate, species distribution and other data to simulate the distribution of species and vegetation types under different land use and conservation planning scenarios. Reinforcement Learning algorithms can then be used to learn a management policy that attains a specified quantifiable objective (such as minimising the number of individuals from a non-native species) under constraints such as cost or the amount of land that can be protected. Dietterich, Taleghan and Crowley (2013) demonstrated how Reinforcement Learning can be applied to managing a river system to control the expansion of a non-native plant species. Lapeyrolerie et al. (2022) demonstrated the potential of Reinforcement Learning for resource management problems, such as setting fishing quotas. Conservation area prioritisation through artificial intelligence (CAPTAIN) (Silvestro et al., 2022) is a general simulation framework that allows the user to define flexibly management objectives to be optimised. The unprecedented rate at which new technologies are emerging holds great promise for improving impact assessments related to biological invasions."
+
 Coypu (Myocastor coypu) as a case study throughout the paper. Code and tutorials available as appendices. 
 
 Add a shiny for each case study so that folks can play around?

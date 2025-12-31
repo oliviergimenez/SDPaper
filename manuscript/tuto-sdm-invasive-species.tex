@@ -146,7 +146,7 @@
 
 \title{A primer on structured decision making for invasive species (using dynamic programming)}
 \author{Olivier Gimenez\textsuperscript{1}* \and Abby Keller\textsuperscript{2}* \and Lucile Marescot\textsuperscript{3}* \and Cassie Speakman\textsuperscript{4}*}
-\date{2025-10-25}
+\date{2025-12-31}
 
 \begin{document}
 \maketitle
@@ -189,6 +189,10 @@ Effective management of invasive species requires blabla for guiding control eff
 Pitch: Structured decision-making (SDM) and adaptive management (AM) have been repeatedly recommended for the management of invasive species, yet they remain underused in practice. There are many reasons for this gap, one of which is the technical challenge of formally identifying and quantifying trade-offs among management objectives. Here, we contribute to ongoing efforts by illustrating the use of stochastic dynamic programming (SDP) and some of its variants --- including active and passive adaptive management and partially observable Markov decision processes (POMDPs) --- across different ecological contexts (a single population, a metapopulation, and two interacting populations).
 
 Several papers have recommended or implemented structured decision-making (SDM) for managing invasive species. It's worth providing a short review of this literature.
+
+In a recent review on impacts, the use of ML to guide management actions identified as a future research direction (see Appendix 3 in Haubrock et al. (\citeproc{ref-Haubrock2025}{2025})).
+
+``Another recent research direction is the use of machine learning to aid the development of conservation management strategies. These methods involve models that integrate geospatial, climate, species distribution and other data to simulate the distribution of species and vegetation types under different land use and conservation planning scenarios. Reinforcement Learning algorithms can then be used to learn a management policy that attains a specified quantifiable objective (such as minimising the number of individuals from a non-native species) under constraints such as cost or the amount of land that can be protected. Dietterich, Taleghan and Crowley (2013) demonstrated how Reinforcement Learning can be applied to managing a river system to control the expansion of a non-native plant species. Lapeyrolerie et al.~(2022) demonstrated the potential of Reinforcement Learning for resource management problems, such as setting fishing quotas. Conservation area prioritisation through artificial intelligence (CAPTAIN) (Silvestro et al., 2022) is a general simulation framework that allows the user to define flexibly management objectives to be optimised. The unprecedented rate at which new technologies are emerging holds great promise for improving impact assessments related to biological invasions.''
 
 Coypu (Myocastor coypu) as a case study throughout the paper. Code and tutorials available as appendices.
 
@@ -254,6 +258,9 @@ Data and code are available at \href{https://github.com/oliviergimenez/SDPaper}{
 
 \phantomsection\label{refs}
 \begin{CSLReferences}{1}{0}
+\bibitem[\citeproctext]{ref-Haubrock2025}
+Haubrock, P. J., T. Everts, N. A. S. Abreo, J. Bojko, V. Deklerck, J. W. E. Dickey, A. C. S. Franco, E. García-Berthou, S. Katsanevakis, N. I. Kirichenko, S. Mammola, M. A. Nuñez, B. Parker, R. Scalera, I. Soto, D. Strubbe, A. S. Tarkan, L. Vilizzi, T. Adriaens, P. Balzani, D. Blońska, E. Briski, R. Brys, A. L. Burgess, J. E. Byers, C. Cano-Barbacil, G. Castaldelli, J. T. A. Dick, V. Dominguez Almela, R. D. Dimarco, M. Florencio, A. Kouba, M. Kourantidou, I. Kurtul, I. Martín-Forés, O. Morissette, J. D. Olden, B. E. Soares, J. Truszkowski, H. Verreycken, M. Kenis, R. Sousa, and J. R. Britton. 2025. The impacts of biological invasions. Biological Reviews n/a.
+
 \bibitem[\citeproctext]{ref-Petr2020}
 Pyšek, P., P. E. Hulme, D. Simberloff, S. Bacher, T. M. Blackburn, J. T. Carlton, W. Dawson, F. Essl, L. C. Foxcroft, P. Genovesi, J. M. Jeschke, I. Kühn, A. M. Liebhold, N. E. Mandrak, L. A. Meyerson, A. Pauchard, J. Pergl, H. E. Roy, H. Seebens, M. van Kleunen, M. Vilà, M. J. Wingfield, and D. M. Richardson. 2020. Scientists' warning on invasive alien species. Biological Reviews 95:1511--1534.
 
