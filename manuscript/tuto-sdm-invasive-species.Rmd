@@ -37,7 +37,6 @@ link-citations: yes
 linkcolor: RoyalBlue
 urlcolor: RoyalBlue
 links-as-notes: false
-
 ---
 
 \linenumbers
@@ -102,11 +101,126 @@ Add a shiny for each case study so that folks can play around?
 
 # A primer on structured decision making 
 
+We do not want to rewrite Lucile's paper... 
+
 ## Why and what (all)
+
+![](bellman1.png)
+
+![](bellman2.png)
 
 ## Stochastic dynamic programming (Olivier)
 
-Example on computer maintenance (coverted into coypu example) to explain SDP on a simple example ? 
+Here we present a minimal stochastic dynamic programming (SDP) example. The aim is purely pedagogical: to show how states, actions, transition probabilities, rewards, and time horizon combine to produce an optimal decision rule. 
+
+We consider a stylized invasion management problem with three qualitative states describing the invasion level:
+
+- Eradicated: no individuals detected (possible re-invasion risk)
+- Contained: invasion present but at low abundance
+- Established: invasion widespread with high impacts
+
+At each time step, the manager chooses between two actions:
+
+- Monitor: surveillance only (low cost, little effect)
+- Control: active management campaign (higher cost, improves state)
+
+State dynamics are described by action-dependent transition matrices
+
+\[
+P_a(s,s') = \Pr(S_{t+1}=s' \mid S_t=s,\; A_t=a).
+\]
+
+Transition matrices describe how the invasion state evolves probabilistically from one time step to the next under each management action. Each row corresponds to the current state and each column to the next state, with entries giving transition probabilities. We build a transition matrix for each action. 
+
+Under monitoring, the transition is: 
+
+\[
+P_{\text{Monitor}} =
+\begin{array}{c|ccc}
+ & \text{Erad.} & \text{Cont.} & \text{Estab.} \\
+\hline
+\text{Erad.} & 0.95 & 0.05 & 0.00 \\
+\text{Cont.} & 0.00 & 0.80 & 0.20 \\
+\text{Estab.} & 0.00 & 0.00 & 1.00 \\
+\end{array}
+\]
+
+If the system is eradicated, it remains so with probability 0.95 but may revert to a contained state with probability 0.05, reflecting a small risk of re-invasion. When the invasion is contained, it persists with probability 0.80 but may deteriorate to an established state with probability 0.20, indicating possible population growth without intervention. Once established, the system remains established with probability 1, meaning monitoring alone cannot reverse the invasion. 
+
+In contrast, control shifts the system toward better states:
+
+\[
+P_{\text{Control}} =
+\begin{array}{c|ccc}
+ & \text{Erad.} & \text{Cont.} & \text{Estab.} \\
+\hline
+\text{Erad.} & 0.98 & 0.02 & 0.00 \\
+\text{Cont.} & 0.20 & 0.75 & 0.05 \\
+\text{Estab.} & 0.05 & 0.75 & 0.20 \\
+\end{array}
+\]
+
+From an eradicated state, the system remains eradicated with probability 0.98 and only rarely becomes contained (0.02). When contained, control can eradicate the population (0.20), maintain it at low levels (0.75), or fail and allow establishment (0.05). Finally, when the invasion is established, control improves the situation in most cases, leading to a contained state with probability 0.75, occasionally achieving eradication (0.05), but sometimes failing to reduce impacts (remaining established with probability 0.20). 
+
+Together, these transition matrices encode both ecological uncertainty and the imperfect effectiveness of management actions.
+
+Next we define rewards. Rewards are defined as the negative of total costs, so that maximizing expected reward is equivalent to minimizing management and damage costs. 
+
+\[
+R(s,a) = -(\text{damage}(s) + \text{cost}(a)).
+\]
+
+Damage depends on the invasion state (higher when the invasion is established), while management cost depends on the chosen action (higher for active control than monitoring). The reward matrix is constructed by combining these two components for all state–action pairs, yielding the immediate payoff used in the dynamic programming recursion.
+
+\[
+R =
+\begin{array}{c|cc}
+ & \text{Monitor} & \text{Control} \\
+\hline
+\text{Erad.} & -1  & -6  \\
+\text{Cont.} & -5  & -10 \\
+\text{Estab.} & -15 & -20 \\
+\end{array}
+\]
+
+(Rows correspond to the current invasion state and columns to the management action.)
+
+For example, when the invasion is eradicated, monitoring yields a reward of -1, reflecting only minor surveillance costs, whereas applying control in the same state yields -6 due to higher intervention costs. When the population is contained, rewards are -5 for monitoring and -10 for control, representing moderate damages combined with the respective management costs. Finally, when the invasion is established, rewards drop to -15 under monitoring and -20 under control, reflecting both high ecological impacts and, in the latter case, substantial intervention effort. Overall, this reward structure captures the short-term trade-off between ecological impacts and management effort that underlies the decision problem.
+
+Solving the finite-horizon decision problem yields the optimal value function $V_t(s)$, which represents the expected cumulative reward (i.e., negative total cost) obtained when starting from state $s$ at time $t$ and following the optimal policy thereafter. Values are more negative when the invasion is established, reflecting higher expected damages. Moreover, values increase (become less negative) as the horizon shortens because fewer future costs can accumulate. 
+
+\[
+V_t(s) =
+\begin{array}{c|cccccc}
+ & t=1 & t=2 & t=3 & t=4 & t=5 & t=6 \\
+\hline
+s = \text{Erad.} & -7.60 & -5.50 & -3.69 & -2.20 & -1 & 0 \\
+s = \text{Cont.} & -33.78 & -27.43 & -19.96 & -12.0 & -5 & 0 \\
+s = \text{Estab.} & -49.26 & -42.05 & -34.47 & -26.8 & -15 & 0 \\
+\end{array}
+\]
+
+The associated optimal policy $\pi_t(s)$ specifies the best action to take in each state $s$ at each time step $t$. Overall, the policy indicates that monitoring is typically optimal when the system is eradicated, whereas control is recommended when the invasion is established due to the high expected damages. In the contained state, the optimal decision varies with the time horizon, reflecting the trade-off between immediate intervention costs and the risk of future deterioration.
+
+\[
+\pi_t(s) =
+\begin{array}{c|ccccc}
+ & t=1 & t=2 & t=3 & t=4 & t=5 \\
+\hline
+s =\text{Erad.} & \text{Monitor} & \text{Monitor} & \text{Monitor} & \text{Monitor} & \text{Monitor} \\
+s = \text{Cont.} & \text{Control} & \text{Control} & \text{Monitor} & \text{Monitor} & \text{Monitor} \\
+s = \text{Estab.} & \text{Control} & \text{Control} & \text{Control} & \text{Control} & \text{Monitor} \\
+\end{array}
+\]
+
+This toy example highlights key features of SDP:
+
+- **State dependence**: optimal decisions depend on invasion level.
+- **Trade-off**: control is costly but reduces future risk.
+- **Time horizon effects**: as the horizon shortens, actions may become more short-term oriented.
+- **Uncertainty**: decisions account for probabilistic transitions, not deterministic outcomes.
+
+
 
 # Case studies with coypus
 
