@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.28 (TeX Live 2025) (preloaded format=pdflatex 2026.2.26)  26 FEB 2026 17:47
+This is pdfTeX, Version 3.141592653-2.6-1.40.28 (TeX Live 2025) (preloaded format=pdflatex 2026.2.26)  27 FEB 2026 15:21
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -557,25 +557,82 @@ LaTeX Font Info:    Font shape `U/msb/m/n' will be
 (Font)              scaled to size 11.40997pt on input line 239.
 LaTeX Font Info:    Font shape `U/msb/m/n' will be
 (Font)              scaled to size 8.33606pt on input line 239.
-[6] [7] [8] [9] [10] [11] [12] (./tuto-sdm-invasive-species.aux)
+[6] [7] [8] [9]
+<output/figures/fig-removal-fraction-1.pdf, id=75, 423.5825pt x 277.035pt>
+File: output/figures/fig-removal-fraction-1.pdf Graphic file (type pdf)
+<use output/figures/fig-removal-fraction-1.pdf>
+Package pdftex.def Info: output/figures/fig-removal-fraction-1.pdf  used on input line 360.
+(pdftex.def)             Requested size: 423.58147pt x 277.03432pt.
+
+Underfull \hbox (badness 1377) in paragraph at lines 367--369
+\T1/ppl/m/n/10.95 (+20) Damages in-crease non-linearly with abun-dance, here us-ing a sim-ple quadratic form
+ []
+
+[10]
+<output/figures/fig-cost-components-1.pdf, id=84, 417.56pt x 277.035pt>
+File: output/figures/fig-cost-components-1.pdf Graphic file (type pdf)
+<use output/figures/fig-cost-components-1.pdf>
+Package pdftex.def Info: output/figures/fig-cost-components-1.pdf  used on input line 382.
+(pdftex.def)             Requested size: 417.55896pt x 277.03432pt.
+[11 <./output/figures/fig-removal-fraction-1.pdf>] [12 <./output/figures/fig-cost-components-1.pdf>]
+<output/figures/fig-policy-and-trajectory-1.pdf, id=110, 449.68pt x 412.54124pt>
+File: output/figures/fig-policy-and-trajectory-1.pdf Graphic file (type pdf)
+<use output/figures/fig-policy-and-trajectory-1.pdf>
+Package pdftex.def Info: output/figures/fig-policy-and-trajectory-1.pdf  used on input line 396.
+(pdftex.def)             Requested size: 449.6789pt x 412.54024pt.
+[13] [14 <./output/figures/fig-policy-and-trajectory-1.pdf>] [15]
+
+LaTeX Warning: Reference `fig:show-prob-curves' on page 16 undefined on input line 423.
+
+<output/figures/show-prob-curves-1.pdf, id=134, 456.70625pt x 210.7875pt>
+File: output/figures/show-prob-curves-1.pdf Graphic file (type pdf)
+<use output/figures/show-prob-curves-1.pdf>
+Package pdftex.def Info: output/figures/show-prob-curves-1.pdf  used on input line 443.
+(pdftex.def)             Requested size: 456.70512pt x 210.78699pt.
+[16 <./output/figures/show-prob-curves-1.pdf>]
+<output/figures/fig-tradeoff-1.pdf, id=149, 459.7175pt x 284.06125pt>
+File: output/figures/fig-tradeoff-1.pdf Graphic file (type pdf)
+<use output/figures/fig-tradeoff-1.pdf>
+Package pdftex.def Info: output/figures/fig-tradeoff-1.pdf  used on input line 471.
+(pdftex.def)             Requested size: 459.71637pt x 284.06053pt.
+[17]
+<output/figures/fig-policy-heatmap-1.pdf, id=157, 441.65pt x 277.035pt>
+File: output/figures/fig-policy-heatmap-1.pdf Graphic file (type pdf)
+<use output/figures/fig-policy-heatmap-1.pdf>
+Package pdftex.def Info: output/figures/fig-policy-heatmap-1.pdf  used on input line 479.
+(pdftex.def)             Requested size: 441.64891pt x 277.03432pt.
+<output/figures/fig-cum-costs-1.pdf, id=159, 459.7175pt x 284.06125pt>
+File: output/figures/fig-cum-costs-1.pdf Graphic file (type pdf)
+<use output/figures/fig-cum-costs-1.pdf>
+Package pdftex.def Info: output/figures/fig-cum-costs-1.pdf  used on input line 487.
+(pdftex.def)             Requested size: 459.71637pt x 284.06053pt.
+<output/figures/fig-site-dynamics-1.pdf, id=161, 459.7175pt x 409.53pt>
+File: output/figures/fig-site-dynamics-1.pdf Graphic file (type pdf)
+<use output/figures/fig-site-dynamics-1.pdf>
+Package pdftex.def Info: output/figures/fig-site-dynamics-1.pdf  used on input line 495.
+(pdftex.def)             Requested size: 459.71637pt x 409.52899pt.
+[18 <./output/figures/fig-tradeoff-1.pdf>] [19 <./output/figures/fig-policy-heatmap-1.pdf> <./output/figures/fig-cum-costs-1.pdf>] [20 <./output/figures/fig-site-dynamics-1.pdf>] [21] [22] [23] (./tuto-sdm-invasive-species.aux)
  ***********
 LaTeX2e <2025-11-01>
 L3 programming layer <2026-01-19>
  ***********
+
+LaTeX Warning: There were undefined references.
+
  ) 
 Here is how much of TeX's memory you used:
- 14634 strings out of 469471
- 230165 string characters out of 5466955
- 702309 words of memory out of 5000000
- 42825 multiletter control sequences out of 15000+600000
- 679992 words of font info for 259 fonts, out of 8000000 for 9000
+ 14768 strings out of 469471
+ 233726 string characters out of 5466955
+ 704188 words of memory out of 5000000
+ 42895 multiletter control sequences out of 15000+600000
+ 684879 words of font info for 293 fonts, out of 8000000 for 9000
  36 hyphenation exceptions out of 8191
- 83i,10n,93p,1393b,567s stack positions out of 10000i,1000n,20000p,200000b,200000s
- </Users/oliviergimenez/Library/TinyTeX/texmf-var/fonts/pk/ljfour/jknappen/ec/ectt1000.600pk> </Users/oliviergimenez/Library/TinyTeX/texmf-var/fonts/pk/ljfour/jknappen/ec/ecss0800.450pk></Users/oliviergimenez/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></Users/oliviergimenez/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></Users/oliviergimenez/Library/TinyTeX/texmf-dist/fonts/type1/public/mathpazo/fplmri.pfb></Users/oliviergimenez/Library/TinyTeX/texmf-dist/fonts/type1/urw/palatino/uplb8a.pfb></Users/oliviergimenez/Library/TinyTeX/texmf-dist/fonts/type1/urw/palatino/uplr8a.pfb></Users/oliviergimenez/Library/TinyTeX/texmf-dist/fonts/type1/urw/palatino/uplri8a.pfb>
-Output written on tuto-sdm-invasive-species.pdf (12 pages, 384299 bytes).
+ 83i,12n,93p,1393b,567s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ </Users/oliviergimenez/Library/TinyTeX/texmf-var/fonts/pk/ljfour/jknappen/ec/ectt1000.600pk> </Users/oliviergimenez/Library/TinyTeX/texmf-var/fonts/pk/ljfour/jknappen/ec/ecss0800.450pk></Users/oliviergimenez/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></Users/oliviergimenez/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></Users/oliviergimenez/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></Users/oliviergimenez/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></Users/oliviergimenez/Library/TinyTeX/texmf-dist/fonts/type1/public/mathpazo/fplmr.pfb></Users/oliviergimenez/Library/TinyTeX/texmf-dist/fonts/type1/public/mathpazo/fplmri.pfb></Users/oliviergimenez/Library/TinyTeX/texmf-dist/fonts/type1/urw/palatino/uplb8a.pfb></Users/oliviergimenez/Library/TinyTeX/texmf-dist/fonts/type1/urw/palatino/uplr8a.pfb></Users/oliviergimenez/Library/TinyTeX/texmf-dist/fonts/type1/urw/palatino/uplri8a.pfb>
+Output written on tuto-sdm-invasive-species.pdf (23 pages, 501596 bytes).
 PDF statistics:
- 215 PDF objects out of 1000 (max. 8388607)
- 172 compressed objects within 2 object streams
- 37 named destinations out of 1000 (max. 500000)
- 71835 words of extra memory for PDF output out of 74296 (max. 10000000)
+ 360 PDF objects out of 1000 (max. 8388607)
+ 275 compressed objects within 3 object streams
+ 55 named destinations out of 1000 (max. 500000)
+ 71875 words of extra memory for PDF output out of 74296 (max. 10000000)
 

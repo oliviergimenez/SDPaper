@@ -146,7 +146,7 @@
 
 \title{A primer on structured decision making for invasive species (using dynamic programming)}
 \author{Olivier Gimenez\textsuperscript{1}* \and Abby Keller\textsuperscript{2}* \and Lucile Marescot\textsuperscript{3}* \and Cassie Speakman\textsuperscript{4}*}
-\date{2026-02-26}
+\date{2026-02-27}
 
 \begin{document}
 \maketitle
@@ -341,13 +341,160 @@ This toy example highlights key features of SDP:
 
 \subsection{Single population (Olivier)}\label{single-population-olivier}
 
-Take wolf example and turn it into a coypu example ?
+The objective of this example is to determine an optimal regulation policy for coypu based on their total abundance. We consider a stylized management problem in which a decision maker chooses, at each time step, the intensity of a control effort \(u \in [0,1]\). Low effort corresponds to minimal intervention, while high effort represents intensive removal. The management objective is to balance three competing components: ecological damages that increase with population size (e.g.~crop losses, dike weakening, nuisance), management costs that increase with effort, and an additional penalty if abundance exceeds a tolerable level.
+
+In contrast to the previous example with discrete invasion states, the system is here described by a continuous state variable, the population size \(N\). Because dynamic programming requires a finite state space, abundance is discretized onto a grid ranging from 0 to the carrying capacity \(K\). In the implementation, we set \(K=2000\) individuals and use a grid step of 20 individuals. Control effort is also discretized, from 0 to 1 in increments of 0.05.
+
+Population dynamics follow a density-dependent growth model with removals due to control,
+\[
+N_{t+1} = N_t + rN_t\left(1-\frac{N_t}{K}\right) - q(u)N_t ,
+\]
+where the first term describes logistic growth and \(q(u)\) is the fraction of individuals removed as a function of effort. We use a somehow saturating removal function,
+\[
+q(u)=1-\exp(-\alpha u),
+\]
+with \(\alpha=1.5\), which implies diminishing returns of control effort (Figure \ref{fig:fig-removal-fraction}). For example, an effort of \(u=0.5\) removes about 53\% of the population, whereas maximum effort \(u=1\) removes about 78\%, reflecting the fact that complete eradication is rarely achievable in a single step.
+
+\begin{figure}
+\centering
+\pandocbounded{\includegraphics[keepaspectratio]{output/figures/fig-removal-fraction-1.pdf}}
+\caption{\label{fig:fig-removal-fraction}Removal fraction q(u) as a function of control effort u.}
+\end{figure}
+
+Rewards are defined as the negative of total costs, so that maximizing expected reward is equivalent to minimizing long-term damages and management expenses (Figure \ref{fig:fig-cost-components}):
+\[
+R(N,u)=-(\text{damage}(N)+\text{cost}(u)+\text{penalty}(N)).
+\]
+Damages increase non-linearly with abundance, here using a simple quadratic form \(\text{damage}(N)=0.1 N + 0.001 N^2\), reflecting the common ecological pattern whereby impacts accelerate at high density. Management costs increase with effort and are assumed convex (\(\text{cost}(u) = 50 u + 200 u^2\)), capturing increasing marginal costs of intensive interventions. Finally, a penalty is applied when abundance exceeds a tolerable threshold \(N_{\text{tol}} = 400\), representing situations where ecological or social impacts become unacceptable. The penalty increases linearly beyond this threshold according to
+
+\[
+\text{penalty}(N) =
+\begin{cases}
+0, & N \le N_{\text{tol}}, \\
+2000\,\dfrac{N - N_{\text{tol}}}{N_{\text{tol}}}, & N > N_{\text{tol}} .
+\end{cases}
+\]
+
+This formulation implies that the penalty is zero below the threshold and then rises proportionally to the exceedance. For example, an abundance of \(N = 800\) yields a penalty of 2000, thereby strongly incentivizing control once populations grow beyond acceptable levels.
+
+\begin{figure}
+\centering
+\pandocbounded{\includegraphics[keepaspectratio]{output/figures/fig-cost-components-1.pdf}}
+\caption{\label{fig:fig-cost-components}Immediate cost components as functions of abundance. Damage increases nonlinearly with population size, leading to rapidly rising total costs (damage + penalty). The dotted line marks the tolerable threshold (N\_tol = 400) above which an additional penalty is applied in the decision model, although it is not shown here for clarity. Control cost is illustrated for an example effort level (u = 0.6).}
+\end{figure}
+
+The decision problem is solved using infinite-horizon discounted value iteration (with discount factor \(\gamma=0.99\)). The resulting value function represents the expected long-term net benefit of starting from each abundance level when optimal decisions are applied thereafter. The optimal policy \(u^{\*}(N)\) typically exhibits a threshold-like pattern: low effort at low abundance where damages are limited, progressively stronger intervention as abundance increases, and intensive control once the population approaches or exceeds the tolerable level. This behavior reflects a general ecological intuition --- management intensity should scale with both population size and risk --- and illustrates how stochastic dynamic programming formalizes this principle within a transparent decision framework.
+
+The decision problem is solved using infinite-horizon discounted value iteration (discount factor \(\gamma = 0.99\)). This yields (i) an optimal stationary policy, mapping each abundance class to a recommended control effort, and (ii) a value function (not shown) that summarizes the long-term expected net benefit when the policy is followed.
+
+Because damages and the penalty increase sharply with abundance, the optimal rule is ``threshold-like'' (top panel in Figure \ref{fig:fig-policy-and-trajectory}). Effort is low at small \(N\), then increases rapidly as \(N\) approaches the tolerable threshold \(N_{\text{tol}}=400\), and remains high for large \(N\). Ecologically, this tells us that when the population is small, impacts are limited and additional control has diminishing returns, whereas once abundance enters an unacceptable zone, strong intervention is warranted to prevent sustained high impacts.
+
+The bottom panel of Figure \ref{fig:fig-policy-and-trajectory} illustrates the dynamical consequences of applying this rule to a trajectory starting from \(N_0=800\). Control effort \(u(t)\) adjusts immediately to the current abundance class, and abundance \(N(t)\) responds through the logistic dynamics with removals. In this deterministic grid-based version, the system typically moves quickly toward a lower-abundance regime and then stabilizes around a band where the marginal benefit of additional control balances its marginal cost.
+
+\begin{figure}
+\centering
+\pandocbounded{\includegraphics[keepaspectratio]{output/figures/fig-policy-and-trajectory-1.pdf}}
+\caption{\label{fig:fig-policy-and-trajectory}Optimal policy u*(N) (top) and an example trajectory under the optimal policy (bottom, facetted into abundance and effort), starting from N0 = 800.}
+\end{figure}
 
 \subsection{Two interacting species (Lucile)}\label{two-interacting-species-lucile}
 
 Competition or predator-prey, or host-pathogen / disease thing. See SDP-species-interactions/ in Olivier biblio repo.
 
 \subsection{Metapopulation (Olivier)}\label{metapopulation-olivier}
+
+We extend the single-population coypu example to a spatially structured invasion in which several sites are connected through dispersal. The aim is to explore how management effort should vary through time when local demographic processes and spatial spread interact. We consider a network of several sites that can be interpreted as cities or management units. At each monthly time step, a decision maker chooses a global management action corresponding to a harvest intensity applied simultaneously across all sites. Local populations then grow according to density dependence, are partially removed by management, and may subsequently undergo stochastic extinction or colonization depending on local abundance and the occupancy of neighboring sites.
+
+At time \(t\), each site \(i\) is either occupied or empty, represented by the binary variable \(X_i(t)\in\{0,1\}\). When a site is empty its abundance is zero, whereas when it is occupied its population size follows discrete logistic growth with intrinsic rate \(r\) and carrying capacity \(K\). Denoting abundance by \(N_i(t)\), post-growth abundance is
+
+\[
+N_i^{\text{grow}}(t+1)
+= N_i(t) + r\,N_i(t)\!\left(1-\frac{N_i(t)}{K}\right).
+\]
+
+Management then removes a fraction \(h_a\) of the population, so that
+
+\[
+N_i(t+1) = N_i^{\text{grow}}(t+1)\,(1-h_a).
+\]
+
+This formulation captures the idea that control reduces numbers but does not eliminate underlying demographic regulation.
+
+Occupancy is updated stochastically based on local abundance and spatial context (Figure \ref{fig:show-prob-curves}). When a site is occupied, extinction probability decreases with abundance according to
+
+\[
+p_{\text{ext}}(N_i) = \exp(-\alpha N_i),
+\]
+
+so that small populations are more vulnerable to disappearance. When a site is empty, colonization probability increases with the number of occupied neighbors
+
+\[
+k_i(t)=\sum_{j\neq i} A_{ij} X_j(t),
+\]
+
+through
+
+\[
+p_{\text{col}}(k_i) = 1-(1-\beta)^{k_i}.
+\]
+
+Together, these rules link local demography with spatial dynamics and create feedbacks between sites.
+
+\pandocbounded{\includegraphics[keepaspectratio]{output/figures/show-prob-curves-1.pdf}}
+
+Because the transition probabilities induced by these ecological rules are analytically intractable, we approximate them using repeated simulations. Starting from a given state and management action, we simulate the ecological dynamics many times and record the frequency of each possible next state. In practice, the estimated probability of transitioning from state \(s\) to state \(s'\) under action \(a\) is the proportion of simulations that lead to \(s'\):
+
+This Monte Carlo approach allows the decision model to incorporate nonlinear and stochastic ecological processes without requiring an explicit analytical expression for transition probabilities.
+
+Management decisions are evaluated through a cost function that balances ecological damages and intervention effort (Figure \ref{fig:fig-tradeoff}). At each time step, total cost is defined as
+
+\[
+C(s,a) = c_d \sum_{i=1}^n N_i(t) + c_a(a),
+\]
+
+where \(c_d\) represents the damage cost per individual (here \(c_d = 1\)) and \(c_a(a)\) is the management cost associated with action \(a\). In this example, we consider three possible actions corresponding to no control, moderate control, and strong control, with costs
+
+\[
+c_a(a) \in \{0,\;5,\;10\}.
+\]
+
+The reward used in the dynamic programming recursion is defined as the negative of this cost,
+
+\[
+R(s,a) = -C(s,a),
+\]
+
+so that maximizing expected reward is equivalent to minimizing long-term total costs.
+
+\begin{figure}
+\centering
+\pandocbounded{\includegraphics[keepaspectratio]{output/figures/fig-tradeoff-1.pdf}}
+\caption{\label{fig:fig-tradeoff}Representation of the cost components on the log scale. Damage costs increase linearly with total abundance across sites, whereas control costs are fixed action-specific intercepts (none/moderate/strong). Stronger control increases immediate spending but can reduce future abundance and damages.}
+\end{figure}
+
+The resulting policy is illustrated in Figure \ref{fig:fig-policy-heatmap}. When few sites are occupied and populations remain small, limited intervention is often sufficient because damages are modest and extinction may occur naturally. As more sites become occupied or local abundances increase, stronger control becomes optimal in order to reduce future spread and prevent escalating impacts. Temporal variation in recommended actions arises because the finite planning horizon reduces the benefit of aggressive intervention late in the time period.
+
+\begin{figure}
+\centering
+\pandocbounded{\includegraphics[keepaspectratio]{output/figures/fig-policy-heatmap-1.pdf}}
+\caption{\label{fig:fig-policy-heatmap}Optimal global action as a function of time and invasion level (measured as the number of occupied sites). Colors indicate the action recommended by the finite-horizon SDP (None/Moderate/Strong). This visualization highlights how stronger control becomes optimal as the invasion occupies more sites, and how recommendations may soften near the end of the planning horizon.}
+\end{figure}
+
+Comparing forward simulations under the optimal policy with simulations under constant strategies highlights the value of adaptive management (Figure \ref{fig:fig-cum-costs}). The optimal strategy typically reduces cumulative costs by applying effort strategically in time rather than maintaining a fixed level of control.
+
+\begin{figure}
+\centering
+\pandocbounded{\includegraphics[keepaspectratio]{output/figures/fig-cum-costs-1.pdf}}
+\caption{\label{fig:fig-cum-costs}Cumulative costs over time under constant strategies (none, moderate, strong) versus the SDP-optimal policy. Costs combine damages proportional to total abundance and an action-specific control cost.}
+\end{figure}
+
+Spatial trajectories further illustrate how coordinated management alters invasion dynamics across the network, with reductions in abundance and occupancy emerging progressively across sites (Figure \ref{fig:fig-site-dynamics}).
+
+\begin{figure}
+\centering
+\pandocbounded{\includegraphics[keepaspectratio]{output/figures/fig-site-dynamics-1.pdf}}
+\caption{\label{fig:fig-site-dynamics}Site-level abundance dynamics under constant strategies and the SDP-optimal policy. Each panel corresponds to a site; trajectories highlight how spatial heterogeneity and network-driven recolonization can create uneven benefits of control across locations.}
+\end{figure}
 
 \section{Acounting for uncertainty}\label{acounting-for-uncertainty}
 
