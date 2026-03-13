@@ -1106,10 +1106,28 @@ p_sites
 ## POMDP (Cassie)
 
 Illustrate POMDP, Olivier has some code extending the computer maintenance example from above. 
-
 <https://besjournals.onlinelibrary.wiley.com/doi/10.1111/2041-210X.14374>
-
 <https://besjournals.onlinelibrary.wiley.com/doi/10.1111/2041-210X.13692>
+
+In an ideal world, invasive species management would be based on perfect knowledge of the state of the system. Yet ecological systems are inherently difficult to monitor, leading to imperfect knowledge of the system and its state. While ongoing monitoring can reduce uncertainties associated with the state of the system, invasive species management often requires timely decisions. In these cases, partially observable Markov decision process (POMDP) models can be used. POMDPs build on MDPs, dealing with uncertainty in both the model and state of the system. However, POMDPs are more computationally and mathematically challenging to solve due to the continuous and high-dimensional state space. A detailed primer on developing POMDPs for ecological problems already exists (Chades et al 2021), so here we will keep our description simple. 
+
+POMDPs differ from MDPs by including an observation state (O), observation function (Z), and initial belief state ($b_0$). The observation state includes the set of observations perceived by the manager, while the observation function represents the conditional probability of a manager observing o' given that action a lead to state s'. In cases where state uncertainty cannot be reduced, the observation function is independent from the actions taken, and thus dependent only on state s'. The initial belief represents the believed state of the system at a given time.
+
+Because the states are themselves unobservable, the state of the system must be tracked with belief states. At any point in time, the actual (unobservable) state of the system influences the immediate returns, state transitions, and observations, but do not influence actions. The belief state is updated based on observations, which subsequently inform the action(s) to be selected. Lastly, actions drive the state transitions, rewards, and may influence the observations.
+
+[I think having a diagram to show the difference between MDP and POMDP, like Figure 1 in Chades et al 2021 or Fig 2-3 in Williams & Brown 2022, could be helpful]
+[Also from Chades et al 2021: "In the language of statistics, POMDPs are models that describe optimal control of hidden Markov models (HMMs). In this framing, the partially observed states of the model are latent variables that are inferred from the (fully observable) observation states."]
+
+Chades et al (2021) identified three types of management problems that POMDPs can be used to solve: 
+- Exploiting current knowledge or reducing uncertainty: Classic dilemma where managers have to choose between investing in reducing state uncertainty or exploiting current knowledge. 
+- Managing under imperfect detection: Assumes that managers have no means of reducing uncertainty, but managers can invest in management actions for which effectiveness varies across the state space.
+- Adaptive management: Where the dynamics of the system are not observable.
+The authors included an example for the first type of problem from a conservation perspective. Here, we'll focus on an example for managing under imperfect detection, continuing with our coypu case study. 
+
+Going back to a simple example in invasive species management, imagine we have .... 
+Occupancy model with uncertain detectability
+
+The invasive species can either be established or absent, with possible observations defined as present or absent denoting if the species was observed in a given time step. 
 
 
 ## Adaptive management (Abby)
