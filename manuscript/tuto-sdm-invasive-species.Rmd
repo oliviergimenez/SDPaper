@@ -1,5 +1,5 @@
 ---
-title: "A primer on structured decision making for invasive species (using dynamic programming)"
+title: "Using dynamic programming for making structured decisions about invasive species"
 author:
   - Olivier Gimenez^1^*
   - Abby Keller^2^*
@@ -55,15 +55,15 @@ links-as-notes: false
 \vspace{1cm}
 \hrule
 
-Invasive species (IAS) pose significant ecological, economic, and public health challenges. Robust methods are needed for guiding effective management. Overall, we hope to demonstrate the flexibility and utility of structured decision making in invasive species management. 
+Invasive alien species (IAS) pose significant ecological, economic, and public health challenges. Robust methods are needed for guiding effective management. Overall, we hope to demonstrate the flexibility and utility of structured decision making in invasive species management. 
 
-Target journal: Biological invasions? NeoBiota?.
+Target journal: Journal of Animal Ecology
 
 \vspace{3mm}
 \hrule
 \vspace{5mm}
 
-*Keywords*: Adaptive management, Invasive species, Stochastic dynamic programming, Structured decision making
+*Keywords*: Adaptive management, Decision theory, Invasive alien species, Stochastic dynamic programming, Structured decision making, Uncertainty
 
 \newpage
 
@@ -99,17 +99,21 @@ Coypu (Myocastor coypu) as a case study throughout the paper. Code and tutorials
 
 Add a shiny for each case study so that folks can play around?
 
-# A primer on structured decision making 
+# Explanation of the method
+
+"A very brief historical background. Why is the method useful for investigating or analysing the topic in question? Provide some details on the method’s applications."
 
 We do not want to rewrite Lucile's paper... 
 
-## Why and what (all)
+## Structured decision making
+
+Why and what (all)
+
+## Stochastic dynamic programming (Olivier)
 
 ![](bellman1.png)
 
 ![](bellman2.png)
-
-## Stochastic dynamic programming (Olivier)
 
 Here we present a minimal stochastic dynamic programming (SDP) example. The aim is purely pedagogical: to show how states, actions, transition probabilities, rewards, and time horizon combine to produce an optimal decision rule. 
 
@@ -220,8 +224,15 @@ This toy example highlights key features of SDP:
 - **Time horizon effects**: as the horizon shortens, actions may become more short-term oriented.
 - **Uncertainty**: decisions account for probabilistic transitions, not deterministic outcomes.
 
+# Things to consider for before using this method
 
-# Case studies with coypus
+"Outline the requirements for framing hypotheses, data and computing, experimental constraints and statistical power."
+
+# Worked examples
+
+"Papers should include at least two tutorials, with a step-by step demonstration of the method. Figures and mathematical formulations are particularly useful here. Where possible, tutorials and examples should include those using the R statistical package or other freeware."
+
+Here explain that we use coypu IAS in Europe as a "fil rouge". 
 
 ## Single population (Olivier)
 
@@ -563,10 +574,6 @@ p_traj <- ggplot(traj_long, aes(x = time, y = value)) +
 # ---- combine panels ----
 p_policy / p_traj
 ```
-
-## Two interacting species (Lucile)
-
-Competition or predator-prey, or host-pathogen / disease thing. See SDP-species-interactions/ in Olivier biblio repo.
 
 ## Metapopulation (Olivier)
 
@@ -1100,19 +1107,19 @@ p_sites <- ggplot(df_all, aes(Time, Abundance, color = Strategy, linetype = Stra
 p_sites
 ```
 
+In perspective, say that this can be used to model competition or predator-prey, or host-pathogen / disease thing. See SDP-species-interactions/ in Olivier biblio repo.
 
-# Acounting for uncertainty
 
-## POMDP (Cassie)
+## Acounting for observation error w/ POMDP (Cassie)
 
-Illustrate POMDP, Olivier has some code extending the computer maintenance example from above. 
+Illustrate POMDP. 
 
 <https://besjournals.onlinelibrary.wiley.com/doi/10.1111/2041-210X.14374>
 
 <https://besjournals.onlinelibrary.wiley.com/doi/10.1111/2041-210X.13692>
 
 
-## Adaptive management (Abby)
+## Accounting for model uncertainty w/ adaptive management (Abby)
 
 When is it useful. Start with value of information? 
 
@@ -1124,7 +1131,7 @@ On a single species ; check out Conroy's book, there is a nice figure illustrati
 
 ## Main messages
 
-How is SDM relevant. 
+How is SDM/SDP relevant. 
 
 ## Limitations
 

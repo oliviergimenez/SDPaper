@@ -135,7 +135,7 @@
 \IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
 \urlstyle{same}
 \hypersetup{
-  pdftitle={A primer on structured decision making for invasive species (using dynamic programming)},
+  pdftitle={Using dynamic programming for making structured decisions about invasive species},
   pdfauthor={Olivier Gimenez1*; Abby Keller2*; Lucile Marescot3*; Cassie Speakman4*},
   colorlinks=true,
   linkcolor={RoyalBlue},
@@ -144,9 +144,9 @@
   urlcolor={RoyalBlue},
   pdfcreator={LaTeX via pandoc}}
 
-\title{A primer on structured decision making for invasive species (using dynamic programming)}
+\title{Using dynamic programming for making structured decisions about invasive species}
 \author{Olivier Gimenez\textsuperscript{1}* \and Abby Keller\textsuperscript{2}* \and Lucile Marescot\textsuperscript{3}* \and Cassie Speakman\textsuperscript{4}*}
-\date{2026-02-27}
+\date{2026-03-15}
 
 \begin{document}
 \maketitle
@@ -168,15 +168,15 @@
 \vspace{1cm}
 \hrule
 
-Invasive species (IAS) pose significant ecological, economic, and public health challenges. Robust methods are needed for guiding effective management. Overall, we hope to demonstrate the flexibility and utility of structured decision making in invasive species management.
+Invasive alien species (IAS) pose significant ecological, economic, and public health challenges. Robust methods are needed for guiding effective management. Overall, we hope to demonstrate the flexibility and utility of structured decision making in invasive species management.
 
-Target journal: Biological invasions? NeoBiota?.
+Target journal: Journal of Animal Ecology
 
 \vspace{3mm}
 \hrule
 \vspace{5mm}
 
-\emph{Keywords}: Adaptive management, Invasive species, Stochastic dynamic programming, Structured decision making
+\emph{Keywords}: Adaptive management, Decision theory, Invasive alien species, Stochastic dynamic programming, Structured decision making, Uncertainty
 
 \newpage
 
@@ -198,17 +198,21 @@ Coypu (Myocastor coypu) as a case study throughout the paper. Code and tutorials
 
 Add a shiny for each case study so that folks can play around?
 
-\section{A primer on structured decision making}\label{a-primer-on-structured-decision-making}
+\section{Explanation of the method}\label{explanation-of-the-method}
+
+``A very brief historical background. Why is the method useful for investigating or analysing the topic in question? Provide some details on the method's applications.''
 
 We do not want to rewrite Lucile's paper\ldots{}
 
-\subsection{Why and what (all)}\label{why-and-what-all}
+\subsection{Structured decision making}\label{structured-decision-making}
+
+Why and what (all)
+
+\subsection{Stochastic dynamic programming (Olivier)}\label{stochastic-dynamic-programming-olivier}
 
 \pandocbounded{\includegraphics[keepaspectratio]{bellman1.png}}
 
 \pandocbounded{\includegraphics[keepaspectratio]{bellman2.png}}
-
-\subsection{Stochastic dynamic programming (Olivier)}\label{stochastic-dynamic-programming-olivier}
 
 Here we present a minimal stochastic dynamic programming (SDP) example. The aim is purely pedagogical: to show how states, actions, transition probabilities, rewards, and time horizon combine to produce an optimal decision rule.
 
@@ -337,7 +341,15 @@ This toy example highlights key features of SDP:
   \textbf{Uncertainty}: decisions account for probabilistic transitions, not deterministic outcomes.
 \end{itemize}
 
-\section{Case studies with coypus}\label{case-studies-with-coypus}
+\section{Things to consider for before using this method}\label{things-to-consider-for-before-using-this-method}
+
+``Outline the requirements for framing hypotheses, data and computing, experimental constraints and statistical power.''
+
+\section{Worked examples}\label{worked-examples}
+
+``Papers should include at least two tutorials, with a step-by step demonstration of the method. Figures and mathematical formulations are particularly useful here. Where possible, tutorials and examples should include those using the R statistical package or other freeware.''
+
+Here explain that we use coypu IAS in Europe as a ``fil rouge''.
 
 \subsection{Single population (Olivier)}\label{single-population-olivier}
 
@@ -396,10 +408,6 @@ The bottom panel of Figure \ref{fig:fig-policy-and-trajectory} illustrates the d
 \pandocbounded{\includegraphics[keepaspectratio]{output/figures/fig-policy-and-trajectory-1.pdf}}
 \caption{\label{fig:fig-policy-and-trajectory}Optimal policy u*(N) (top) and an example trajectory under the optimal policy (bottom, facetted into abundance and effort), starting from N0 = 800.}
 \end{figure}
-
-\subsection{Two interacting species (Lucile)}\label{two-interacting-species-lucile}
-
-Competition or predator-prey, or host-pathogen / disease thing. See SDP-species-interactions/ in Olivier biblio repo.
 
 \subsection{Metapopulation (Olivier)}\label{metapopulation-olivier}
 
@@ -496,17 +504,17 @@ Spatial trajectories further illustrate how coordinated management alters invasi
 \caption{\label{fig:fig-site-dynamics}Site-level abundance dynamics under constant strategies and the SDP-optimal policy. Each panel corresponds to a site; trajectories highlight how spatial heterogeneity and network-driven recolonization can create uneven benefits of control across locations.}
 \end{figure}
 
-\section{Acounting for uncertainty}\label{acounting-for-uncertainty}
+In perspective, say that this can be used to model competition or predator-prey, or host-pathogen / disease thing. See SDP-species-interactions/ in Olivier biblio repo.
 
-\subsection{POMDP (Cassie)}\label{pomdp-cassie}
+\subsection{Acounting for observation error w/ POMDP (Cassie)}\label{acounting-for-observation-error-w-pomdp-cassie}
 
-Illustrate POMDP, Olivier has some code extending the computer maintenance example from above.
+Illustrate POMDP.
 
 \url{https://besjournals.onlinelibrary.wiley.com/doi/10.1111/2041-210X.14374}
 
 \url{https://besjournals.onlinelibrary.wiley.com/doi/10.1111/2041-210X.13692}
 
-\subsection{Adaptive management (Abby)}\label{adaptive-management-abby}
+\subsection{Accounting for model uncertainty w/ adaptive management (Abby)}\label{accounting-for-model-uncertainty-w-adaptive-management-abby}
 
 When is it useful. Start with value of information?
 
@@ -518,7 +526,7 @@ On a single species ; check out Conroy's book, there is a nice figure illustrati
 
 \subsection{Main messages}\label{main-messages}
 
-How is SDM relevant.
+How is SDM/SDP relevant.
 
 \subsection{Limitations}\label{limitations}
 
