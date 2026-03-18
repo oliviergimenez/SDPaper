@@ -1,0 +1,39 @@
+---
+title: "Coypu adaptive management"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+We will use the following discrete-time population model, where $r$ is the intrinsic rate of growth, $K$ is the carrying capacity, $q(u)$ is the harvest rate as a function of action $u$, $R$ is the per-capita growth rate, and $m$ describes whether the per-capita growth rate is linear, concave, or convex:
+
+$$
+N_{t+1} = N_t(1 + R(N_t)) - q(u) \times N + \epsilon
+$$
+$$
+R(N_t) = r \times (1 - (N_t / K) ^ m)
+$$
+
+If $m > 1$, most density—dependent change occurs at high population levels (close to the carrying capacity), which is theoretically common for species with life history strategies typical of large mammals. If $m < 1$, most density-dependent change occurs at low population levels, which is theoretically common for species with life history strategies typical of insects and some fishes (Fowler, 1981).
+
+We will consider the following model set, with five possible values of $m$. This model bounds, but does not contain, the true model we will use to simulate dynamics.
+
+![](figures/m_curves.png)
+
+These different values of $m$ result in different optimal policies (with known dynamics):
+
+![](figures/static_policies.png)
+
+We will use adaptive management, which will update the belief state in the five models over time:
+
+![](figures/belief_plot.png)
+
+And we will see an increase in reward over time:
+
+![](figures/reward_plot.png)
+
+# References
+
+Fowler, C. W. (1981). Density dependence as related to life history strategy. Ecology, 62(3), 602-610.
