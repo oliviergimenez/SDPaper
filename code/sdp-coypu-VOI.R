@@ -1,0 +1,331 @@
+#############################################################
+# Passive adaptive management for coypu (ragondin) regulation
+# -----------------------------------------------------------
+# Goal:
+#   Find an optimal control policy u*(N) under structural uncertainty using the 
+#   weighted average approach for solving passive adaptive management problems.
+#
+# State:
+#   N = total abundance (1D), discretized onto a finite grid
+#
+# Action:
+#   u in [0,1] = control effort (dimensionless), discretized onto a finite grid
+#
+# Stochastic dynamics (1-step, e.g. yearly):
+#   N_{t+1} = N_t(1 + R(N_t)) - q(u) \times N + \epsilon
+#   R(N_t) = r \times (1 - (N_t / K) ^ m)
+#   where q(u) is a saturating removal fraction, R(N_t) is the per-capita growth 
+#   rate, m describes whether the per-capita growth rate is linear, concave, or 
+#   convex, and epsilon is log-normally distributed error
+#
+# Structural uncertainty
+#   We consider a model set with uncertainty about the shape of the per-capita 
+#   growth rate, R(N_t), as described by the value of m. 
+#   If m = 1, the per-capita growth rate declines linearly as a N approaches K.
+#   If m > 1, most density—dependent change occurs at high population levels 
+#   (close to K).
+#   If m < 1, most density-dependent change occurs at low population levels.
+#
+# Reward:
+#   Reward = -(damage(N) + cost(u) + penalty(N))
+#
+# Solution:
+#   Infinite-horizon discounted value iteration at time t, given belief state 
+#   b_t. Solution is simulated for 20 years given known dynamics to demonstrate 
+#   updated belief state and improved reward over time.
+#
+# Notes:
+#   Code is adapted from https://github.com/boettiger-lab/mdplearning.
+###############################################################################
+
+library(tidyverse)
+library(MDPtoolbox)
+
+source("AM_utils.R")
+
+# -----------------------------#
+# 1) State and action grids
+# -----------------------------#
+
+# Carrying capacity: upper bound defining the support for N
+K <- 2000
+
+# Discrete state space for abundance N:
+#  - Here step = 20, so we have 101 states from 0 to 2000.
+#  - Trade-off: finer step => more precise but slower.
+seq_N <- seq(0, K, by = 20)
+S <- length(seq_N)  # number of states
+
+# Discrete action space for control effort u in [0,1]:
+#  - Here step = 0.05, so we have 21 effort levels.
+seq_u <- seq(0, 1, by = 0.05)
+A <- length(seq_u)  # number of actions
+
+# Structural uncertainty
+#  - Uncertainty is incorporated as an unknown per-capita growth rate, which 
+#    takes on different functional forms based on the value of m.
+#  - Here we consider a model set m = {0.4, 0.7, 1, 1.3, 1.7}. 
+#  - The true system dynamics are represented by m = 1.15, which is bounded, yet 
+#    not contained by the model set.
+m <- c(0.4, 0.7, 1, 1.15, 1.3, 1.7)
+true_m <- m[4]
+model_set <- m[!m %in% true_m]
+
+# -----------------------------#
+# 2) Parameters (toy / to calibrate)
+# -----------------------------#
+
+# Intrinsic growth rate (logistic dynamics): controls growth at low N
+r <- 0.9
+
+# Log-standard deviation in log-normally distributed error in population growth
+sigma <- 0.1
+# sigma_e <- 50
+# sigma_d <- 1e4
+
+# Controls how quickly the removal fraction increases with effort u
+# Larger alpha => smaller u already removes a lot (stronger response)
+alpha <- 1.5
+
+# Tolerable threshold (soft constraint): above this, penalties apply
+N_tol <- 400
+
+# -----------------------------#
+# 3) Helper functions
+# -----------------------------#
+
+# Clamp a number into [lo, hi] to avoid leaving state support
+clamp <- function(x, lo, hi) pmin(pmax(x, lo), hi)
+
+# Project a continuous value onto a discrete grid by nearest neighbor
+# (this is the "state discretization" step).
+round_to_grid <- function(x, grid) {
+  grid[which.min((grid - x) ^ 2)]
+}
+
+# Removal fraction as a saturating function of effort u:
+#   q(u) = 1 - exp(-alpha*u)
+# Properties:
+#   q(0)=0, increasing, saturating (diminishing returns).
+q_u <- function(u) 1 - exp(-alpha * u)
+
+# -----------------------------#
+# 4) Population dynamics (1-step)
+# -----------------------------#
+# Stochastic update:
+#   N_{t+1} = N_t(1 + R(N_t)) - q(u) \times N + \epsilon
+#   R(N_t) = r \times (1 - (N_t / K) ^ m)
+#   where q(u) is a saturating removal fraction, R(N_t) is the per-capita growth 
+#   rate, m describes whether the per-capita growth rate is linear, concave, or 
+#   convex, and epsilon is log-normally distributed error
+#
+# Interpretation:
+# - logistic growth adds recruits at low N and slows near K, and m describes the 
+#   shape of the relationship between the per-capita growth rate, R(N), and N
+# - control removes a fraction q(u) of the population
+step_fun <- function(N, u, m, sigma) {
+  
+  Nnext <- N + r * N * (1 - (N / K) ^ m) - q_u(u) * N
+  clamp(Nnext, 0, K)
+  
+  if (Nnext <= 0) {
+    x <- c(1, rep(0, S - 1))
+  } else { # stochastic
+    # P(S | s', sigma)
+    x <- dlnorm(seq_N, log(Nnext), sdlog = sigma)
+    # x <- dnorm(seq_N, Nnext, sd = sigma)
+    # x <- dnorm(seq_N, Nnext, sd = sigma_e + sigma_d / Nnext) 
+    # normalize
+    x <- x / sum(x) 
+  }
+  return(x)
+}
+
+sim_next <- function(N, u, m, sigma) {
+  
+  Nnext <- N + r * N * (1 - (N / K) ^ m) - q_u(u) * N
+  clamp(Nnext, 0, K)
+  
+  x <- rlnorm(1, log(Nnext), sdlog = sigma)
+  
+  return(x)
+}
+
+# -----------------------------#
+# 5) Reward function = negative total costs
+# -----------------------------#
+# Components:
+# - damage(N): increasing convex function of N (impacts accelerate with abundance)
+# - cost(u): increasing convex function of u (marginal effort becomes harder/costlier)
+# - penalty(N): soft constraint if N > N_tol (risk aversion / unacceptable state)
+reward_fun <- function(N, u) {
+  
+  # Damages (toy): linear + quadratic
+  # - linear = baseline nuisance
+  # - quadratic = rapidly increasing impacts at high N
+  damage <- 0.1 * N + 0.001 * N ^ 2
+  
+  # Management cost (toy): convex in u
+  # - proportional part + quadratic part for increasing marginal costs
+  cost <- 500 * u + 1000 * u ^ 2
+  
+  # Penalty above threshold (toy): increases linearly beyond N_tol
+  penalty <- if (N > N_tol) 2000 * (N - N_tol) / N_tol else 0
+  
+  # Reward = negative costs (maximize reward <=> minimize cost)
+  -(damage + cost + penalty)
+}
+
+
+# -----------------------------#
+# 6) Build transition kernels P and reward matrix R
+# -----------------------------#
+# - P: [S, S, A]_k transition probability array for model k
+#      P[s, s_next, a]_k = Prob(next_state = s_next | current_state = s, action = a, model = k)
+# - R: [S, A] reward matrix
+#      R[s, a] = immediate reward when choosing action a in state s
+#
+
+
+# function for calculating the transition probability array for model k 
+# (i.e., given value of m)
+get_P <- function(m, S, A, seq_N, seq_u, sigma) {
+  
+  P <- array(0, dim = c(S, S, A))
+  
+  for (s in seq_len(S)) {
+    
+    # Current abundance for state index s
+    N <- seq_N[s]
+    
+    for (a in seq_len(A)) {
+      
+      # Current effort for action index a
+      u <- seq_u[a]
+      
+      # Continuous next abundance under dynamics + control
+      P[s, , a] <- step_fun(N, u, m, sigma)
+      
+    }
+  }
+  
+  return(P)
+}
+
+# create a list of transition matrices for each model k in the model set
+P <- list()
+for (i in seq_len(length(model_set))) {
+  P[[i]] <- get_P(model_set[i], S, A, seq_N, seq_u, sigma)
+}
+names(P) <- c("1", "2", "3", "4", "5")
+
+# get reward
+R <- matrix(0, nrow = S, ncol = A)
+for (s in seq_len(S)) {
+  
+  # Current abundance for state index s
+  N <- seq_N[s]
+  
+  for (a in seq_len(A)) {
+    
+    # Current effort for action index a
+    u <- seq_u[a]
+    
+    # Immediate reward at (N,u)
+    R[s, a] <- reward_fun(N, u)
+  }
+}
+
+# -----------------------------#
+# 7) Solve infinite-horizon discounted MDP with known dynamics
+# -----------------------------#
+
+# create list of solutions for known dynamics
+known_sol <- list()
+for (i in 1:length(P)) {
+  known_sol[[i]] <- mdp_value_iteration(P[[i]], R,
+                                        discount = 0.99, epsilon = 1e-6)
+}
+
+# -----------------------------#
+# 8) Solve infinite-horizon discounted MDP with unknown dynamics
+# -----------------------------#
+
+b <- 1 / length(P)
+P_NL <- Reduce("+", Map("*", P, b))
+out_nolearning <- mdp_value_iteration(P_NL, R,
+                                      discount = 0.99, epsilon = 1e-6)
+
+# -----------------------------#
+# 9) Simulate a trajectory under the optimal and bet-hedging policies
+# -----------------------------#
+simulate_policy <- function(N0, n_years = 30, sol, m) {
+  
+  N_path <- numeric(n_years)
+  u_path <- numeric(n_years)
+  reward_path <- numeric(n_years)
+  
+  # Initial abundance (clamped to [0,K])
+  N_path[1] <- clamp(N0, 0, K)
+  
+  for (t in 1:(n_years - 1)) {
+    
+    # Find the closest state index (in case N0 is not exactly on the grid)
+    s <- which.min((seq_N - N_path[t])^2)
+    
+    # Optimal action index and corresponding effort
+    a <- sol$policy[s]
+    u <- seq_u[a]
+    
+    # Store action and reward at current time
+    u_path[t] <- u
+    reward_path[t] <- reward_fun(N_path[t], u)
+    
+    # Step forward under dynamics and snap to grid (consistent with the MDP)
+    Nnext <- sim_next(N_path[t], u, m, sigma)
+    N_path[t + 1] <- round_to_grid(Nnext, seq_N)
+  }
+  
+  # Store action and reward at final time step
+  sfinal <- which.min((seq_N - N_path[n_years])^2)
+  u_path[n_years] <- seq_u[sol$policy[sfinal]]
+  reward_path[n_years] <- reward_fun(N_path[n_years], u_path[n_years])
+  
+  data.frame(
+    year = 1:n_years,
+    N = N_path,
+    u = u_path,
+    reward = reward_path
+  )
+}
+
+n_iter <- 200
+out_df <- matrix(NA, nrow = 0, ncol = 3)
+colnames(out_df) <- c("m", "policy", "reward")
+for (i in 1:n_iter) {
+  for (j in 1:length(model_set)) {
+    
+    # known policy
+    out_true <- simulate_policy(N0 = 800, n_years = 40, 
+                                sol = known_sol[[j]], m = model_set[j])
+    out_df <- rbind(out_df, c(m[j], "known", mean(out_true$reward)))
+    
+    # bet-hedging strategy
+    out_bet <- simulate_policy(N0 = 800, n_years = 40, 
+                                sol = out_nolearning, m = model_set[j])
+    out_df <- rbind(out_df, c(m[j], "bet", mean(out_bet$reward)))
+    
+  }
+}
+out_df <- as.data.frame(out_df)
+out_df$reward <- as.numeric(out_df$reward)
+
+# -----------------------------#
+# 10) Calculate VOI
+# -----------------------------#
+
+# ggplot(data = out_df) +
+#   geom_density(aes(x = reward, fill = policy), alpha = 0.4)
+PI <- mean(out_df[out_df$policy == "known", "reward"])
+NL <- mean(out_df[out_df$policy == "bet", "reward"])
+PI - NL
