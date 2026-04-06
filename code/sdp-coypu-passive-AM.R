@@ -41,7 +41,7 @@
 library(tidyverse)
 library(MDPtoolbox)
 
-source("AM_utils.R")
+source("code/AM_utils.R")
 
 # -----------------------------#
 # 1) State and action grids
@@ -69,6 +69,7 @@ A <- length(seq_u)  # number of actions
 #    not contained by the model set.
 m <- c(0.4, 0.7, 1, 1.15, 1.3, 1.7)
 true_m <- m[4]
+model_set <- m[!m %in% true_m]
 
 # -----------------------------#
 # 2) Parameters (toy / to calibrate)
@@ -163,12 +164,10 @@ reward_fun <- function(N, u) {
 
 
 # -----------------------------#
-# 6) Build transition kernels P and reward matrix R
+# 6) Build transition kernels P for each model k
 # -----------------------------#
 # - P: [S, S, A]_k transition probability array for model k
 #      P[s, s_next, a]_k = Prob(next_state = s_next | current_state = s, action = a, model = k)
-# - R: [S, A] reward matrix
-#      R[s, a] = immediate reward when choosing action a in state s
 #
 
 
@@ -202,7 +201,14 @@ P <- list()
 for (i in seq_len(length(m))) {
   P[[i]] <- get_P(m[i], S, A, seq_N, seq_u, sigma)
 }
-names(P) <- c("1", "2", "3", "4", "5", "6")
+names(P) <- c("1", "2", "3", "true", "4", "5")
+
+# -----------------------------#
+# 7) Build reward matrix R
+# -----------------------------#
+# - R: [S, A] reward matrix
+#      R[s, a] = immediate reward when choosing action a in state s
+#
 
 # get reward
 R <- matrix(0, nrow = S, ncol = A)
@@ -222,18 +228,21 @@ for (s in seq_len(S)) {
 }
 
 # -----------------------------#
-# 7) Solve infinite-horizon discounted MDP with known dynamics
+# 8) Solve infinite-horizon discounted MDP with known dynamics
 # -----------------------------#
 # For comparison, first solve the MDP when the system dynamics are known.
 # Use value iteration algorithm in MDPtoolbox.
 #
+
+# set discount factor
+discount <- 0.95
 
 # create list of solutions for known dynamics
 known_sol <- list()
 known_policies <- data.frame(m = NULL, N = NULL, policy = NULL)
 for (i in 1:length(P)) {
   known_sol[[i]] <- mdp_value_iteration(P[[i]], R, 
-                                         discount = 0.99, epsilon = 1e-6)
+                                         discount = discount, epsilon = 1e-6)
   known_policies <- rbind(known_policies,
                           data.frame(m = rep(m[[i]], S),
                                      N = seq_N,
@@ -245,7 +254,7 @@ write.csv(known_policies, "data/passive_known_dynamics.csv")
 
 
 # -----------------------------#
-# 7) Solve passive adaptive management with unknown dynamics
+# 9) Solve passive adaptive management with unknown dynamics
 # -----------------------------#
 # Uses two functions found in AM_utils.R:
 # - mdp_compute_policy: calculates the optimal solution, given the transition 
@@ -259,7 +268,6 @@ write.csv(known_policies, "data/passive_known_dynamics.csv")
 Tmax <- 30 # number of time steps for simulation
 x0 <- 41 # state at t = 0, (index of seq_N)
 a0 <- 1 # action at t = 0
-discount <- 0.99
 
 # create model set: list of transition dynamics, P_k, excluding the true system 
 # dynamics

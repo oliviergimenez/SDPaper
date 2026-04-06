@@ -1,9 +1,17 @@
 #############################################################
-# Value of Information for coypu (ragondin) regulation
+# Active adaptive management for coypu (ragondin) regulation
 # -----------------------------------------------------------
 # Goal:
-#   Calculate the Value of Information (VOI) for reducing structural uncertainty 
-#   related to the per-capita coypu growth rate.
+#   Find an optimal control policy u*(N) under structural uncertainty using an
+#   active adaptive management strategy. The problem is formulated as a 
+#   partially observable Markov Decision Process (POMDP), where the belief 
+#   state enters the state space of the MDP. The POMDP is solved using the 
+#   SARSOP (Successive Approximations of the Reachable Space under
+#   Optimal Policies) algorithm (Kurniawati et al., 2008).
+#
+#   We also exemplify the dual control problem by finding the optimal policy
+#   for multiple discount factors, representing the way future reward is valued
+#   relative to current reward.
 #
 # State:
 #   N = total abundance (1D), discretized onto a finite grid
@@ -28,12 +36,19 @@
 #
 # Reward:
 #   Reward = -(damage(N) + cost(u) + penalty(N))
+#
+# Solution:
+#   State-dependent optimal action, u*(N), given uncertain model of population 
+#   dynamics, initial belief state, and discount factor.
+#
+# Notes:
+#   Kurniawati, H., Hsu, D., & Lee, W. S. (2008, June). Sarsop: Efficient point-
+#   based pomdp planning by approximating optimally reachable belief spaces. In 
+#   Robotics: Science and systems (Vol. 2008).
 ###############################################################################
 
 library(tidyverse)
-library(MDPtoolbox)
-
-source("AM_utils.R")
+library(sarsop)
 
 # -----------------------------#
 # 1) State and action grids
@@ -45,7 +60,7 @@ K <- 2000
 # Discrete state space for abundance N:
 #  - Here step = 20, so we have 101 states from 0 to 2000.
 #  - Trade-off: finer step => more precise but slower.
-seq_N <- seq(0, K, by = 20)
+seq_N <- seq(0, K, by = 50)
 S <- length(seq_N)  # number of states
 
 # Discrete action space for control effort u in [0,1]:
@@ -62,6 +77,7 @@ A <- length(seq_u)  # number of actions
 m <- c(0.4, 0.7, 1, 1.15, 1.3, 1.7)
 true_m <- m[4]
 model_set <- m[!m %in% true_m]
+n <- length(model_set)
 
 # -----------------------------#
 # 2) Parameters (toy / to calibrate)
@@ -129,16 +145,6 @@ step_fun <- function(N, u, m, sigma) {
   return(x)
 }
 
-sim_next <- function(N, u, m, sigma) {
-  
-  Nnext <- N + r * N * (1 - (N / K) ^ m) - q_u(u) * N
-  clamp(Nnext, 0, K)
-  
-  x <- rlnorm(1, log(Nnext), sdlog = sigma)
-  
-  return(x)
-}
-
 # -----------------------------#
 # 5) Reward function = negative total costs
 # -----------------------------#
@@ -166,12 +172,10 @@ reward_fun <- function(N, u) {
 
 
 # -----------------------------#
-# 6) Build transition kernels P and reward matrix R
+# 6) Build transition kernels P for each model k
 # -----------------------------#
 # - P: [S, S, A]_k transition probability array for model k
 #      P[s, s_next, a]_k = Prob(next_state = s_next | current_state = s, action = a, model = k)
-# - R: [S, A] reward matrix
-#      R[s, a] = immediate reward when choosing action a in state s
 #
 
 
@@ -205,7 +209,13 @@ P <- list()
 for (i in seq_len(length(model_set))) {
   P[[i]] <- get_P(model_set[i], S, A, seq_N, seq_u, sigma)
 }
-names(P) <- c("1", "2", "3", "4", "5")
+
+# -----------------------------#
+# 7) Build reward matrix R
+# -----------------------------#
+# - R: [S, A] reward matrix
+#      R[s, a] = immediate reward when choosing action a in state s
+#
 
 # get reward
 R <- matrix(0, nrow = S, ncol = A)
@@ -225,95 +235,139 @@ for (s in seq_len(S)) {
 }
 
 # -----------------------------#
-# 7) Solve infinite-horizon discounted MDP with known dynamics
+# 8) Set up arguments for POMDP solver (SARSOP algorithm)
 # -----------------------------#
+# 
+#   Note: All below matrix depictions of solver arguments assume five candidate models (n = 5)
+#
+# - transition: block diagonal matrix that allows belief to be added to state space 
+#      - Dimensions: [S * n, S * n, A]  
+#      - Each transition matrix in list P for each of n models is a sub matrix
+#      - The 0 symbols represent entire blocks filled with zeros that "pad" the 
+#        space between the diagonal blocks
+#                 __                                        __
+#                 | P_{k=1}    0       0       0       0     |
+#                 |    0    P_{k=2}    0       0       0     |
+#   transition =  |    0       0    P_{k=3}    0       0     |
+#                 |    0       0       0    P_{k=4}    0     |
+#                 |_   0       0       0       0    P_{k=5} _|
+#
+# - reward: reward matrix
+#      - Dimensions: [S * n, A]  
+#      - R represents S x A reward matrix
+#             __   __
+#             |  R  |
+#             |  R  |
+#   reward =  |  R  |
+#             |  R  |
+#             |_ R _|
+# 
+# - observation: observation matrix, stacked identity matrix to assume perfect observation
+#      - Dimensions: [S * n, S, A]  
+#      - I refers to identity matrix of dimensions S * S
+#      - Rows are the state space (with belief), and columns are the observation space
+#                  __   __
+#                  |  I  |
+#                  |  I  |
+#   observation =  |  I  |
+#                  |  I  |
+#                  |_ I _|
+#
 
-# create list of solutions for known dynamics
-known_sol <- list()
-for (i in 1:length(P)) {
-  known_sol[[i]] <- mdp_value_iteration(P[[i]], R,
-                                        discount = 0.99, epsilon = 1e-6)
+## transition
+# create an empty transition matrix filled with 0
+transition <- array(0, dim = c(S * n, S * n, A))
+# create block diagonal matrix by filling in with P
+for (i in 1:n) {
+  s_start <- (i - 1) * S + 1
+  s_end <- S * i
+  transition[s_start:s_end, s_start:s_end, ] <- P[[i]]
+}
+
+## reward
+# create an empty reward matrix
+reward <- array(NA, dim = c(S * n, A))
+# fill in reward with R
+for (i in 1:n) {
+  s_start <- (i - 1) * S + 1
+  s_end <- S * i
+  reward[s_start:s_end, ] <- R
+}
+
+## observation
+# create an empty observation matrix
+observation <- array(NA, dim = c(S * n, S, A))
+# fill in with identity matrices
+for (i in 1:n) {
+  s_start <- (i - 1) * S + 1
+  s_end <- S * i
+  observation[s_start:s_end, 1:S, ] <- diag(S)
 }
 
 # -----------------------------#
-# 8) Solve infinite-horizon discounted MDP with unknown dynamics
+# 9) Run POMDP solver (SARSOP algorithm)
 # -----------------------------#
+#
+# Solving the POMDP with the SARSOP algorithm occurs in two steps:
+#
+# 1. Generate a set of alpha vectors that approximates V_pi(b), or the expected
+#    total reward of executing policy pi starting from belief b.
+#    - V* is the value function associated with the optimal policy, pi*, and can 
+#      be approximated by a piece-wise linear function:
+#      V(b) = max(alpha ⋅ b)
+#      where alpha is a finite set of vectors called alpha vectors, b is the 
+#      discrete vector representation of the belief, and alpha ⋅ b is the inner
+#      product
+#
+# 2. Calculate the policy by selecting the action corresponding to the best
+#    alpha-vector at the current belief.
+# 
+# We will find the optimal policy for two discount factors that represent
+# different ways of valuing future reward relative to current reward.
 
-b <- 1 / length(P)
-P_NL <- Reduce("+", Map("*", P, b))
-out_nolearning <- mdp_value_iteration(P_NL, R,
-                                      discount = 0.99, epsilon = 1e-6)
+# Set up two discount factors to highlight the dual control problem
+discount1 <- 0.95 # high future rewards more valuable
+discount2 <- 0.75 # high future rewards less valuable
 
-# -----------------------------#
-# 9) Simulate a trajectory under the optimal and bet-hedging policies
-# -----------------------------#
-simulate_policy <- function(N0, n_years = 30, sol, m) {
-  
-  N_path <- numeric(n_years)
-  u_path <- numeric(n_years)
-  reward_path <- numeric(n_years)
-  
-  # Initial abundance (clamped to [0,K])
-  N_path[1] <- clamp(N0, 0, K)
-  
-  for (t in 1:(n_years - 1)) {
-    
-    # Find the closest state index (in case N0 is not exactly on the grid)
-    s <- which.min((seq_N - N_path[t])^2)
-    
-    # Optimal action index and corresponding effort
-    a <- sol$policy[s]
-    u <- seq_u[a]
-    
-    # Store action and reward at current time
-    u_path[t] <- u
-    reward_path[t] <- reward_fun(N_path[t], u)
-    
-    # Step forward under dynamics and snap to grid (consistent with the MDP)
-    Nnext <- sim_next(N_path[t], u, m, sigma)
-    N_path[t + 1] <- round_to_grid(Nnext, seq_N)
-  }
-  
-  # Store action and reward at final time step
-  sfinal <- which.min((seq_N - N_path[n_years])^2)
-  u_path[n_years] <- seq_u[sol$policy[sfinal]]
-  reward_path[n_years] <- reward_fun(N_path[n_years], u_path[n_years])
-  
-  data.frame(
-    year = 1:n_years,
-    N = N_path,
-    u = u_path,
-    reward = reward_path
-  )
-}
+# Get initial belief (uniform across models)
+b <- rep(1, dim(transition)[1]) / dim(transition)[1]
 
-n_iter <- 200
-out_df <- matrix(NA, nrow = 0, ncol = 3)
-colnames(out_df) <- c("m", "policy", "reward")
-for (i in 1:n_iter) {
-  for (j in 1:length(model_set)) {
-    
-    # known policy
-    out_true <- simulate_policy(N0 = 800, n_years = 40, 
-                                sol = known_sol[[j]], m = model_set[j])
-    out_df <- rbind(out_df, c(m[j], "known", mean(out_true$reward)))
-    
-    # bet-hedging strategy
-    out_bet <- simulate_policy(N0 = 800, n_years = 40, 
-                                sol = out_nolearning, m = model_set[j])
-    out_df <- rbind(out_df, c(m[j], "bet", mean(out_bet$reward)))
-    
-  }
-}
-out_df <- as.data.frame(out_df)
-out_df$reward <- as.numeric(out_df$reward)
+## solve POMDP with higher discount factor
+# generate alpha vectors, approximation of V(b)
+# Note: this is long-running
+time1 <- Sys.time()
+alpha1 <- sarsop(
+  transition = transition, 
+  observation = observation, 
+  reward = reward, 
+  discount = discount1
+)
+time2 <- Sys.time()
+time2 - time1
+# Note: Each alpha-vector is associated with an action.
 
-# -----------------------------#
-# 10) Calculate VOI
-# -----------------------------#
+# compute policy based on alpha vectors
+df1 <- compute_policy(alpha1, transition, observation, reward, b)
 
-# ggplot(data = out_df) +
-#   geom_density(aes(x = reward, fill = policy), alpha = 0.4)
-PI <- mean(out_df[out_df$policy == "known", "reward"])
-NL <- mean(out_df[out_df$policy == "bet", "reward"])
-PI - NL
+# save data
+write.csv(df1, "data/active_am_data_highdiscount.csv")
+
+#plot(df$state, df$policy)
+
+## solve POMDP with lower discount factor
+# generate alpha vectors, approximation of V(b)
+time1 <- Sys.time()
+alpha2 <- sarsop(
+  transition = transition, 
+  observation = observation, 
+  reward = reward, 
+  discount = discount2
+)
+time2 <- Sys.time()
+time2 - time1
+
+# compute policy based on alpha vectors
+df2 <- compute_policy(alpha2, transition, observation, reward, b)
+
+# save data
+write.csv(df2, "data/active_am_data_lowdiscount.csv")
