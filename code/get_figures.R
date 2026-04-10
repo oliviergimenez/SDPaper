@@ -116,3 +116,36 @@ plot_passive <- plot_belief + plot_reward + plot_layout(ncol = 1)
 # save
 ggsave("figures/passive_AM.png", plot_passive, dpi = 400,
        width = 4, height = 5)
+
+
+##############################
+##############################
+# Active adaptive management #
+##############################
+##############################
+
+# get states
+seq_N_am <- seq(0, K, by = 100)
+
+# read in data
+discount_high <- read.csv("data/active_am_data_highdiscount.csv") %>% 
+  mutate(N = seq_N_am)
+discount_low <- read.csv("data/active_am_data_lowdiscount.csv") %>% 
+  mutate(N = seq_N_am)
+
+# plot
+plot_high <- ggplot(data = discount_high) +
+  geom_line(aes(x = N, y = policy)) +
+  labs(x = "N", y = "optimal action") +
+  ggtitle("Discount factor: 0.95") +
+  theme_minimal()
+
+plot_low <- ggplot(data = discount_low) +
+  geom_line(aes(x = N, y = policy)) +
+  labs(x = "N", y = "optimal action") +
+  ggtitle("Discount factor: 0.75") +
+  theme_minimal()  
+
+final_active <- plot_high + plot_low + plot_layout(nrow = 1)
+ggsave("figures/active_AM.png", final_active, dpi = 400,
+       width = 6, height = 3)
