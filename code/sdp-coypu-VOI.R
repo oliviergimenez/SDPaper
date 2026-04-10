@@ -33,7 +33,7 @@
 library(tidyverse)
 library(MDPtoolbox)
 
-source("AM_utils.R")
+source("code/AM_utils.R")
 
 # -----------------------------#
 # 1) State and action grids
@@ -287,6 +287,7 @@ simulate_policy <- function(N0, n_years = 30, sol, m) {
   )
 }
 
+# simulate 200 replicates per model in the model set
 n_iter <- 200
 out_df <- matrix(NA, nrow = 0, ncol = 3)
 colnames(out_df) <- c("m", "policy", "reward")

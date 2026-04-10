@@ -42,17 +42,11 @@ m_plot <- ggplot() +
     "True Model" = "firebrick",
     setNames(viridis_pal()(length(unique(m_data$m)) - 1), 
              as.character(unique(m_data$m[m_data$m != true_m])))
-  ))
-
-# save
-ggsave("figures/model_set.png", m_plot, dpi = 400,
-       width = 5, height = 3)
-
-###############################
-###############################
-# Passive adaptive management #
-###############################
-###############################
+  )) +
+  ggtitle("A. Model set") +
+  theme_minimal() +
+  theme(legend.position = "None",
+        plot.title = element_text(hjust = 0.5))
 
 ##############################
 # policies with known dynamics
@@ -72,15 +66,23 @@ plot_known_policies <- ggplot() +
     "True Model" = "firebrick",
     setNames(viridis_pal()(length(unique(known_policies$m)) - 1), 
              as.character(unique(known_policies$m[known_policies$m != true_m])))
-  ))
+  )) +
+  ggtitle("B. Optimal policies\nwith known dynamics") +
+  theme_minimal() +
+  theme(plot.title = element_text(hjust = 0.5))
+
+final_plot <- m_plot + plot_known_policies + plot_layout(nrow = 1)
 
 # save
-ggsave("figures/passive_known_policies.png", plot_known_policies, dpi = 400,
-       width = 5, height = 3)
+ggsave("figures/model_set_policies.png", final_plot, dpi = 400,
+       width = 7, height = 3)
 
 
-########################
-# passive AM simulations 
+###############################
+###############################
+# Passive adaptive management #
+###############################
+###############################
 
 # read in data
 posterior <- read.csv("data/passive_am_belief.csv")[, -1]

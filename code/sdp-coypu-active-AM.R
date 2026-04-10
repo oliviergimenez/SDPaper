@@ -58,9 +58,9 @@ library(sarsop)
 K <- 2000
 
 # Discrete state space for abundance N:
-#  - Here step = 20, so we have 101 states from 0 to 2000.
+#  - Here step = 100, so we have 21 states from 0 to 2000.
 #  - Trade-off: finer step => more precise but slower.
-seq_N <- seq(0, K, by = 50)
+seq_N <- seq(0, K, by = 100)
 S <- length(seq_N)  # number of states
 
 # Discrete action space for control effort u in [0,1]:
@@ -74,8 +74,8 @@ A <- length(seq_u)  # number of actions
 #  - Here we consider a model set m = {0.4, 0.7, 1, 1.3, 1.7}. 
 #  - The true system dynamics are represented by m = 1.15, which is bounded, yet 
 #    not contained by the model set.
-m <- c(0.4, 0.7, 1, 1.15, 1.3, 1.7)
-true_m <- m[4]
+m <- c(0.7, 1.15, 1.3)
+true_m <- m[2]
 model_set <- m[!m %in% true_m]
 n <- length(model_set)
 
