@@ -1,11 +1,12 @@
 ---
 title: "Coypu adaptive management"
 output: pdf_document
+bibliography: references.bib
 ---
 
 # Adaptive management
 
-Decision theoretic methods can be used to make control decisions not only in the face of uncertainty, but also to reduce uncertainty over time. Adaptive management, or “learning by doing”, involves making decisions to achieve a management objective while simultaneously learning about system dynamics to improve future management success (Holling 1978, Walters 1986). Adaptive management approaches differ based on whether they learn only from the past (passive adaptive management) or anticipate future learning (active adaptive management) (Chades et al., 2017).
+Decision theoretic methods can be used to make control decisions not only in the face of uncertainty, but also to reduce uncertainty over time. Adaptive management, or “learning by doing”, involves making decisions to achieve a management objective while simultaneously learning about system dynamics to improve future management success [@holling1978adaptive; @walters1986adaptive]. Adaptive management approaches differ based on whether they learn only from the past (passive adaptive management) or anticipate future learning (active adaptive management) [@chades2017optimization].
 
 Here we apply adaptive management strategies to inform control decisions for a single coypu population and to learn about and reduce uncertainty in the per-capita growth rate. We will use the following discrete-time population model, where $r$ is the intrinsic rate of growth; $K$ is the carrying capacity; $q(u)$ is the harvest rate as a function of action $u$; $R$ is the per-capita growth rate; $m$ describes whether the per-capita growth rate is linear, concave, or convex; and $\epsilon$ is log-normally distributed noise:
 
@@ -16,31 +17,34 @@ $$
 R(N_t) = r \times (1 - (N_t / K) ^ m)
 $$
 
-If $m > 1$, most density—dependent change occurs at high population levels (close to the carrying capacity), which is theoretically common for species with life history strategies typical of large mammals. If $m < 1$, most density-dependent change occurs at low population levels, which is theoretically common for species with life history strategies typical of insects and some fishes (Fowler, 1981).
+If $m > 1$, most density—dependent change occurs at high population levels (close to the carrying capacity), which is theoretically common for species with life history strategies typical of large mammals. If $m < 1$, most density-dependent change occurs at low population levels, which is theoretically common for species with life history strategies typical of insects and some fishes [@fowler1981density].
 
-We will consider the following model set, with five possible values of $m$. This model bounds, but does not contain, the true model we will use to simulate dynamics in the passive adaptive management approach (Figure XA). These different values of $m$ result in different optimal policies when system dynamics are known perfectly (Figure XB).
+We will consider the following model set, with five possible values of $m$. This model bounds, but does not contain, the true model we will use to simulate dynamics in the passive adaptive management approach Figure 1A. These different values of $m$ result in different optimal policies when system dynamics are known perfectly Figure 1B.
 
-Figure X: *A.* Model set representing structural uncertainty in the per-capita growth rate. *B.* Optimal state-dependent removal actions assuming perfectly known population dynamics, solved with stochastic dynamic programming. In both panels, colors correpond to different values of $m$ in the model set, and the red dashed line corresponds to the true model dynamics used for simulation in the passive adaptive management approach.
+```{r model-set, fig.cap="$A.$ Model set representing structural uncertainty in the per-capita growth rate. $B.$ Optimal state-dependent removal actions assuming perfectly known population dynamics, solved with stochastic dynamic programming. In both panels, colors correpond to different values of $m$ in the model set, and the red dashed line corresponds to the true model dynamics used for simulation in the passive adaptive management approach.", out.width="90%", fig.align="center", echo = FALSE}
 
-![](../figures/model_set_policies.png)
+knitr::include_graphics("../figures/model_set_policies.png")
+```
+
+
 
 ## Value of Information
 
-For a decision maker, uncertainty may not be important to resolve; learning may not be inherently valuable if it does not result in improved management outcomes. A Value of Information (VoI) analysis *a priori* quantifies the importance of reducing uncertainty, or the expected improvement on management objectives if uncertainty were resolved (Raiffa and Schlaifer, 1961). If the VOI is high, an adaptive management approach is typically justified.
+For a decision maker, uncertainty may not be important to resolve; learning may not be inherently valuable if it does not result in improved management outcomes. A Value of Information (VoI) analysis *a priori* quantifies the importance of reducing uncertainty, or the expected improvement on management objectives if uncertainty were resolved [@raiffa2000applied]. If the VOI is high, an adaptive management approach is typically justified.
 
-The expected value of perfect information (EVPI) is measured as the difference between 1) $PI$, or the expected value once uncertainty has been resolved because the optimal action is chosen after knowing which model best describes the system, and 2) $NL$, or the expected value in the face of uncertainty because the optimal action is chosen with no learning about the system (Runge et al., 2011). The difference between these terms, $\text{EVPI} = PI - NL$, is the expected improvement in management performance due to acquiring perfect information.
+The expected value of perfect information (EVPI) is measured as the difference between 1) $PI$, or the expected value once uncertainty has been resolved because the optimal action is chosen after knowing which model best describes the system, and 2) $NL$, or the expected value in the face of uncertainty because the optimal action is chosen with no learning about the system [@runge2011uncertainty]. The difference between these terms, $\text{EVPI} = PI - NL$, is the expected improvement in management performance due to acquiring perfect information.
 
 To calculate EVPI for a sequential decision problem, we first use SDP to calculate the optimal state-dependent policy with assumed system dynamics, $\pi^*(s)_k$, for each model $k$ in the model set $K$, given each transition matrix, $P_k$. We also calculate the bet-hedging strategy, or the optimal policy given uncertain dynamics, $\pi^*(s)_{NL}$. This bet-hedging strategy is calculated with the transition matrix $P_{NL}$, representing the average of the transitions of each model, $P_k$, weighted by each model belief, $b$: $P_{NL}(s_{t+1}|s_t, a_t) = \sum_{k\in K}b(k)P_k(s_{t+1}|s_t, a_t)$.
 
-Using the policies calculated with known dynamics, $\pi^*(s)_k$, and unknown dynamics, $\pi^*(s)_{NL}$, we find the EVPI by first simulating $i$ replicated population trajectories assuming each model $k$, applying both policies with known and unknown dynamics, and calculating the value at time $t$ over time horizon $T$. The value associated with applying the policy with known dynamics is $V_{k,t,i}(s_t, a_t | a_t = \pi^*(s)_k)$, and the value associated with applying unknown dynamics is $V_{k,t,i}(s_t, a_t | a_t = \pi^*(s)_{NL})$. The EVPI is therefore $\frac{1}{S}\frac{1}{K}\frac{1}{T}\frac{1}{I}\sum_s \sum_k \sum_t \sum_i V_{k,t,i}(s_t, a_t | a_t = \pi^*(s)_k) - \frac{1}{S}\frac{1}{K}\frac{1}{T}\frac{1}{I}\sum_s \sum_k \sum_t \sum_i V_{k,t,i}(s_t, a_t | a_t = \pi^*(s)_{NL})$.
+Using the policies calculated with known dynamics, $\pi^*(s)_k$, and unknown dynamics, $\pi^*(s)_{NL}$, we find the EVPI by first simulating $i$ replicated population trajectories assuming each model $k$, applying both policies with known and unknown dynamics, and calculating the value at time $t$ over time horizon $T$. The value associated with applying the policy with known dynamics is $V_{k,t,i}(s_t, a_t | a_t = \pi^*(s)_k)$, and the value associated with applying unknown dynamics is $V_{k,t,i}(s_t, a_t | a_t = \pi^*(s)_{NL})$. The EVPI is therefore $E_{s,k,t,i}[V(s_t, a_t | a_t = \pi^*(s)_k)] - E_{s,k,t,i}[V(s_t, a_t | a_t = \pi^*(s)_{NL})]$.
 
-In the context of coypu regulation, the EVPI represents the expected improvement on the management objective if uncertainty about the per-capita growth rate was reduced. We calculate the EVPI for a model set, $K$, where $m \in \{0.4, 0.7, 1, 1.3, 1.7\}$ (Figure XA) for $I = 200$ iterations over a $T = 40$ time horizon. We assume equal belief in each model. The expected value once uncertainty has been resolved, $PI$, is -1730.4, the expected value with no learning, $NL$, is -1787.8, and the EVPI is $PI - NL = 57.4$. It is therefore valuable to learn about the population dynamics and per-capita growth rate, as this learning is expected to improve performance on the management objective.
+In the context of coypu regulation, the EVPI represents the expected improvement on the management objective if uncertainty about the per-capita growth rate was reduced. We calculate the EVPI for a model set, $K$, where $m \in \{0.4, 0.7, 1, 1.3, 1.7\}$ Figure 1A for $I = 200$ iterations over a $T = 40$ time horizon. We assume equal belief in each model. The expected value once uncertainty has been resolved, $PI$, is -1730.4, the expected value with no learning, $NL$, is -1787.8, and the EVPI is $PI - NL = 57.4$. It is therefore valuable to learn about the population dynamics and per-capita growth rate, as this learning is expected to improve performance on the management objective.
 
 ## Passive adaptive management
 
-With passive adaptive management, uncertainty is reduced and management performance improves over time, yet decisions at each time step are optimized assuming that current knowledge of the system will not change into the future. Learning therefore occurs by monitoring the effect of an implemented action, rather than during the optimization procedure (Chades et al., 2011).
+With passive adaptive management, uncertainty is reduced and management performance improves over time, yet decisions at each time step are optimized assuming that current knowledge of the system will not change into the future. Learning therefore occurs by monitoring the effect of an implemented action, rather than during the optimization procedure [@chades2017optimization].
 
-Solving a passive adaptive management problem includes an implementation step and an updating step at every time point $t$, based on the current belief in model $k$, $b_t(k)$. The MDP must be solved at every time step because the transition matrices change as the belief changes. During the implementation step, the optimal action at time $t$ is selected using weighted averaging, where the transition probabilities are averaged across all models with the weights given by the current belief, $b_t(k)$ (Williams 2011a). This can be solved using stochastic dynamic programming with an updated Bellman equation:
+Solving a passive adaptive management problem includes an implementation step and an updating step at every time point $t$, based on the current belief in model $k$, $b_t(k)$. The MDP must be solved at every time step because the transition matrices change as the belief changes. During the implementation step, the optimal action at time $t$ is selected using weighted averaging, where the transition probabilities are averaged across all models with the weights given by the current belief, $b_t(k)$ [@williams2011adaptive]. This can be solved using stochastic dynamic programming with an updated Bellman equation:
 
 $$
 V^*(s_t|b_t) = \text{max}_{a \in A} \left\{ \sum_{k \in K}b_t(k)r(s_t, a_t) + \gamma \sum_{s_{t+1}} \left\{\sum_{k\in K}b_t(k)P_k(s_{t+1}|s_t, a_t) \times V^*(s_{t+1}|b_t)\right\} \right\}
@@ -52,10 +56,16 @@ $$
 b_{t+1}(k|s_t, a_t, s_{t+1}, b_t) = \frac{P_k(s_{t+1}|s_t,a_t)b_t(k)}{\sum_{k \in K}P_k(s_{t+1}|s_t,a_t)b_t(k)}
 $$
 
-We’re assuming the state is perfectly observed
+For coypu control decisions, we solve the passive adaptive management problem by updating the belief about the coypu population dynamics to improve management performance over time. We begin with an equal belief, $b_{t=1}(k) = 1 / 5$, across the five models in the model set Figure 1A. We iterate between implementing the optimal action given the current belief state, simulating the next state, $s_{t+1}$ given the action and true population dynamics, and updating the belief state based observing the next state given action $a_t$. Here we assume the state is perfectly observed. We simulate the application of passive adaptive management over 30 time steps. The belief in each model changes over time Figure 2A, resulting in the highest belief for the two models closest to the true population dynamics $m = 1$ and $m = 1.3$ Figure 1A. Through updating the belief state over time and implementing the optimal action given the current belief state, the management performance improves over time Figure 2B. 
+
+
+```{r passive-plot, fig.cap="$A.$ Belief state for each model $k$ at time $t$. Colors correspond to different values of $m$, representing structural uncertainty in the per-capita growth rate. $B.$ Reward, $r(s_t,a_t)$, at time $t$ in passive adaptive management problem.", out.width="40%", fig.align="center", echo = FALSE}
+
+knitr::include_graphics("../figures/passive_AM.png")
+```
+
+
 
 ## Active adaptive management
 
 # References
-
-Fowler, C. W. (1981). Density dependence as related to life history strategy. Ecology, 62(3), 602-610.

@@ -90,6 +90,7 @@ colnames(posterior) <- m[c(1:3, 5, 6)]
 am_data <- read.csv("data/passive_am_data.csv")
 
 # convert posterior to long
+Tmax <- 30
 posterior_long <- posterior %>% 
   mutate(t = 1:Tmax) %>% 
   pivot_longer(cols = -t,
@@ -100,11 +101,15 @@ posterior_long <- posterior %>%
 plot_belief <- ggplot(data = posterior_long) +
   geom_line(aes(x = t, y = belief, color = as.factor(m))) +
   scale_color_viridis_d() +
-  labs(x = "t", y = "belief", color = "m")
+  ggtitle("A.") +
+  labs(x = "t", y = "belief", color = "m") +
+  theme_minimal()
 
-plot_reward <- ggplot(data = df) +
+plot_reward <- ggplot(data = am_data) +
   geom_line(aes(x = time, y = value)) +
-  labs(x = "t", y = "reward")
+  ggtitle("B.") +
+  labs(x = "t", y = "reward") +
+  theme_minimal()
 
 plot_passive <- plot_belief + plot_reward + plot_layout(ncol = 1)
 
