@@ -71,12 +71,8 @@ A <- length(seq_u)  # number of actions
 # Structural uncertainty
 #  - Uncertainty is incorporated as an unknown per-capita growth rate, which 
 #    takes on different functional forms based on the value of m.
-#  - Here we consider a model set m = {0.4, 0.7, 1, 1.3, 1.7}. 
-#  - The true system dynamics are represented by m = 1.15, which is bounded, yet 
-#    not contained by the model set.
-m <- c(0.7, 1.15, 1.3)
-true_m <- m[2]
-model_set <- m[!m %in% true_m]
+#  - Here we consider a model set m = {0.7, 1.3}. 
+model_set <- c(0.7, 1.3)
 n <- length(model_set)
 
 # -----------------------------#
@@ -351,8 +347,6 @@ df1 <- compute_policy(alpha1, transition, observation, reward, b)
 
 # save data
 write.csv(df1, "data/active_am_data_highdiscount.csv")
-
-#plot(df$state, df$policy)
 
 ## solve POMDP with lower discount factor
 # generate alpha vectors, approximation of V(b)

@@ -45,8 +45,7 @@ m_plot <- ggplot() +
   )) +
   ggtitle("A. Model set") +
   theme_minimal() +
-  theme(legend.position = "None",
-        plot.title = element_text(hjust = 0.5))
+  theme(legend.position = "None")
 
 ##############################
 # policies with known dynamics
@@ -68,8 +67,7 @@ plot_known_policies <- ggplot() +
              as.character(unique(known_policies$m[known_policies$m != true_m])))
   )) +
   ggtitle("B. Optimal policies\nwith known dynamics") +
-  theme_minimal() +
-  theme(plot.title = element_text(hjust = 0.5))
+  theme_minimal()
 
 final_plot <- m_plot + plot_known_policies + plot_layout(nrow = 1)
 
@@ -137,13 +135,13 @@ discount_low <- read.csv("data/active_am_data_lowdiscount.csv") %>%
 plot_high <- ggplot(data = discount_high) +
   geom_line(aes(x = N, y = policy)) +
   labs(x = "N", y = "optimal action") +
-  ggtitle("Discount factor: 0.95") +
+  ggtitle("A. Discount factor: 0.95") +
   theme_minimal()
 
 plot_low <- ggplot(data = discount_low) +
   geom_line(aes(x = N, y = policy)) +
   labs(x = "N", y = "optimal action") +
-  ggtitle("Discount factor: 0.75") +
+  ggtitle("B. Discount factor: 0.75") +
   theme_minimal()  
 
 final_active <- plot_high + plot_low + plot_layout(nrow = 1)
