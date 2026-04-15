@@ -1124,9 +1124,9 @@ Illustrate POMDP.
 <https://besjournals.onlinelibrary.wiley.com/doi/10.1111/2041-210X.13692>
 
 
-## Accounting for model uncertainty w/ adaptive management (Abby)
+## Reducing model uncertainty w/ adaptive management (Abby)
 
-Decision theoretic methods can be used to make control decisions not only in the face of uncertainty, but also to reduce uncertainty over time. Adaptive management, or “learning by doing”, involves making decisions to achieve a management objective while simultaneously learning about system dynamics to improve future management success [@holling1978adaptive; @walters1986adaptive]. Adaptive management approaches differ based on whether they learn only from the past (passive adaptive management) or anticipate future learning (active adaptive management) [@chades2017optimization].
+Decision theoretic methods can be used to make control decisions not only in the face of uncertainty, but also to reduce uncertainty over time. Adaptive management, or “learning by doing”, involves making decisions to achieve a management objective while simultaneously learning about system dynamics to improve future management success [@holling1978adaptive; @walters1986adaptive; @conroy2013decision]. Adaptive management approaches differ based on whether they learn only from the past (passive adaptive management) or anticipate future learning (active adaptive management) [@chades2017optimization].
 
 Here we apply adaptive management strategies to inform control decisions for a single coypu population and to learn about and reduce uncertainty in the per-capita growth rate. We will use the following discrete-time population model, where $r$ is the intrinsic rate of growth; $K$ is the carrying capacity; $q(u)$ is the harvest rate as a function of action $u$; $R$ is the per-capita growth rate; $m$ describes whether the per-capita growth rate is linear, concave, or convex; and $\epsilon$ is log-normally distributed noise:
 
@@ -1159,6 +1159,8 @@ To calculate EVPI for a sequential decision problem, we first use SDP to calcula
 Using the policies calculated with known dynamics, $\pi^*(s)_k$, and unknown dynamics, $\pi^*(s)_{NL}$, we find the EVPI by first simulating $i$ replicated population trajectories assuming each model $k$, applying both policies with known and unknown dynamics, and calculating the value at time $t$ over time horizon $T$. The value associated with applying the policy with known dynamics is $V_{k,t,i}(s_t, a_t | a_t = \pi^*(s)_k)$, and the value associated with applying unknown dynamics is $V_{k,t,i}(s_t, a_t | a_t = \pi^*(s)_{NL})$. The EVPI is therefore $E_{s,k,t,i}[V(s_t, a_t | a_t = \pi^*(s)_k)] - E_{s,k,t,i}[V(s_t, a_t | a_t = \pi^*(s)_{NL})]$.
 
 In the context of coypu regulation, the EVPI represents the expected improvement on the management objective if uncertainty about the per-capita growth rate was reduced. We calculate the EVPI for a model set, $K$, where $m \in \{0.4, 0.7, 1, 1.3, 1.7\}$ for $I = 200$ iterations over a $T = 40$ time horizon. We assume equal belief in each model. The expected value once uncertainty has been resolved, $PI$, is -1730.4, the expected value with no learning, $NL$, is -1787.8, and the EVPI is $PI - NL = 57.4$. It is therefore valuable to learn about the population dynamics and per-capita growth rate, as this learning is expected to improve performance on the management objective.
+
+Value of information analyses are typically applied for static, one-time conservation decisions, rather than sequential problems, often in the context of understanding when to act and when to delay action until after further research [@bolam2019using]. To better understand the value of information in the context of adaptive management, future work should investigate quantifying VOI by iteratively resolving uncertainty, requiring evaluating the gain of implementing an adaptive policy rather than a single action [@chades2017optimization].
 
 ## Passive adaptive management
 
