@@ -1,5 +1,5 @@
 ---
-title: "A primer on structured decision making for invasive species (using dynamic programming)"
+title: "Using dynamic programming for making structured decisions about invasive species"
 author:
   - Olivier Gimenez^1^*
   - Abby Keller^2^*
@@ -55,15 +55,15 @@ links-as-notes: false
 \vspace{1cm}
 \hrule
 
-Invasive species (IAS) pose significant ecological, economic, and public health challenges. Robust methods are needed for guiding effective management. Overall, we hope to demonstrate the flexibility and utility of structured decision making in invasive species management. 
+Invasive alien species (IAS) pose significant ecological, economic, and public health challenges. Robust methods are needed for guiding effective management. Overall, we hope to demonstrate the flexibility and utility of structured decision making in invasive species management. 
 
-Target journal: Biological invasions? NeoBiota?.
+Target journal: Journal of Animal Ecology
 
 \vspace{3mm}
 \hrule
 \vspace{5mm}
 
-*Keywords*: Adaptive management, Invasive species, Stochastic dynamic programming, Structured decision making
+*Keywords*: Adaptive management, Decision theory, Invasive alien species, Stochastic dynamic programming, Structured decision making, Uncertainty
 
 \newpage
 
@@ -99,17 +99,29 @@ Coypu (Myocastor coypu) as a case study throughout the paper. Code and tutorials
 
 Add a shiny for each case study so that folks can play around?
 
-# A primer on structured decision making 
+# Explanation of the method
+
+"A very brief historical background. Why is the method useful for investigating or analysing the topic in question? Provide some details on the method’s applications."
 
 We do not want to rewrite Lucile's paper... 
 
-## Why and what (all)
+Invasive species are a major driver of ecological disruption, economic losses, and risks to human health and food security, and their management often requires repeated decisions under uncertainty, limited budgets, and imperfect knowledge of ecological dynamics, which are frequently characterized by strong population fluctuations, rapid spread, and broad spatial distributions. In practice, managers must decide not only whether to intervene, but also when, where, and how strongly, while balancing short-term operational costs against long-term socio-ecological benefits (Hauser and Possingham 2008). This makes invasive species management a complex decision problem, in which predicting invasion dynamics, or risk forecasting alone are insufficient unless it is explicitly linked to management objectives, feasible actions, and measurable consequences. 
+
+Although invasive species management does not always involve strongly opposed objectives, as in some human–wildlife conflicts, the utility function can still be highly complex. Management decisions must weigh expected effectiveness against economic costs, operational effort, feasibility, timing, and the potential unintended impacts of control actions, including non-target effects (Poulin 2015). These decisions are further complicated by the fact that invasive species and their control may be perceived differently by different stakeholders, so that social acceptability becomes an important component of management outcomes (Estevez et al. 2014). More broadly, controversies surrounding invasive species management may reflect differences in environmental values, risk perceptions, rather than disagreement over ecological evidence alone (Simberloff 2012). In this context, several authors have argued that assessing ecological effectiveness of invasive species control measures is not sufficient, and that management strategies should also be evaluated in terms of their social impacts (Crowley et al. 2017). Recent studies further confirm that commonly proposed management interventions, particularly those involving lethal control, often face substantial public resistance or stakeholder conflict, making social feasibility a central dimension of management success (Simmons et al. 2025; Busby et al. 2025).
+
+That's why SDP is an approriate method for invasive species... In invasive species management, SDP has been applied to problems such as balancing prevention and control for zebra mussels, optimizing search effort for red imported fire ants in Australia, selecting integrated control strategies for invasive weeds such as leafy spurge or blackberry, and determining whether prevention, eradication, control, or adaptation is optimal under different stages of aquatic invasions.
+
+In practice, SDP treats invasive species management as a sequential decision problem in which actions are optimized over time rather than evaluated in isolation. The sequence of decisions are optimal actions over time that depend on the current state of the system, such as infestation size, invaded area, local density. At each time step, managers can choose among several actions including preventing establishment, conducting routine surveillance, intensifying search in high-risk areas, containing spread from invaded sites, reducing local abundance through control, attempting eradication of already established populations, or postponing intervention when action is not expected to be worthwhile (Moore et al. 2011). The consequences of each action are then evaluated under stochastic population dynamics, imperfect detection (in the case of POMDP, e.g Haight & Polasky (2010)) and partial controlability, while accounting for the expected future effects of each action on progressing towards the ecological, economic, or social objectives that management seeks to optimize (Williams et al. 2001). More specifically, SDP has been used to determine how much to invest in prevention versus post-invasion control for the invasive zebra mussels within nuclear power-plant water systems (Leung et al. 2002), to optimize control strategies (mechanical, chemical, biological) for the invasive weed leafy spurge by combining information on density and spatial spread (Hyder et al. 2008), to identify state-dependent management policies for an invasive gypsy moth (Lymantria dispar) considering the metapopulation with different patch sizes and spread dynamics (Bogich and Shea 2008), to optimize search effort for the red imported fire ant in Queensland by balancing broad surveillance against targeted search and learning (Baxter et al. 2011), and to compare prevention, control, eradication, and adaptation strategies for aquatic invasive species under different stages of invasion (Hyytiäinen et al. 2013).
+
+## Structured decision making
+
+Why and what (all)
+
+## Stochastic dynamic programming (Olivier)
 
 ![](bellman1.png)
 
 ![](bellman2.png)
-
-## Stochastic dynamic programming (Olivier)
 
 Here we present a minimal stochastic dynamic programming (SDP) example. The aim is purely pedagogical: to show how states, actions, transition probabilities, rewards, and time horizon combine to produce an optimal decision rule. 
 
@@ -220,8 +232,15 @@ This toy example highlights key features of SDP:
 - **Time horizon effects**: as the horizon shortens, actions may become more short-term oriented.
 - **Uncertainty**: decisions account for probabilistic transitions, not deterministic outcomes.
 
+# Things to consider for before using this method
 
-# Case studies with coypus
+"Outline the requirements for framing hypotheses, data and computing, experimental constraints and statistical power."
+
+# Worked examples
+
+"Papers should include at least two tutorials, with a step-by step demonstration of the method. Figures and mathematical formulations are particularly useful here. Where possible, tutorials and examples should include those using the R statistical package or other freeware."
+
+Here explain that we use coypu IAS in Europe as a "fil rouge". 
 
 ## Single population (Olivier)
 
@@ -563,10 +582,6 @@ p_traj <- ggplot(traj_long, aes(x = time, y = value)) +
 # ---- combine panels ----
 p_policy / p_traj
 ```
-
-## Two interacting species (Lucile)
-
-Competition or predator-prey, or host-pathogen / disease thing. See SDP-species-interactions/ in Olivier biblio repo.
 
 ## Metapopulation (Olivier)
 
@@ -1100,12 +1115,13 @@ p_sites <- ggplot(df_all, aes(Time, Abundance, color = Strategy, linetype = Stra
 p_sites
 ```
 
+In perspective, say that this can be used to model competition or predator-prey, or host-pathogen / disease thing. See SDP-species-interactions/ in Olivier biblio repo.
 
-# Acounting for uncertainty
 
-## POMDP (Cassie)
+## Acounting for observation error w/ POMDP (Cassie)
 
-Illustrate POMDP, Olivier has some code extending the computer maintenance example from above. 
+Illustrate POMDP. 
+
 <https://besjournals.onlinelibrary.wiley.com/doi/10.1111/2041-210X.14374>
 <https://besjournals.onlinelibrary.wiley.com/doi/10.1111/2041-210X.13692>
 
@@ -1130,7 +1146,7 @@ Occupancy model with uncertain detectability
 The invasive species can either be established or absent, with possible observations defined as present or absent denoting if the species was observed in a given time step. 
 
 
-## Adaptive management (Abby)
+## Accounting for model uncertainty w/ adaptive management (Abby)
 
 When is it useful. Start with value of information? 
 
@@ -1142,7 +1158,7 @@ On a single species ; check out Conroy's book, there is a nice figure illustrati
 
 ## Main messages
 
-How is SDM relevant. 
+How is SDM/SDP relevant. 
 
 ## Limitations
 
