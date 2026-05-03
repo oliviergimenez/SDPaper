@@ -131,6 +131,9 @@
 
 
 
+\usepackage{float}
+\usepackage{setspace}
+\doublespacing
 \usepackage{bookmark}
 \IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
 \urlstyle{same}
@@ -519,12 +522,119 @@ In perspective, say that this can be used to model competition or predator-prey,
 Illustrate POMDP.
 
 \url{https://besjournals.onlinelibrary.wiley.com/doi/10.1111/2041-210X.14374}
-
 \url{https://besjournals.onlinelibrary.wiley.com/doi/10.1111/2041-210X.13692}
 
-\subsection{Accounting for model uncertainty w/ adaptive management (Abby)}\label{accounting-for-model-uncertainty-w-adaptive-management-abby}
+In an ideal world, invasive species management would be based on perfect knowledge of the state of the system. Yet ecological systems are inherently difficult to monitor, leading to imperfect knowledge of the system and its state. While ongoing monitoring can reduce uncertainties associated with the state of the system, invasive species management often requires timely decisions. In these cases, partially observable Markov decision process (POMDP) models can be used. POMDPs build on MDPs, dealing with uncertainty in both the model and state of the system. However, POMDPs are more computationally and mathematically challenging to solve due to the continuous and high-dimensional state space. A detailed primer on developing POMDPs for ecological problems already exists (Chades et al 2021), so here we will keep our description simple.
 
-When is it useful. Start with value of information?
+POMDPs differ from MDPs by including an observation state (O), observation function (Z), and initial belief state (\(b_0\)). The observation state includes the set of observations perceived by the manager, while the observation function represents the conditional probability of a manager observing o' given that action a lead to state s'. In cases where state uncertainty cannot be reduced, the observation function is independent from the actions taken, and thus dependent only on state s'. The initial belief represents the believed state of the system at a given time.
+
+Because the states are themselves unobservable, the state of the system must be tracked with belief states. At any point in time, the actual (unobservable) state of the system influences the immediate returns, state transitions, and observations, but do not influence actions. The belief state is updated based on observations, which subsequently inform the action(s) to be selected. Lastly, actions drive the state transitions, rewards, and may influence the observations.
+
+{[}I think having a diagram to show the difference between MDP and POMDP, like Figure 1 in Chades et al 2021 or Fig 2-3 in Williams \& Brown 2022, could be helpful{]}
+{[}Also from Chades et al 2021: ``In the language of statistics, POMDPs are models that describe optimal control of hidden Markov models (HMMs). In this framing, the partially observed states of the model are latent variables that are inferred from the (fully observable) observation states.''{]}
+
+Chades et al (2021) identified three types of management problems that POMDPs can be used to solve:
+- Exploiting current knowledge or reducing uncertainty: Classic dilemma where managers have to choose between investing in reducing state uncertainty or exploiting current knowledge.
+- Managing under imperfect detection: Assumes that managers have no means of reducing uncertainty, but managers can invest in management actions for which effectiveness varies across the state space.
+- Adaptive management: Where the dynamics of the system are not observable.
+The authors included an example for the first type of problem from a conservation perspective. Here, we'll focus on an example for managing under imperfect detection, continuing with our coypu case study.
+
+Going back to a simple example in invasive species management, imagine we have \ldots.
+Occupancy model with uncertain detectability
+
+The invasive species can either be established or absent, with possible observations defined as present or absent denoting if the species was observed in a given time step.
+
+\subsection{Reducing model uncertainty w/ adaptive management (Abby)}\label{reducing-model-uncertainty-w-adaptive-management-abby}
+
+Decision theoretic methods can be used to make control decisions not only in the face of uncertainty, but also to reduce uncertainty over time. Adaptive management, or ``learning by doing'', involves making decisions to achieve a management objective while simultaneously learning about system dynamics to improve future management success (\citeproc{ref-holling1978adaptive}{Holling 1978}, \citeproc{ref-walters1986adaptive}{Walters 1986}, \citeproc{ref-conroy2013decision}{Conroy and Peterson 2013}). Adaptive management approaches differ based on whether they learn only from the past (passive adaptive management) or anticipate future learning (active adaptive management) (\citeproc{ref-chades2017optimization}{Chadès et al. 2017}).
+
+Here we apply adaptive management strategies to inform control decisions for a single coypu population and to learn about and reduce uncertainty in the per-capita growth rate. We will use the following discrete-time population model, where \(r\) is the intrinsic rate of growth; \(K\) is the carrying capacity; \(q(u)\) is the harvest rate as a function of action \(u\); \(R\) is the per-capita growth rate; \(m\) describes whether the per-capita growth rate is linear, concave, or convex; and \(\epsilon\) is log-normally distributed noise:
+
+\[
+N_{t+1} = N_t(1 + R(N_t)) - q(u) \times N + \epsilon
+\]
+\[
+R(N_t) = r \times (1 - (N_t / K) ^ m)
+\]
+
+If \(m > 1\), most density---dependent change occurs at high population levels (close to the carrying capacity), which is theoretically common for species with life history strategies typical of large mammals. If \(m < 1\), most density-dependent change occurs at low population levels, which is theoretically common for species with life history strategies typical of insects and some fishes (\citeproc{ref-fowler1981density}{Fowler 1981}).
+
+We will consider a model set with five possible values of \(m\). This model bounds, but does not contain, the true model we will use to simulate dynamics in the passive adaptive management approach (Figure 1A). These different values of \(m\) result in different optimal policies when system dynamics are known perfectly (Figure 1B).
+
+\begin{figure}[H]
+
+{\centering \includegraphics[width=0.9\linewidth]{../figures/model_set_policies} 
+
+}
+
+\caption{$A.$ Model set representing structural uncertainty in the per-capita growth rate. $B.$ Optimal state-dependent removal actions assuming perfectly known population dynamics, solved with stochastic dynamic programming. In both panels, colors correpond to different values of $m$ in the model set, and the red dashed line corresponds to the true model dynamics used for simulation in the passive adaptive management approach.}\label{fig:model-set}
+\end{figure}
+
+\subsection{Value of Information}\label{value-of-information}
+
+For a decision maker, uncertainty may not be important to resolve; learning may not be inherently valuable if it does not result in improved management outcomes. A Value of Information (VoI) analysis \emph{a priori} quantifies the importance of reducing uncertainty, or the expected improvement on management objectives if uncertainty were resolved (\citeproc{ref-raiffa2000applied}{Raiffa and Schlaifer 2000}). If the VOI is high, an adaptive management approach is typically justified.
+
+The expected value of perfect information (EVPI) is measured as the difference between 1) \(PI\), or the expected value once uncertainty has been resolved because the optimal action is chosen after knowing which model best describes the system, and 2) \(NL\), or the expected value in the face of uncertainty because the optimal action is chosen with no learning about the system (\citeproc{ref-runge2011uncertainty}{Runge et al. 2011}). The difference between these terms, \(\text{EVPI} = PI - NL\), is the expected improvement in management performance due to acquiring perfect information.
+
+To calculate EVPI for a sequential decision problem, we first use SDP to calculate the optimal state-dependent policy with assumed system dynamics, \(\pi^*(s)_k\), for each model \(k\) in the model set \(K\), given each transition matrix, \(P_k\). We also calculate the bet-hedging strategy, or the optimal policy given uncertain dynamics, \(\pi^*(s)_{NL}\). This bet-hedging strategy is calculated with the transition matrix \(P_{NL}\), representing the average of the transitions of each model, \(P_k\), weighted by each model belief, \(b\): \(P_{NL}(s_{t+1}|s_t, a_t) = \sum_{k\in K}b(k)P_k(s_{t+1}|s_t, a_t)\).
+
+Using the policies calculated with known dynamics, \(\pi^*(s)_k\), and unknown dynamics, \(\pi^*(s)_{NL}\), we find the EVPI by first simulating \(i\) replicated population trajectories assuming each model \(k\), applying both policies with known and unknown dynamics, and calculating the value at time \(t\) over time horizon \(T\). The value associated with applying the policy with known dynamics is \(V_{k,t,i}(s_t, a_t | a_t = \pi^*(s)_k)\), and the value associated with applying unknown dynamics is \(V_{k,t,i}(s_t, a_t | a_t = \pi^*(s)_{NL})\). The EVPI is therefore \(E_{s,k,t,i}[V(s_t, a_t | a_t = \pi^*(s)_k)] - E_{s,k,t,i}[V(s_t, a_t | a_t = \pi^*(s)_{NL})]\).
+
+In the context of coypu regulation, the EVPI represents the expected improvement on the management objective if uncertainty about the per-capita growth rate was reduced. We calculate the EVPI for a model set, \(K\), where \(m \in \{0.4, 0.7, 1, 1.3, 1.7\}\) for \(I = 200\) iterations over a \(T = 40\) time horizon. We assume equal belief in each model. The expected value once uncertainty has been resolved, \(PI\), is -1730.4, the expected value with no learning, \(NL\), is -1787.8, and the EVPI is \(PI - NL = 57.4\). It is therefore valuable to learn about the population dynamics and per-capita growth rate, as this learning is expected to improve performance on the management objective.
+
+Value of information analyses are typically applied for static, one-time conservation decisions, rather than sequential problems, often in the context of understanding when to act and when to delay action until after further research (\citeproc{ref-bolam2019using}{Bolam et al. 2019}). To better understand the value of information in the context of adaptive management, future work should investigate quantifying VOI by iteratively resolving uncertainty, requiring evaluating the gain of implementing an adaptive policy rather than a single action (\citeproc{ref-chades2017optimization}{Chadès et al. 2017}).
+
+\subsection{Passive adaptive management}\label{passive-adaptive-management}
+
+Passive adaptive management involves learning from the outcomes of previous management actions to update knowledge about system dynamics and improve management performance over time. Decisions at each time step are optimized assuming that current knowledge of the system will not change into the future. Learning therefore occurs by monitoring the effect of an implemented action, rather than during the optimization procedure (\citeproc{ref-chades2017optimization}{Chadès et al. 2017}).
+
+Solving a passive adaptive management problem includes an implementation step and an updating step at every time point \(t\), based on the current belief in model \(k\), \(b_t(k)\). The MDP must be solved at every time step because the transition matrices change as the belief changes. During the implementation step, the optimal action at time \(t\) is selected using a weighted averaging approach, where the transition probabilities are averaged across all models with the weights given by the current belief, \(b_t(k)\) (\citeproc{ref-williams2011adaptive}{Williams et al. 2011}). This can be solved using stochastic dynamic programming:
+
+\[
+V^*(s_t|b_t) = \text{max}_{a \in A} \left\{ \sum_{k \in K}b_t(k)r(s_t, a_t) + \gamma \sum_{s_{t+1}} \left\{\sum_{k\in K}b_t(k)P_k(s_{t+1}|s_t, a_t) \times V^*(s_{t+1}|b_t)\right\} \right\}
+\]
+
+During the updating step, the resulting state, \(s_{t+1}\), after taking action \(a_t\) is observed, and belief, \(b_{t+1}\), is updated according to Bayes' rule:
+
+\[
+b_{t+1}(k|s_t, a_t, s_{t+1}, b_t) = \frac{P_k(s_{t+1}|s_t,a_t)b_t(k)}{\sum_{k \in K}P_k(s_{t+1}|s_t,a_t)b_t(k)}
+\]
+
+For coypu control decisions, we solve the passive adaptive management problem by updating the belief about the coypu population dynamics to improve management performance over time. We begin with an equal belief, \(b_{t=1}(k) = 1 / 5\), across the five models in the model set (Figure 1A). We iterate between 1) calculating the optimal action given the current belief state, 2) implementing the optimal action and simulating the next state, \(s_{t+1}\), given the true population dynamics, and 3) updating the belief state based observing the next state given action \(a_t\). Here we assume the state is perfectly observed. We simulate the application of passive adaptive management over 30 time steps. The belief in each model changes over time (Figure 2A), resulting in the highest belief for the two models closest to the true population dynamics \(m = 1\) and \(m = 1.3\) (Figure 1A). Through updating the belief state over time and implementing the optimal action given the current belief state, the management performance improves over time (Figure 2B).
+
+\begin{figure}[H]
+
+{\centering \includegraphics[width=0.6\linewidth]{../figures/passive_AM} 
+
+}
+
+\caption{$A.$ Belief state for each model $k$ at time $t$. Colors correspond to different values of $m$, representing structural uncertainty in the per-capita growth rate. $B.$ Reward, $r(s_t,a_t)$, at time $t$ in passive adaptive management problem.}\label{fig:passive-plot}
+\end{figure}
+
+\subsection{Active adaptive management}\label{active-adaptive-management}
+
+In contrast to passive adaptive management, active adaptive management does not rely only on past experience and instead explicitly accounts for future learning opportunities to maximize the chance of achieving the objective. Instead of an optimization at every time step as in passive adaptive management, the optimization occurs once and requires that the trajectory of belief \(b_t\) to \(b_{t+1}\) and state transitions be calculated for all time steps (\citeproc{ref-chades2017optimization}{Chadès et al. 2017}). The optimal value function \(V^*\) that characterizes the performance of a policy is a function of both the state of the system \(s_t\) and belief over the models \(b_t\):
+
+\[
+V^*(s_t,b_t) = \text{max}_{a \in A} \left\{ \sum_{k \in K}b_t(k)r(s_t, a_t) + \gamma \sum_{s_{t+1}} \left\{\sum_{k\in K}b_t(k)P_k(s_{t+1}|s_t, a_t) \times V^*(s_{t+1},b_t)\right\} \right\}
+\]
+
+Active adaptive management with model uncertainty can be solved with many methods, including those developed for dealing with partial observability (\citeproc{ref-williams2011adaptive}{Williams et al. 2011}, \citeproc{ref-chades2017optimization}{Chadès et al. 2017}). Here, a POMDP is characterized by a tuple \(〈X, A, O, P, Z, r, \gamma〉\), where \(X = S \times K\) represents the factored state space with \(S\) denoting the possible conditions of the system and \(K\) denoting the model set. The unknown model is an unobserved state variable that must be inferred through observation. We can solve the POMDP with the Successive Approximations of the Reachable Space under Optimal Policies (SARSOP) algorithm (\citeproc{ref-kurniawati2008sarsop}{Kurniawati et al. 2008}). With this algorithm, the value function \(V^*\) associated with the optimal policy \(\pi^*\) can be approximated by a convex, piecewise-linear function \(V(b) = \text{max}_{\alpha \in \Gamma}(\alpha \cdot b)\), where \(\Gamma\) is a finite set of \(\alpha\)-vectors and \(b\) is the discrete vector representation of a belief (\citeproc{ref-kurniawati2008sarsop}{Kurniawati et al. 2008}).
+
+For coypu control decisions, we solve the active adaptive management problem by augmenting the state space with the belief in two models where \(m \in \{0.7, 1.3\}\). We choose a smaller model set than in the passive adaptive management problem due to the computational cost associated with exploring the belief and state spaces over the entire time period (i.e., ``curse of dimensionality''). We assume a uniform belief across models and assume perfect observation of the state (i.e., \(o_t = s_t\)).
+
+We also use the coypu example to demonstrate the ``dual control problem'' (\citeproc{ref-walters1978ecological}{Walters and Hilborn 1978}). A management action altering a poorly understood system can produce two types of benefits: 1) short-term payoffs and 2) learning about the system so as to improve payoffs in the long-term. There is a trade-off between these two benefits, as large disturbances allow for rapid learning yet may incur high costs; the challenge is to optimally balance these benefits. Here we explore the dual control problem by selecting two different discount factors, \(\gamma \in \{0.95, 0.75 \}\). The higher of which represents a decision maker who values long-term rewards more highly, and the lower of which represents a decision maker who values short-term rewards more highly.
+
+The active adaptive management solution describes the optimal action (\(a_t\), removal effort), given the state (\(s_t\), coypu abundance), initial belief (\(b_{t=1}\), uniform across models), and discount factor (Figure 3). The solution differs depending on how future rewards are discounted in the optimization. At low coypu abundance, the optimal removal effort increases as the discount factor increases. With a higher discount factor, future system states are valued more highly; even though a higher removal effort is costly today, this higher removal effort will accelerate learning to yield higher rewards in the long term (Figure 3A). In contrast, with a lower discount factor, active learning becomes less useful, as the price paid for not following the passive-adaptive (optimal right now) solution exceeds the information gained from learning (Figure 3B).
+
+\begin{figure}[H]
+
+{\centering \includegraphics[width=0.9\linewidth]{../figures/active_AM} 
+
+}
+
+\caption{$A.$ State-dependent active adaptive management solution, given an initial uniform belief across models and a higher discount factor representing a decision maker who values long-term payoffs more highly. $B.$ State-dependent active adaptive management solution, given an initial uniform belief across models and a lower discount factor representing a decision maker who values short-term payoffs more highly.}\label{fig:active-plot}
+\end{figure}
 
 On a single species ; check out Conroy's book, there is a nice figure illustrating AM.
 
@@ -552,17 +662,50 @@ Data and code are available at \href{https://github.com/oliviergimenez/SDPaper}{
 
 \phantomsection\label{refs}
 \begin{CSLReferences}{1}{0}
+\bibitem[\citeproctext]{ref-bolam2019using}
+Bolam, F. C., M. J. Grainger, K. L. Mengersen, G. B. Stewart, W. J. Sutherland, M. C. Runge, and P. J. McGowan. 2019. Using the value of information to improve conservation decision making. Biological Reviews 94:629--647.
+
+\bibitem[\citeproctext]{ref-chades2017optimization}
+Chadès, I., S. Nicol, T. M. Rout, M. Péron, Y. Dujardin, J.-B. Pichancourt, A. Hastings, and C. E. Hauser. 2017. Optimization methods to solve adaptive management problems. Theoretical Ecology 10:1--20.
+
+\bibitem[\citeproctext]{ref-conroy2013decision}
+Conroy, M. J., and J. T. Peterson. 2013. Decision making in natural resource management: A structured, adaptive approach. John Wiley \& Sons.
+
+\bibitem[\citeproctext]{ref-fowler1981density}
+Fowler, C. W. 1981. Density dependence as related to life history strategy. Ecology 62:602--610.
+
 \bibitem[\citeproctext]{ref-Haubrock2025}
 Haubrock, P. J., T. Everts, N. A. S. Abreo, J. Bojko, V. Deklerck, J. W. E. Dickey, A. C. S. Franco, E. García-Berthou, S. Katsanevakis, N. I. Kirichenko, S. Mammola, M. A. Nuñez, B. Parker, R. Scalera, I. Soto, D. Strubbe, A. S. Tarkan, L. Vilizzi, T. Adriaens, P. Balzani, D. Blońska, E. Briski, R. Brys, A. L. Burgess, J. E. Byers, C. Cano-Barbacil, G. Castaldelli, J. T. A. Dick, V. Dominguez Almela, R. D. Dimarco, M. Florencio, A. Kouba, M. Kourantidou, I. Kurtul, I. Martín-Forés, O. Morissette, J. D. Olden, B. E. Soares, J. Truszkowski, H. Verreycken, M. Kenis, R. Sousa, and J. R. Britton. 2025. The impacts of biological invasions. Biological Reviews n/a.
+
+\bibitem[\citeproctext]{ref-holling1978adaptive}
+Holling, C. S. 1978. Adaptive environmental assessment and management. John Wiley \& Sons.
+
+\bibitem[\citeproctext]{ref-kurniawati2008sarsop}
+Kurniawati, H., D. Hsu, W. S. Lee, and others. 2008. Sarsop: Efficient point-based pomdp planning by approximating optimally reachable belief spaces. Robotics: Science and systems. Zurich, Switzerland.
 
 \bibitem[\citeproctext]{ref-Petr2020}
 Pyšek, P., P. E. Hulme, D. Simberloff, S. Bacher, T. M. Blackburn, J. T. Carlton, W. Dawson, F. Essl, L. C. Foxcroft, P. Genovesi, J. M. Jeschke, I. Kühn, A. M. Liebhold, N. E. Mandrak, L. A. Meyerson, A. Pauchard, J. Pergl, H. E. Roy, H. Seebens, M. van Kleunen, M. Vilà, M. J. Wingfield, and D. M. Richardson. 2020. Scientists' warning on invasive alien species. Biological Reviews 95:1511--1534.
 
+\bibitem[\citeproctext]{ref-raiffa2000applied}
+Raiffa, H., and R. Schlaifer. 2000. Applied statistical decision theory. John Wiley \& Sons.
+
 \bibitem[\citeproctext]{ref-Roy2024}
 Roy, H. E., A. Pauchard, P. J. Stoett, T. Renard Truong, L. A. Meyerson, S. Bacher, B. S. Galil, P. E. Hulme, T. Ikeda, S. Kavileveettil, M. A. McGeoch, M. A. Nuñez, A. Ordonez, S. J. Rahlao, E. Schwindt, H. Seebens, A. W. Sheppard, V. Vandvik, A. Aleksanyan, M. Ansong, T. August, R. Blanchard, E. Brugnoli, J. K. Bukombe, B. Bwalya, C. Byun, M. Camacho-Cervantes, P. Cassey, M. L. Castillo, F. Courchamp, K. Dehnen-Schmutz, R. D. Zenni, C. Egawa, F. Essl, G. Fayvush, R. D. Fernandez, M. Fernandez, L. C. Foxcroft, P. Genovesi, Q. J. Groom, A. I. González, A. Helm, I. Herrera, A. J. Hiremath, P. L. Howard, C. Hui, M. Ikegami, E. Keskin, A. Koyama, S. Ksenofontov, B. Lenzner, T. Lipinskaya, J. L. Lockwood, D. C. Mangwa, A. F. Martinou, S. M. McDermott, C. L. Morales, J. Müllerová, N. A. Mungi, L. K. Munishi, H. Ojaveer, S. N. Pagad, N. P. K. T. S. Pallewatta, L. R. Peacock, E. Per, J. Pergl, C. Preda, P. Pyšek, R. K. Rai, A. Ricciardi, D. M. Richardson, S. Riley, B. J. Rono, E. Ryan-Colton, H. Saeedi, B. B. Shrestha, D. Simberloff, A. Tawake, E. Tricarico, S. Vanderhoeven, J. Vicente, M. Vilà, W. Wanzala, V. Werenkraut, O. L. F. Weyl, J. R. U. Wilson, R. O. Xavier, and S. R. Ziller. 2024. Curbing the major and growing threats from invasive alien species is urgent and achievable. Nature Ecology \& Evolution 8:1216--1223.
 
+\bibitem[\citeproctext]{ref-runge2011uncertainty}
+Runge, M. C., S. J. Converse, and J. E. Lyons. 2011. Which uncertainty? Using expert elicitation and expected value of information to design an adaptive program. Biological Conservation 144:1214--1223.
+
 \bibitem[\citeproctext]{ref-Thompson2021}
 Thompson, B. K., J. D. Olden, and S. J. Converse. 2021. Mechanistic invasive species management models and their application in conservation. Conservation Science and Practice 3:e533.
+
+\bibitem[\citeproctext]{ref-walters1986adaptive}
+Walters, C. J. 1986. Adaptive management of renewable resources. Macmillan Publishers Ltd.
+
+\bibitem[\citeproctext]{ref-walters1978ecological}
+Walters, C. J., and R. Hilborn. 1978. Ecological optimization and adaptive management. Annual review of Ecology and Systematics 9:157--188.
+
+\bibitem[\citeproctext]{ref-williams2011adaptive}
+Williams, B. K., M. J. Eaton, and D. R. Breininger. 2011. Adaptive resource management and the value of information. Ecological Modelling 222:3429--3436.
 
 \bibitem[\citeproctext]{ref-Williams2002}
 Williams, B. K., J. D. Nichols, and M. J. Conroy. 2002. Analysis and management of animal populations. Academic Press, San Diego, California, USA.

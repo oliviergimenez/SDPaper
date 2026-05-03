@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.28 (TeX Live 2025) (preloaded format=pdflatex 2026.2.26)  3 MAY 2026 12:09
+This is pdfTeX, Version 3.141592653-2.6-1.40.28 (TeX Live 2025) (preloaded format=pdflatex 2026.2.26)  3 MAY 2026 12:16
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -390,8 +390,8 @@ Package uniquecounter Info: New unique counter `rerunfilecheck' on input line 28
 File: bkm-pdftex.def 2023-12-10 v1.31 bookmark driver for pdfTeX and luaTeX (HO)
 \BKM@id=\count333
 ))
-Package hyperref Info: Option `colorlinks' set `true' on input line 145.
-LaTeX Font Info:    Trying to load font information for T1+ppl on input line 151.
+Package hyperref Info: Option `colorlinks' set `true' on input line 148.
+LaTeX Font Info:    Trying to load font information for T1+ppl on input line 154.
 (/Users/oliviergimenez/Library/TinyTeX/texmf-dist/tex/latex/psnfss/t1ppl.fd
 File: t1ppl.fd 2001/06/04 font definitions for T1/ppl.
 ) (/Users/oliviergimenez/Library/TinyTeX/texmf-dist/tex/latex/l3backend/l3backend-pdftex.def
@@ -400,33 +400,33 @@ File: l3backend-pdftex.def 2025-10-09 L3 backend support: PDF output (pdfTeX)
 ) (./tuto-sdm-invasive-species.aux)
 \openout1 = `tuto-sdm-invasive-species.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 151.
-LaTeX Font Info:    ... okay on input line 151.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 151.
-LaTeX Font Info:    ... okay on input line 151.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 151.
-LaTeX Font Info:    ... okay on input line 151.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 151.
-LaTeX Font Info:    ... okay on input line 151.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 151.
-LaTeX Font Info:    ... okay on input line 151.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 151.
-LaTeX Font Info:    ... okay on input line 151.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 151.
-LaTeX Font Info:    ... okay on input line 151.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 151.
-LaTeX Font Info:    ... okay on input line 151.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 151.
-LaTeX Font Info:    ... okay on input line 151.
-LaTeX Info: Redefining \microtypecontext on input line 151.
-Package microtype Info: Applying patch `item' on input line 151.
-Package microtype Info: Applying patch `toc' on input line 151.
-Package microtype Info: Applying patch `eqnum' on input line 151.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 154.
+LaTeX Font Info:    ... okay on input line 154.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 154.
+LaTeX Font Info:    ... okay on input line 154.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 154.
+LaTeX Font Info:    ... okay on input line 154.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 154.
+LaTeX Font Info:    ... okay on input line 154.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 154.
+LaTeX Font Info:    ... okay on input line 154.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 154.
+LaTeX Font Info:    ... okay on input line 154.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 154.
+LaTeX Font Info:    ... okay on input line 154.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 154.
+LaTeX Font Info:    ... okay on input line 154.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 154.
+LaTeX Font Info:    ... okay on input line 154.
+LaTeX Info: Redefining \microtypecontext on input line 154.
+Package microtype Info: Applying patch `item' on input line 154.
+Package microtype Info: Applying patch `toc' on input line 154.
+Package microtype Info: Applying patch `eqnum' on input line 154.
 
-Package microtype Warning: Unable to apply patch `footnote' on input line 151.
+Package microtype Warning: Unable to apply patch `footnote' on input line 154.
 
-Package microtype Info: Applying patch `verbatim' on input line 151.
-LaTeX Info: Redefining \microtypesetup on input line 151.
+Package microtype Info: Applying patch `verbatim' on input line 154.
+LaTeX Info: Redefining \microtypesetup on input line 154.
 Package microtype Info: Generating PDF output.
 Package microtype Info: Character protrusion enabled (level 2).
 Package microtype Info: Using protrusion set `basicmath'.
@@ -479,86 +479,86 @@ File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Live
 * \@reversemarginfalse
 * (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
-Package hyperref Info: Link coloring ON on input line 151.
-LaTeX Font Info:    Trying to load font information for OT1+ppl on input line 153.
+Package hyperref Info: Link coloring ON on input line 154.
+LaTeX Font Info:    Trying to load font information for OT1+ppl on input line 156.
 (/Users/oliviergimenez/Library/TinyTeX/texmf-dist/tex/latex/psnfss/ot1ppl.fd
 File: ot1ppl.fd 2001/06/04 font definitions for OT1/ppl.
 )
-LaTeX Font Info:    Trying to load font information for OML+zplm on input line 153.
+LaTeX Font Info:    Trying to load font information for OML+zplm on input line 156.
 (/Users/oliviergimenez/Library/TinyTeX/texmf-dist/tex/latex/psnfss/omlzplm.fd
 File: omlzplm.fd 2002/09/08 Fontinst v1.914 font definitions for OML/zplm.
 )
-LaTeX Font Info:    Trying to load font information for OMS+zplm on input line 153.
+LaTeX Font Info:    Trying to load font information for OMS+zplm on input line 156.
 (/Users/oliviergimenez/Library/TinyTeX/texmf-dist/tex/latex/psnfss/omszplm.fd
 File: omszplm.fd 2002/09/08 Fontinst v1.914 font definitions for OMS/zplm.
 )
-LaTeX Font Info:    Trying to load font information for OMX+zplm on input line 153.
+LaTeX Font Info:    Trying to load font information for OMX+zplm on input line 156.
 (/Users/oliviergimenez/Library/TinyTeX/texmf-dist/tex/latex/psnfss/omxzplm.fd
 File: omxzplm.fd 2002/09/08 Fontinst v1.914 font definitions for OMX/zplm.
 )
 LaTeX Font Info:    Font shape `U/msa/m/n' will be
-(Font)              scaled to size 12.50409pt on input line 153.
+(Font)              scaled to size 12.50409pt on input line 156.
 (/Users/oliviergimenez/Library/TinyTeX/texmf-dist/tex/latex/microtype/mt-msa.cfg
 File: mt-msa.cfg 2006/02/04 v1.1 microtype config. file: AMS symbols (a) (RS)
 )
 LaTeX Font Info:    Font shape `U/msa/m/n' will be
-(Font)              scaled to size 9.37807pt on input line 153.
+(Font)              scaled to size 9.37807pt on input line 156.
 LaTeX Font Info:    Font shape `U/msa/m/n' will be
-(Font)              scaled to size 7.29405pt on input line 153.
+(Font)              scaled to size 7.29405pt on input line 156.
 LaTeX Font Info:    Font shape `U/msb/m/n' will be
-(Font)              scaled to size 12.50409pt on input line 153.
+(Font)              scaled to size 12.50409pt on input line 156.
 (/Users/oliviergimenez/Library/TinyTeX/texmf-dist/tex/latex/microtype/mt-msb.cfg
 File: mt-msb.cfg 2005/06/01 v1.0 microtype config. file: AMS symbols (b) (RS)
 )
 LaTeX Font Info:    Font shape `U/msb/m/n' will be
-(Font)              scaled to size 9.37807pt on input line 153.
+(Font)              scaled to size 9.37807pt on input line 156.
 LaTeX Font Info:    Font shape `U/msb/m/n' will be
-(Font)              scaled to size 7.29405pt on input line 153.
-LaTeX Font Info:    Trying to load font information for OT1+zplm on input line 153.
+(Font)              scaled to size 7.29405pt on input line 156.
+LaTeX Font Info:    Trying to load font information for OT1+zplm on input line 156.
 (/Users/oliviergimenez/Library/TinyTeX/texmf-dist/tex/latex/psnfss/ot1zplm.fd
 File: ot1zplm.fd 2002/09/08 Fontinst v1.914 font definitions for OT1/zplm.
 )
 LaTeX Font Info:    Font shape `U/msa/m/n' will be
-(Font)              scaled to size 10.42007pt on input line 159.
+(Font)              scaled to size 10.42007pt on input line 162.
 LaTeX Font Info:    Font shape `U/msa/m/n' will be
-(Font)              scaled to size 7.91925pt on input line 159.
+(Font)              scaled to size 7.91925pt on input line 162.
 LaTeX Font Info:    Font shape `U/msa/m/n' will be
-(Font)              scaled to size 6.25204pt on input line 159.
+(Font)              scaled to size 6.25204pt on input line 162.
 LaTeX Font Info:    Font shape `U/msb/m/n' will be
-(Font)              scaled to size 10.42007pt on input line 159.
+(Font)              scaled to size 10.42007pt on input line 162.
 LaTeX Font Info:    Font shape `U/msb/m/n' will be
-(Font)              scaled to size 7.91925pt on input line 159.
+(Font)              scaled to size 7.91925pt on input line 162.
 LaTeX Font Info:    Font shape `U/msb/m/n' will be
-(Font)              scaled to size 6.25204pt on input line 159.
+(Font)              scaled to size 6.25204pt on input line 162.
 [1
 
 {/Users/oliviergimenez/Library/TinyTeX/texmf-var/fonts/map/pdftex/updmap/pdftex.map}{/Users/oliviergimenez/Library/TinyTeX/texmf-dist/fonts/enc/dvips/base/8r.enc}] [2] [3] [4]
 <bellman1.png, id=41, 736.7525pt x 553.06625pt>
 File: bellman1.png Graphic file (type png)
 <use bellman1.png>
-Package pdftex.def Info: bellman1.png  used on input line 221.
+Package pdftex.def Info: bellman1.png  used on input line 224.
 (pdftex.def)             Requested size: 736.7507pt x 553.0649pt.
 [5]
 <bellman2.png, id=48, 736.7525pt x 554.07pt>
 File: bellman2.png Graphic file (type png)
 <use bellman2.png>
-Package pdftex.def Info: bellman2.png  used on input line 223.
+Package pdftex.def Info: bellman2.png  used on input line 226.
 (pdftex.def)             Requested size: 736.7507pt x 554.06865pt.
 [6 <./bellman1.png>]
-LaTeX Font Info:    Trying to load font information for TS1+ppl on input line 232.
+LaTeX Font Info:    Trying to load font information for TS1+ppl on input line 235.
 (/Users/oliviergimenez/Library/TinyTeX/texmf-dist/tex/latex/psnfss/ts1ppl.fd
 File: ts1ppl.fd 2001/06/04 font definitions for TS1/ppl.
 ) [7 <./bellman2.png>]
 LaTeX Font Info:    Font shape `U/msa/m/n' will be
-(Font)              scaled to size 11.40997pt on input line 251.
+(Font)              scaled to size 11.40997pt on input line 254.
 LaTeX Font Info:    Font shape `U/msa/m/n' will be
-(Font)              scaled to size 8.33606pt on input line 251.
+(Font)              scaled to size 8.33606pt on input line 254.
 LaTeX Font Info:    Font shape `U/msb/m/n' will be
-(Font)              scaled to size 11.40997pt on input line 251.
+(Font)              scaled to size 11.40997pt on input line 254.
 LaTeX Font Info:    Font shape `U/msb/m/n' will be
-(Font)              scaled to size 8.33606pt on input line 251.
+(Font)              scaled to size 8.33606pt on input line 254.
 [8] [9] [10]
-Overfull \hbox (1.49994pt too wide) in paragraph at lines 354--355
+Overfull \hbox (1.49994pt too wide) in paragraph at lines 357--358
 \T1/ppl/m/n/10.95 (-20) ``Outline the requirements for framing hypotheses, data and computing, experimental constraints
  []
 
@@ -566,10 +566,10 @@ Overfull \hbox (1.49994pt too wide) in paragraph at lines 354--355
 <output/figures/fig-removal-fraction-1.pdf, id=83, 423.5825pt x 277.035pt>
 File: output/figures/fig-removal-fraction-1.pdf Graphic file (type pdf)
 <use output/figures/fig-removal-fraction-1.pdf>
-Package pdftex.def Info: output/figures/fig-removal-fraction-1.pdf  used on input line 380.
+Package pdftex.def Info: output/figures/fig-removal-fraction-1.pdf  used on input line 383.
 (pdftex.def)             Requested size: 423.58147pt x 277.03432pt.
 [12]
-Underfull \hbox (badness 1377) in paragraph at lines 387--389
+Underfull \hbox (badness 1377) in paragraph at lines 390--392
 \T1/ppl/m/n/10.95 (+20) Damages in-crease non-linearly with abun-dance, here us-ing a sim-ple quadratic form
  []
 
@@ -577,47 +577,93 @@ Underfull \hbox (badness 1377) in paragraph at lines 387--389
 <output/figures/fig-cost-components-1.pdf, id=106, 417.56pt x 277.035pt>
 File: output/figures/fig-cost-components-1.pdf Graphic file (type pdf)
 <use output/figures/fig-cost-components-1.pdf>
-Package pdftex.def Info: output/figures/fig-cost-components-1.pdf  used on input line 402.
+Package pdftex.def Info: output/figures/fig-cost-components-1.pdf  used on input line 405.
 (pdftex.def)             Requested size: 417.55896pt x 277.03432pt.
 [14 <./output/figures/fig-cost-components-1.pdf>]
 <output/figures/fig-policy-and-trajectory-1.pdf, id=120, 449.68pt x 412.54124pt>
 File: output/figures/fig-policy-and-trajectory-1.pdf Graphic file (type pdf)
 <use output/figures/fig-policy-and-trajectory-1.pdf>
-Package pdftex.def Info: output/figures/fig-policy-and-trajectory-1.pdf  used on input line 416.
+Package pdftex.def Info: output/figures/fig-policy-and-trajectory-1.pdf  used on input line 419.
 (pdftex.def)             Requested size: 449.6789pt x 412.54024pt.
 [15] [16 <./output/figures/fig-policy-and-trajectory-1.pdf>]
 
-LaTeX Warning: Reference `fig:show-prob-curves' on page 17 undefined on input line 439.
+LaTeX Warning: Reference `fig:show-prob-curves' on page 17 undefined on input line 442.
 
 [17]
 <output/figures/show-prob-curves-1.pdf, id=143, 456.70625pt x 210.7875pt>
 File: output/figures/show-prob-curves-1.pdf Graphic file (type pdf)
 <use output/figures/show-prob-curves-1.pdf>
-Package pdftex.def Info: output/figures/show-prob-curves-1.pdf  used on input line 459.
+Package pdftex.def Info: output/figures/show-prob-curves-1.pdf  used on input line 462.
 (pdftex.def)             Requested size: 456.70512pt x 210.78699pt.
 [18 <./output/figures/show-prob-curves-1.pdf>]
 <output/figures/fig-tradeoff-1.pdf, id=159, 459.7175pt x 284.06125pt>
 File: output/figures/fig-tradeoff-1.pdf Graphic file (type pdf)
 <use output/figures/fig-tradeoff-1.pdf>
-Package pdftex.def Info: output/figures/fig-tradeoff-1.pdf  used on input line 487.
+Package pdftex.def Info: output/figures/fig-tradeoff-1.pdf  used on input line 490.
 (pdftex.def)             Requested size: 459.71637pt x 284.06053pt.
 [19 <./output/figures/fig-tradeoff-1.pdf>]
 <output/figures/fig-policy-heatmap-1.pdf, id=174, 441.65pt x 277.035pt>
 File: output/figures/fig-policy-heatmap-1.pdf Graphic file (type pdf)
 <use output/figures/fig-policy-heatmap-1.pdf>
-Package pdftex.def Info: output/figures/fig-policy-heatmap-1.pdf  used on input line 495.
+Package pdftex.def Info: output/figures/fig-policy-heatmap-1.pdf  used on input line 498.
 (pdftex.def)             Requested size: 441.64891pt x 277.03432pt.
 <output/figures/fig-cum-costs-1.pdf, id=176, 459.7175pt x 284.06125pt>
 File: output/figures/fig-cum-costs-1.pdf Graphic file (type pdf)
 <use output/figures/fig-cum-costs-1.pdf>
-Package pdftex.def Info: output/figures/fig-cum-costs-1.pdf  used on input line 503.
+Package pdftex.def Info: output/figures/fig-cum-costs-1.pdf  used on input line 506.
 (pdftex.def)             Requested size: 459.71637pt x 284.06053pt.
 <output/figures/fig-site-dynamics-1.pdf, id=178, 459.7175pt x 409.53pt>
 File: output/figures/fig-site-dynamics-1.pdf Graphic file (type pdf)
 <use output/figures/fig-site-dynamics-1.pdf>
-Package pdftex.def Info: output/figures/fig-site-dynamics-1.pdf  used on input line 511.
+Package pdftex.def Info: output/figures/fig-site-dynamics-1.pdf  used on input line 514.
 (pdftex.def)             Requested size: 459.71637pt x 409.52899pt.
-[20 <./output/figures/fig-policy-heatmap-1.pdf>] [21 <./output/figures/fig-cum-costs-1.pdf>] [22 <./output/figures/fig-site-dynamics-1.pdf>] [23] [24] (./tuto-sdm-invasive-species.aux)
+[20 <./output/figures/fig-policy-heatmap-1.pdf>] [21 <./output/figures/fig-cum-costs-1.pdf>] [22 <./output/figures/fig-site-dynamics-1.pdf>] [23] [24]
+<../figures/model_set_policies.png, id=239, 505.89pt x 216.81pt>
+File: ../figures/model_set_policies.png Graphic file (type png)
+<use ../figures/model_set_policies.png>
+Package pdftex.def Info: ../figures/model_set_policies.png  used on input line 566.
+(pdftex.def)             Requested size: 407.66833pt x 174.7186pt.
+[25 <../figures/model_set_policies.png>] [26] [27]
+<../figures/passive_AM.png, id=268, 289.08pt x 361.35pt>
+File: ../figures/passive_AM.png Graphic file (type png)
+<use ../figures/passive_AM.png>
+Package pdftex.def Info: ../figures/passive_AM.png  used on input line 607.
+(pdftex.def)             Requested size: 271.7835pt x 339.74625pt.
+[28] [29 <../figures/passive_AM.png>]
+
+LaTeX Warning: Command \textlangle invalid in math mode on input line 622.
+
+LaTeX Info: Symbol \textlangle not provided by
+            font family ppl in TS1 encoding.
+            Default family used instead on input line 622.
+(/Users/oliviergimenez/Library/TinyTeX/texmf-dist/tex/latex/microtype/mt-cmr.cfg
+File: mt-cmr.cfg 2013/05/19 v2.2 microtype config. file: Computer Modern Roman (RS)
+)
+
+LaTeX Warning: Command \textlangle invalid in math mode on input line 622.
+
+
+LaTeX Warning: Command \textlangle invalid in math mode on input line 622.
+
+
+LaTeX Warning: Command \textrangle invalid in math mode on input line 622.
+
+LaTeX Info: Symbol \textrangle not provided by
+            font family ppl in TS1 encoding.
+            Default family used instead on input line 622.
+
+LaTeX Warning: Command \textrangle invalid in math mode on input line 622.
+
+
+LaTeX Warning: Command \textrangle invalid in math mode on input line 622.
+
+[30]
+<../figures/active_AM.png, id=297, 433.62pt x 216.81pt>
+File: ../figures/active_AM.png Graphic file (type png)
+<use ../figures/active_AM.png>
+Package pdftex.def Info: ../figures/active_AM.png  used on input line 632.
+(pdftex.def)             Requested size: 407.66833pt x 203.84442pt.
+[31 <../figures/active_AM.png>] [32] [33] [34] (./tuto-sdm-invasive-species.aux)
  ***********
 LaTeX2e <2025-11-01>
 L3 programming layer <2026-01-19>
@@ -627,18 +673,18 @@ LaTeX Warning: There were undefined references.
 
  ) 
 Here is how much of TeX's memory you used:
- 14772 strings out of 469471
- 233811 string characters out of 5466955
- 704144 words of memory out of 5000000
- 42893 multiletter control sequences out of 15000+600000
- 685197 words of font info for 297 fonts, out of 8000000 for 9000
+ 14982 strings out of 469471
+ 237890 string characters out of 5466955
+ 706924 words of memory out of 5000000
+ 43029 multiletter control sequences out of 15000+600000
+ 688139 words of font info for 327 fonts, out of 8000000 for 9000
  36 hyphenation exceptions out of 8191
  83i,12n,93p,2060b,567s stack positions out of 10000i,1000n,20000p,200000b,200000s
  </Users/oliviergimenez/Library/TinyTeX/texmf-var/fonts/pk/ljfour/jknappen/ec/ectt1000.600pk> </Users/oliviergimenez/Library/TinyTeX/texmf-var/fonts/pk/ljfour/jknappen/ec/ecss0800.450pk></Users/oliviergimenez/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></Users/oliviergimenez/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></Users/oliviergimenez/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></Users/oliviergimenez/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></Users/oliviergimenez/Library/TinyTeX/texmf-dist/fonts/type1/public/mathpazo/fplmr.pfb></Users/oliviergimenez/Library/TinyTeX/texmf-dist/fonts/type1/public/mathpazo/fplmri.pfb></Users/oliviergimenez/Library/TinyTeX/texmf-dist/fonts/type1/urw/palatino/uplb8a.pfb></Users/oliviergimenez/Library/TinyTeX/texmf-dist/fonts/type1/urw/palatino/uplr8a.pfb></Users/oliviergimenez/Library/TinyTeX/texmf-dist/fonts/type1/urw/palatino/uplri8a.pfb>
-Output written on tuto-sdm-invasive-species.pdf (24 pages, 507443 bytes).
+Output written on tuto-sdm-invasive-species.pdf (34 pages, 1020072 bytes).
 PDF statistics:
- 360 PDF objects out of 1000 (max. 8388607)
- 274 compressed objects within 3 object streams
- 55 named destinations out of 1000 (max. 500000)
- 71867 words of extra memory for PDF output out of 74296 (max. 10000000)
+ 464 PDF objects out of 1000 (max. 8388607)
+ 364 compressed objects within 4 object streams
+ 82 named destinations out of 1000 (max. 500000)
+ 73954 words of extra memory for PDF output out of 74296 (max. 10000000)
 
