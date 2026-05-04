@@ -139,7 +139,7 @@
 \urlstyle{same}
 \hypersetup{
   pdftitle={Using dynamic programming for making structured decisions about invasive species},
-  pdfauthor={Olivier Gimenez1*; Abby Keller2*; Lucile Marescot3*; Cassie Speakman4*},
+  pdfauthor={Olivier Gimenez1*; Abby Keller2*; Lucile Marescot3*; Carl Boettiger2*; Cassie Speakman4,1*},
   colorlinks=true,
   linkcolor={RoyalBlue},
   filecolor={Maroon},
@@ -148,8 +148,8 @@
   pdfcreator={LaTeX via pandoc}}
 
 \title{Using dynamic programming for making structured decisions about invasive species}
-\author{Olivier Gimenez\textsuperscript{1}* \and Abby Keller\textsuperscript{2}* \and Lucile Marescot\textsuperscript{3}* \and Cassie Speakman\textsuperscript{4}*}
-\date{2026-05-03}
+\author{Olivier Gimenez\textsuperscript{1}* \and Abby Keller\textsuperscript{2}* \and Lucile Marescot\textsuperscript{3}* \and Carl Boettiger\textsuperscript{2}* \and Cassie Speakman\textsuperscript{4,1}*}
+\date{2026-05-04}
 
 \begin{document}
 \maketitle
@@ -160,9 +160,9 @@
 \small
 
 \textsuperscript{1} CEFE, Univ Montpellier, CNRS, EPHE, IRD, Montpellier, France
-\textsuperscript{2} address
-\textsuperscript{3} address
-\textsuperscript{4} address
+\textsuperscript{2} University of California, Berkeley, Berkeley, California, USA
+\textsuperscript{3} CBGP, INRAE, IRD, CIRAD, Institut Agro Montpellier, Univ Montpellier, Montpellier, France
+\textsuperscript{4} FRB-CESAB, Montpellier, France
 
 \texttt{*} Corresponding author: \href{mailto:olivier.gimenez@cefe.cnrs.fr}{\nolinkurl{olivier.gimenez@cefe.cnrs.fr}}
 
@@ -185,21 +185,17 @@ Target journal: Journal of Animal Ecology
 
 \section{Introduction}\label{introduction}
 
-Invasive species are a significant global issue, with wide-ranging impacts on ecosystems, economies, and public health (\citeproc{ref-Petr2020}{Pyšek et al. 2020}, \citeproc{ref-Roy2024}{Roy et al. 2024}).
+Invasive species are a major global concern, with wide-ranging impacts on ecosystems, economies, and public health (\citeproc{ref-Petr2020}{Pyšek et al. 2020}, \citeproc{ref-Roy2024}{Roy et al. 2024}). Their management is inherently challenging, as it requires repeated decisions under uncertainty, limited budgets, and imperfect knowledge of ecological dynamics, which are often characterized by rapid spread, strong population fluctuations, and broad spatial distributions. In practice, managers must decide not only whether to intervene, but also when, where, and how intensively, while balancing short-term operational costs against long-term socio-ecological benefits (\citeproc{ref-hauserExperimentalPrecautionaryAdaptive2008}{Hauser and Possingham 2008}).
 
-Effective management of invasive species requires blabla for guiding control efforts and evaluating the success of eradication or regulation programs (\citeproc{ref-Williams2002}{Williams et al. 2002}, \citeproc{ref-Thompson2021}{Thompson et al. 2021}).
+This makes invasive species management a fundamentally dynamic decision problem. Predicting invasion dynamics or mapping risks is not sufficient unless these predictions are explicitly linked to management objectives, feasible actions, and measurable consequences. Decision-making is further complicated by the need to account for multiple, sometimes competing, criteria, including ecological effectiveness, economic costs, operational feasibility, and potential unintended consequences such as non-target impacts. In addition, management actions are embedded in social contexts, where stakeholder perceptions, acceptability of control measures, and underlying environmental values can strongly influence both implementation and outcomes (\citeproc{ref-simberloffImpactsBiologicalInvasions2013a}{Simberloff et al. 2013}, \citeproc{ref-estevezClarifyingValuesRisk2015}{Estévez et al. 2015}, \citeproc{ref-crowleyInvasiveSpeciesManagement2017}{Crowley et al. 2017})
 
-Pitch: Structured decision-making (SDM) and adaptive management (AM) have been repeatedly recommended for the management of invasive species, yet they remain underused in practice. There are many reasons for this gap, one of which is the technical challenge of formally identifying and quantifying trade-offs among management objectives. Here, we contribute to ongoing efforts by illustrating the use of stochastic dynamic programming (SDP) and some of its variants --- including active and passive adaptive management and partially observable Markov decision processes (POMDPs) --- across different ecological contexts (a single population, a metapopulation, and two interacting populations).
+Structured decision-making (SDM) and adaptive management (AM) have long been advocated as frameworks to address the complexity of ecological management problems (\citeproc{ref-Williams2002}{Williams et al. 2002}, \citeproc{ref-Thompson2021}{Thompson et al. 2021}). These approaches emphasize the explicit formulation of objectives, the evaluation of alternative actions, and the incorporation of uncertainty into decision processes. However, despite their conceptual appeal, they remain underused in practice, in part because of the technical challenge of formally identifying, quantifying, and optimizing trade-offs among competing objectives over time. Stochastic dynamic programming (SDP), a core tool of decision theory, provides a powerful framework to address this challenge by treating management as a sequential decision problem under uncertainty. In this framework, optimal actions are derived as a function of the current state of the system (e.g.~infestation size, spatial extent, or local density), while explicitly accounting for stochastic dynamics and the future consequences of present decisions. SDP naturally accommodates a wide range of management actions, including prevention, surveillance, containment, control, eradication, or inaction, and allows their outcomes to be evaluated in terms of long-term ecological, economic, or social objectives.
 
-Several papers have recommended or implemented structured decision-making (SDM) for managing invasive species. It's worth providing a short review of this literature.
+SDP has been successfully applied to a variety of invasive species management problems, including optimizing prevention versus control strategies for zebra mussels (\citeproc{ref-leungOuncePreventionPound2002}{Leung et al. 2002}), designing control policies for invasive plants such as leafy spurge (\citeproc{ref-hyderEcologySocietyIntegrating2008}{Hyder et al. 2008}), identifying state-dependent strategies for spatially structured invasions (\citeproc{ref-bogichSampleEradicateCost2008}{Bogich et al. 2008}), optimizing search effort for invasive insects (\citeproc{ref-baxterOptimizingSearchStrategies2011}{Baxter and Possingham 2011}), and comparing alternative strategies across invasion stages (\citeproc{ref-hyytiainenOptimizationFrameworkAddressing2013}{Hyytiäinen et al. 2013}). More recent developments, including partially observable Markov decision processes (POMDPs), allow decision-making under imperfect detection, while connections with reinforcement learning highlight promising avenues for scaling these approaches to complex, data-rich systems (e.g. Haubrock et al. (\citeproc{ref-Haubrock2025}{2025})).
 
-In a recent review on impacts, the use of ML to guide management actions identified as a future research direction (see Appendix 3 in Haubrock et al. (\citeproc{ref-Haubrock2025}{2025})).
+Despite these advances, the practical implementation of SDP and related approaches remains limited in applied animal ecology. This gap is partly due to the perceived complexity of these methods and the lack of accessible, step-by-step guidance for translating ecological problems into operational decision models.
 
-``Another recent research direction is the use of machine learning to aid the development of conservation management strategies. These methods involve models that integrate geospatial, climate, species distribution and other data to simulate the distribution of species and vegetation types under different land use and conservation planning scenarios. Reinforcement Learning algorithms can then be used to learn a management policy that attains a specified quantifiable objective (such as minimising the number of individuals from a non-native species) under constraints such as cost or the amount of land that can be protected. Dietterich, Taleghan and Crowley (2013) demonstrated how Reinforcement Learning can be applied to managing a river system to control the expansion of a non-native plant species. Lapeyrolerie et al.~(2022) demonstrated the potential of Reinforcement Learning for resource management problems, such as setting fishing quotas. Conservation area prioritisation through artificial intelligence (CAPTAIN) (Silvestro et al., 2022) is a general simulation framework that allows the user to define flexibly management objectives to be optimised. The unprecedented rate at which new technologies are emerging holds great promise for improving impact assessments related to biological invasions.''
-
-Coypu (Myocastor coypu) as a case study throughout the paper. Code and tutorials available as appendices.
-
-Add a shiny for each case study so that folks can play around?
+In this paper, we aim to bridge this gap by providing a practical guide to the use of stochastic dynamic programming and its extensions for invasive species management. Using the coypu (\emph{Myocastor coypus}) as a running example, we progressively illustrate how to formulate decision problems, implement models, and derive optimal management strategies across a range of ecological contexts, from single populations to spatially structured metapopulations and interacting systems. We first introduce the core concepts of structured decision making and stochastic dynamic programming through a minimal, fully transparent example. We then develop a series of worked tutorials of increasing complexity, including spatial dynamics, imperfect detection using partially observable Markov decision processes (POMDPs), and model uncertainty addressed through adaptive management. Throughout, we provide reproducible implementations in R to facilitate uptake and adaptation by practitioners.
 
 \section{Explanation of the method}\label{explanation-of-the-method}
 
@@ -207,23 +203,20 @@ Add a shiny for each case study so that folks can play around?
 
 We do not want to rewrite Lucile's paper\ldots{}
 
-Invasive species are a major driver of ecological disruption, economic losses, and risks to human health and food security, and their management often requires repeated decisions under uncertainty, limited budgets, and imperfect knowledge of ecological dynamics, which are frequently characterized by strong population fluctuations, rapid spread, and broad spatial distributions. In practice, managers must decide not only whether to intervene, but also when, where, and how strongly, while balancing short-term operational costs against long-term socio-ecological benefits (Hauser and Possingham 2008). This makes invasive species management a complex decision problem, in which predicting invasion dynamics, or risk forecasting alone are insufficient unless it is explicitly linked to management objectives, feasible actions, and measurable consequences.
-
-Although invasive species management does not always involve strongly opposed objectives, as in some human--wildlife conflicts, the utility function can still be highly complex. Management decisions must weigh expected effectiveness against economic costs, operational effort, feasibility, timing, and the potential unintended impacts of control actions, including non-target effects (Poulin 2015). These decisions are further complicated by the fact that invasive species and their control may be perceived differently by different stakeholders, so that social acceptability becomes an important component of management outcomes (Estevez et al.~2014). More broadly, controversies surrounding invasive species management may reflect differences in environmental values, risk perceptions, rather than disagreement over ecological evidence alone (Simberloff 2012). In this context, several authors have argued that assessing ecological effectiveness of invasive species control measures is not sufficient, and that management strategies should also be evaluated in terms of their social impacts (Crowley et al.~2017). Recent studies further confirm that commonly proposed management interventions, particularly those involving lethal control, often face substantial public resistance or stakeholder conflict, making social feasibility a central dimension of management success (Simmons et al.~2025; Busby et al.~2025).
-
-That's why SDP is an approriate method for invasive species\ldots{} In invasive species management, SDP has been applied to problems such as balancing prevention and control for zebra mussels, optimizing search effort for red imported fire ants in Australia, selecting integrated control strategies for invasive weeds such as leafy spurge or blackberry, and determining whether prevention, eradication, control, or adaptation is optimal under different stages of aquatic invasions.
-
-In practice, SDP treats invasive species management as a sequential decision problem in which actions are optimized over time rather than evaluated in isolation. The sequence of decisions are optimal actions over time that depend on the current state of the system, such as infestation size, invaded area, local density. At each time step, managers can choose among several actions including preventing establishment, conducting routine surveillance, intensifying search in high-risk areas, containing spread from invaded sites, reducing local abundance through control, attempting eradication of already established populations, or postponing intervention when action is not expected to be worthwhile (Moore et al.~2011). The consequences of each action are then evaluated under stochastic population dynamics, imperfect detection (in the case of POMDP, e.g Haight \& Polasky (2010)) and partial controlability, while accounting for the expected future effects of each action on progressing towards the ecological, economic, or social objectives that management seeks to optimize (Williams et al.~2001). More specifically, SDP has been used to determine how much to invest in prevention versus post-invasion control for the invasive zebra mussels within nuclear power-plant water systems (Leung et al.~2002), to optimize control strategies (mechanical, chemical, biological) for the invasive weed leafy spurge by combining information on density and spatial spread (Hyder et al.~2008), to identify state-dependent management policies for an invasive gypsy moth (Lymantria dispar) considering the metapopulation with different patch sizes and spread dynamics (Bogich and Shea 2008), to optimize search effort for the red imported fire ant in Queensland by balancing broad surveillance against targeted search and learning (Baxter et al.~2011), and to compare prevention, control, eradication, and adaptation strategies for aquatic invasive species under different stages of invasion (Hyytiäinen et al.~2013).
-
 \subsection{Structured decision making}\label{structured-decision-making}
 
 Why and what (all)
 
 \subsection{Stochastic dynamic programming (Olivier)}\label{stochastic-dynamic-programming-olivier}
 
-\pandocbounded{\includegraphics[keepaspectratio]{bellman1.png}}
+\begin{figure}
 
-\pandocbounded{\includegraphics[keepaspectratio]{bellman2.png}}
+{\centering \includegraphics[width=0.9\linewidth]{bellman-fig} 
+
+}
+
+\caption{Schematic representation of the Bellman recursion in stochastic dynamic programming. The value of being in a given state at time $t$, $V(X_t)$, is defined as the maximum, over all possible actions, of two components: (i) the immediate reward obtained by taking action $A_t$ in state $X_t$, and (ii) the expected discounted future value of subsequent states. The latter corresponds to the average (weighted by transition probabilities) of the optimal future values $V(X_{t+1})$ that can be reached from the current state-action pair, scaled by a discount factor $\beta < 1$ to reflect that future payoffs are less valuable than present ones. This recursive equation highlights the fact that the value of a decision is not only determined by its immediate payoff, but also by how it shapes future opportunities. The optimal action is therefore the one that maximizes the sum of current rewards and expected future benefits.}\label{fig:fig-bellman}
+\end{figure}
 
 Here we present a minimal stochastic dynamic programming (SDP) example. The aim is purely pedagogical: to show how states, actions, transition probabilities, rewards, and time horizon combine to produce an optimal decision rule.
 
@@ -662,6 +655,12 @@ Data and code are available at \href{https://github.com/oliviergimenez/SDPaper}{
 
 \phantomsection\label{refs}
 \begin{CSLReferences}{1}{0}
+\bibitem[\citeproctext]{ref-baxterOptimizingSearchStrategies2011}
+Baxter, P. W. J., and H. P. Possingham. 2011. Optimizing search strategies for invasive pests: Learn before you leap. Journal of Applied Ecology 48:86--95.
+
+\bibitem[\citeproctext]{ref-bogichSampleEradicateCost2008}
+Bogich, T. L., A. M. Liebhold, and K. Shea. 2008. To sample or eradicate? {A} cost minimization model for monitoring and managing an invasive species. Journal of Applied Ecology 45:1134--1142.
+
 \bibitem[\citeproctext]{ref-bolam2019using}
 Bolam, F. C., M. J. Grainger, K. L. Mengersen, G. B. Stewart, W. J. Sutherland, M. C. Runge, and P. J. McGowan. 2019. Using the value of information to improve conservation decision making. Biological Reviews 94:629--647.
 
@@ -671,17 +670,35 @@ Chadès, I., S. Nicol, T. M. Rout, M. Péron, Y. Dujardin, J.-B. Pichancourt, A.
 \bibitem[\citeproctext]{ref-conroy2013decision}
 Conroy, M. J., and J. T. Peterson. 2013. Decision making in natural resource management: A structured, adaptive approach. John Wiley \& Sons.
 
+\bibitem[\citeproctext]{ref-crowleyInvasiveSpeciesManagement2017}
+Crowley, S. L., S. Hinchliffe, and R. A. McDonald. 2017. Invasive species management will benefit from social impact assessment. Journal of Applied Ecology 54:351--357.
+
+\bibitem[\citeproctext]{ref-estevezClarifyingValuesRisk2015}
+Estévez, R. A., C. B. Anderson, J. C. Pizarro, and M. A. Burgman. 2015. {Clarifying values, risk perceptions, and attitudes to resolve or avoid social conflicts in invasive species management}. Conservation Biology 29:19--30.
+
 \bibitem[\citeproctext]{ref-fowler1981density}
 Fowler, C. W. 1981. Density dependence as related to life history strategy. Ecology 62:602--610.
 
 \bibitem[\citeproctext]{ref-Haubrock2025}
 Haubrock, P. J., T. Everts, N. A. S. Abreo, J. Bojko, V. Deklerck, J. W. E. Dickey, A. C. S. Franco, E. García-Berthou, S. Katsanevakis, N. I. Kirichenko, S. Mammola, M. A. Nuñez, B. Parker, R. Scalera, I. Soto, D. Strubbe, A. S. Tarkan, L. Vilizzi, T. Adriaens, P. Balzani, D. Blońska, E. Briski, R. Brys, A. L. Burgess, J. E. Byers, C. Cano-Barbacil, G. Castaldelli, J. T. A. Dick, V. Dominguez Almela, R. D. Dimarco, M. Florencio, A. Kouba, M. Kourantidou, I. Kurtul, I. Martín-Forés, O. Morissette, J. D. Olden, B. E. Soares, J. Truszkowski, H. Verreycken, M. Kenis, R. Sousa, and J. R. Britton. 2025. The impacts of biological invasions. Biological Reviews n/a.
 
+\bibitem[\citeproctext]{ref-hauserExperimentalPrecautionaryAdaptive2008}
+Hauser, C. E., and H. P. Possingham. 2008. Experimental or precautionary? {Adaptive} management over a range of time horizons. Journal of Applied Ecology 45:72--81.
+
 \bibitem[\citeproctext]{ref-holling1978adaptive}
 Holling, C. S. 1978. Adaptive environmental assessment and management. John Wiley \& Sons.
 
+\bibitem[\citeproctext]{ref-hyderEcologySocietyIntegrating2008}
+Hyder, A., B. Leung, and Z. Miao. 2008. Ecology and {Society}: {Integrating Data}, {Biology}, and {Decision Models} for {Invasive Species Management}: {Application} to {Leafy Spurge} ({\emph{Euphorbia}}{ \emph{Esula}}). Ecology and Society 13.
+
+\bibitem[\citeproctext]{ref-hyytiainenOptimizationFrameworkAddressing2013}
+Hyytiäinen, K., M. Lehtiniemi, J. K. Niemi, and K. Tikka. 2013. An optimization framework for addressing aquatic invasive species. Ecological Economics 91:69--79.
+
 \bibitem[\citeproctext]{ref-kurniawati2008sarsop}
 Kurniawati, H., D. Hsu, W. S. Lee, and others. 2008. Sarsop: Efficient point-based pomdp planning by approximating optimally reachable belief spaces. Robotics: Science and systems. Zurich, Switzerland.
+
+\bibitem[\citeproctext]{ref-leungOuncePreventionPound2002}
+Leung, B., D. M. Lodge, D. Finnoff, J. F. Shogren, M. A. Lewis, and G. Lamberti. 2002. An ounce of prevention or a pound of cure: Bioeconomic risk analysis of invasive species. Proceedings. Biological Sciences 269:2407--2413.
 
 \bibitem[\citeproctext]{ref-Petr2020}
 Pyšek, P., P. E. Hulme, D. Simberloff, S. Bacher, T. M. Blackburn, J. T. Carlton, W. Dawson, F. Essl, L. C. Foxcroft, P. Genovesi, J. M. Jeschke, I. Kühn, A. M. Liebhold, N. E. Mandrak, L. A. Meyerson, A. Pauchard, J. Pergl, H. E. Roy, H. Seebens, M. van Kleunen, M. Vilà, M. J. Wingfield, and D. M. Richardson. 2020. Scientists' warning on invasive alien species. Biological Reviews 95:1511--1534.
@@ -694,6 +711,9 @@ Roy, H. E., A. Pauchard, P. J. Stoett, T. Renard Truong, L. A. Meyerson, S. Bach
 
 \bibitem[\citeproctext]{ref-runge2011uncertainty}
 Runge, M. C., S. J. Converse, and J. E. Lyons. 2011. Which uncertainty? Using expert elicitation and expected value of information to design an adaptive program. Biological Conservation 144:1214--1223.
+
+\bibitem[\citeproctext]{ref-simberloffImpactsBiologicalInvasions2013a}
+Simberloff, D., J.-L. Martin, P. Genovesi, V. Maris, D. A. Wardle, J. Aronson, F. Courchamp, B. Galil, E. García-Berthou, M. Pascal, P. Pyšek, R. Sousa, E. Tabacchi, and M. Vilà. 2013. Impacts of biological invasions: What's what and the way forward. Trends in Ecology \& Evolution 28:58--66.
 
 \bibitem[\citeproctext]{ref-Thompson2021}
 Thompson, B. K., J. D. Olden, and S. J. Converse. 2021. Mechanistic invasive species management models and their application in conservation. Conservation Science and Practice 3:e533.
