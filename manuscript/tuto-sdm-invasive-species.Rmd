@@ -1,5 +1,5 @@
 ---
-title: "Using dynamic programming for making structured decisions about invasive species"
+title: "Using dynamic programming for making decisions about invasive species"
 author:
   - Olivier Gimenez^1^*
   - Abby Keller^2^*
@@ -99,7 +99,7 @@ SDP has been successfully applied to a variety of invasive species management pr
 
 Despite these advances, the practical implementation of SDP and related approaches remains limited in applied animal ecology. This gap is partly due to the perceived complexity of these methods and the lack of accessible, step-by-step guidance for translating ecological problems into operational decision models.
 
-In this paper, we aim to bridge this gap by providing a practical guide to the use of stochastic dynamic programming and its extensions for invasive species management. Using the coypu (*Myocastor coypus*) as a running example, we progressively illustrate how to formulate decision problems, implement models, and derive optimal management strategies across a range of ecological contexts, from single populations to spatially structured metapopulations and interacting systems. We first introduce the core concepts of structured decision making and stochastic dynamic programming through a minimal, fully transparent example. We then develop a series of worked tutorials of increasing complexity, including spatial dynamics, imperfect detection using partially observable Markov decision processes (POMDPs), and model uncertainty addressed through adaptive management. Throughout, we provide reproducible implementations in R to facilitate uptake and adaptation by practitioners.
+In this paper, we aim to bridge this gap by providing a practical guide to the use of stochastic dynamic programming and its extensions for invasive species management. Using the coypu (*Myocastor coypus*) as a running example, we illustrate how to formulate decision problems, implement models, and derive optimal management strategies across a range of ecological contexts, from single populations to metapopulations. We first introduce the core concepts of structured decision making and stochastic dynamic programming through a minimal, fully transparent example. We then develop a series of worked tutorials of increasing complexity, including spatial dynamics, imperfect detection using partially observable Markov decision processes (POMDPs), and model uncertainty addressed through adaptive management. Throughout, we provide reproducible implementations in `R` to facilitate uptake and adaptation by practitioners.
 
 # Explanation of the method
 
@@ -228,7 +228,27 @@ This toy example highlights key features of SDP:
 
 # Things to consider for before using this method
 
-"Outline the requirements for framing hypotheses, data and computing, experimental constraints and statistical power."
+Applying stochastic dynamic programming (SDP) to ecological problems requires careful formulation of the decision context, as well as practical considerations regarding model structure, data, and computation.
+
+## Problem formulation
+
+A prerequisite for SDP is a clear definition of the decision problem. This includes specifying management objectives, identifying feasible actions, defining the state variables that describe the system, and constructing a reward function that captures the trade-offs among ecological, economic, and social outcomes. Because SDP optimizes decisions given these elements, poorly specified objectives or unrealistic action sets can lead to misleading recommendations.
+
+## State definition and discretization.
+
+SDP typically requires a finite state space, whereas ecological systems are often described by continuous variables (e.g. abundance, spatial extent). Discretization is therefore necessary, but introduces a trade-off between realism and tractability. Fine discretization improves accuracy but increases computational cost, while coarse discretization may obscure important system dynamics. Careful sensitivity analyses are often needed to ensure robust conclusions.
+
+## Model specification and uncertainty.
+
+The performance of SDP depends on the specification of transition dynamics and reward functions, which are often uncertain in ecological systems. These uncertainties may arise from limited data, structural assumptions, or imperfect knowledge of management effectiveness. Ignoring uncertainty can result in suboptimal policies, motivating extensions such as adaptive management or partially observable Markov decision processes (POMDPs), which explicitly account for learning and imperfect information.
+
+## Computational constraints.
+
+A major limitation of SDP is the “curse of dimensionality”, whereby the size of the state and action space grows rapidly with system complexity. This can restrict the number of state variables, spatial resolution, or management options that can be included in a model. In practice, this often requires simplifying assumptions, state aggregation, or the use of simulation-based approaches to approximate optimal policies.
+
+## Data requirements and interpretation.
+
+Although SDP can be implemented using simple or expert-based models, its relevance depends on the availability and quality of data describing system dynamics, management effects, and costs. In data-limited contexts, SDP may still provide valuable qualitative insights into decision structure and trade-offs, but quantitative recommendations should be interpreted with caution.
 
 # Worked examples
 
