@@ -124,6 +124,16 @@ simulate_next_state <- function(state, pop, adj) {
   list(state = next_state, pop = pop)
 }
 
+df_ext <- tibble(N = 0:100, p_ext = exp(-0.15*N))
+df_col <- tibble(k = 0:5,   p_col = 1 - (1 - 0.1)^k)
+p1 <- ggplot(df_ext, aes(N, p_ext)) + geom_line() +
+  labs(x = "Local abundance N", y = expression(p[ext](N))) + theme_minimal() +
+  ggtitle("A.")
+p2 <- ggplot(df_col, aes(k, p_col)) + geom_line() +
+  labs(x = "No. occupied neighbors k", y = expression(p[col](k))) + theme_minimal() +
+  ggtitle("B.")
+p1 + p2
+
 # -----------------------------#
 # 3) Monte Carlo transition matrices P and rewards R
 # -----------------------------#
@@ -282,10 +292,10 @@ df_costs <- tibble(
 
 p_costs <- ggplot(df_costs, aes(x = Time, y = CumCost, color = Strategy)) +
   geom_line(linewidth = 1.1) +
-  labs(title = "Cumulative cost: constant vs SDP-optimal strategies",
-       x = "Time step", y = "Cumulative cost", color = NULL) +
+  labs(x = "Time step", y = "Cumulative cost", color = NULL) +
   theme_minimal() +
-  theme(legend.position = "bottom")
+  theme(legend.position = "bottom") +
+  ggtitle("C.")
 p_costs
 
 # -----------------------------#
@@ -331,11 +341,52 @@ df_all <- bind_rows(
 p_sites <- ggplot(df_all, aes(Time, Abundance, color = Strategy, linetype = Strategy)) +
   geom_line(linewidth = 0.9) +
   facet_wrap(~ Site, ncol = 4) +
-  labs(title = "Abundance dynamics per site",
-       x = "Time step", y = "Abundance", color = NULL, linetype = NULL) +
+  labs(x = "Time step", y = "Abundance", color = NULL, linetype = NULL) +
   theme_minimal() +
-  theme(legend.position = "bottom")
+  theme(legend.position = "bottom") +
+  ggtitle("D.")
 p_sites
+
+df_tradeoff <- tibble(
+  TotalAbundance = seq(0, 800, length.out = 200)
+) %>%
+  mutate(
+    Damage = damage_cost * TotalAbundance,
+    None     = control_cost[1],
+    Moderate = control_cost[2],
+    Strong   = control_cost[3]
+  ) %>%
+  pivot_longer(
+    cols = -TotalAbundance,
+    names_to = "Component",
+    values_to = "Cost"
+  ) %>%
+  mutate(
+    Component = factor(Component,
+                       levels = c("None","Moderate","Strong","Damage"))
+  )
+
+p_tradeoff <- ggplot(df_tradeoff,
+                     aes(x = TotalAbundance, y = log(Cost), color = Component)) +
+  geom_line(linewidth = 1.1) +
+  scale_color_manual(
+    values = c(
+      "None" = "grey40",
+      "Moderate" = "orange",
+      "Strong" = "red",
+      "Damage" = "black"
+    )
+  ) +
+  labs(
+    x = "Total abundance across sites",
+    y = "Cost per time step (log scale)",
+    color = NULL
+  ) +
+  theme_minimal() +
+  theme(legend.position = "bottom") +
+  ggtitle("E.")
+
+p_tradeoff
 
 # -----------------------------#
 # 8) Global optimal action sequence over time
@@ -357,20 +408,47 @@ p_action
 # -----------------------------#
 # 9) Heatmap of removals under the optimal policy
 # -----------------------------#
-# Here "removed" is approximated as pop_mat * harvest_fraction at each time.
-harvest_mat <- pop_mat * actions[action_opt]
 
-df_harvest <- as_tibble(harvest_mat) %>%
-  set_names(villes) %>%
-  mutate(Time = 1:Tmax) %>%
-  pivot_longer(cols = all_of(villes), names_to = "Site", values_to = "Harvested")
+# # Here "removed" is approximated as pop_mat * harvest_fraction at each time.
+# harvest_mat <- pop_mat * actions[action_opt]
+# 
+# df_harvest <- as_tibble(harvest_mat) %>%
+#   set_names(villes) %>%
+#   mutate(Time = 1:Tmax) %>%
+#   pivot_longer(cols = all_of(villes), names_to = "Site", values_to = "Harvested")
+# 
+# p_harvest <- ggplot(df_harvest, aes(x = Time, y = Site, fill = Harvested)) +
+#   geom_tile() +
+#   scale_fill_viridis_c(name = "No. removed") +
+#   labs(title = "Coypu removals (optimal policy)", x = "Time step", y = "Site") +
+#   theme_minimal()
+# p_harvest
 
-p_harvest <- ggplot(df_harvest, aes(x = Time, y = Site, fill = Harvested)) +
+# Invasion level for each discrete occupancy state: number of occupied sites
+occ_count <- rowSums(state_list)  # length = n_states
+
+# Build a long data.frame: (state, time) -> optimal action + invasion level
+df_policy <- expand.grid(
+  sid  = seq_len(n_states),
+  time = seq_len(Tmax)
+) %>%
+  mutate(
+    OccSites = occ_count[sid],
+    Action = factor(res$policy[cbind(sid, time)],
+                    levels = 1:3,
+                    labels = c("None", "Moderate", "Strong"))
+  )
+
+ggplot(df_policy, aes(x = time, y = OccSites, fill = Action)) +
   geom_tile() +
-  scale_fill_viridis_c(name = "No. removed") +
-  labs(title = "Coypu removals (optimal policy)", x = "Time step", y = "Site") +
-  theme_minimal()
-p_harvest
+  scale_fill_manual(values = c("None" = "grey70", "Moderate" = "orange", "Strong" = "red")) +
+  scale_y_continuous(breaks = 0:n_sites) +
+  labs(x = "Time step", y = "Number of occupied sites", fill = NULL) +
+  theme_minimal() +
+  theme(
+    panel.grid = element_blank(),
+    legend.position = "bottom"
+  )
 
 # -----------------------------#
 # 10) Containment probability: proportion of sites with abundance <= 5
@@ -382,15 +460,19 @@ df_summary <- df_all %>%
 p_contain <- ggplot(df_summary, aes(Time, perc_low, color = Strategy)) +
   geom_line(linewidth = 1.1) +
   scale_y_continuous(labels = scales::percent) +
-  labs(title = "Containment success (sites with ≤ 5 coypus)",
-       x = "Time step", y = "Proportion of sites", color = NULL) +
+  labs(x = "Time step", y = "Proportion of sites", color = NULL) +
   theme_minimal() +
-  theme(legend.position = "bottom")
+  theme(legend.position = "bottom") +
+  ggtitle("E.")
 p_contain
 
 # -----------------------------#
 # 11) Display or save figures
 # -----------------------------#
-# Combine a few key plots (edit as you like)
-(p_costs / p_action) + plot_annotation(tag_levels = "A")
+
+# combine all figures
+final_plot <- p1 + p2 + p_costs + p_sites + p_tradeoff + p_contain + plot_layout(nrow = 2)
+
+ggsave("../SDPaper/figures/figure3.png", final_plot, dpi = 600, height = 6, width = 9)
+
 

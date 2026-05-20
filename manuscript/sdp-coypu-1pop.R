@@ -35,6 +35,8 @@
 # 0) Packages + reproducibility
 # -----------------------------#
 library(MDPtoolbox)
+library(tidyverse)
+library(patchwork)
 set.seed(666)
 
 # -----------------------------#
@@ -91,6 +93,30 @@ round_to_grid <- function(x, grid) {
 #   q(0)=0, increasing, saturating (diminishing returns).
 q_u <- function(u) 1 - exp(-alpha * u)
 
+# Parameter (same as in the model)
+alpha <- 1.5
+
+# Effort grid
+u <- seq(0, 1, length.out = 200)
+
+# Removal fraction
+df <- data.frame(
+  u = u,
+  q = 1 - exp(-alpha * u)
+)
+
+fig1a <- ggplot(df, aes(x = u, y = q)) +
+  geom_line(linewidth = 1) +
+  #  geom_hline(yintercept = 0.5, linetype = "dashed") +
+  labs(
+    #title = "Saturating removal function",
+    x = "Control effort u",
+    y = "Removal fraction q(u)"
+  ) +
+  theme_minimal() +
+  ggtitle("A.")
+fig1a
+
 # -----------------------------#
 # 4) Population dynamics (1-step)
 # -----------------------------#
@@ -129,6 +155,43 @@ reward_fun <- function(N, u) {
   # Reward = negative costs (maximize reward <=> minimize cost)
   -(damage + cost + penalty)
 }
+
+# Parameters
+N_tol <- 400
+u_example <- 0.6
+
+# Abundance grid
+N <- seq(0, 2000, length.out = 300)
+
+# Components
+damage  <- 0.1 * N + 0.001 * N^2
+penalty <- ifelse(N > N_tol, 2000 * (N - N_tol) / N_tol, 0)
+damage_plus_penalty <- damage + penalty
+control_cost <- rep(50 * u_example + 200 * u_example^2, length(N))
+
+# Long format (without plotting penalty)
+df_long <- rbind(
+  data.frame(N = N, component = "Damage", value = damage),
+  data.frame(N = N, component = "Total cost (damage + penalty)", value = damage_plus_penalty),
+  data.frame(N = N, component = "Control cost (u = 0.6)", value = control_cost)
+)
+
+df_long$component <- factor(
+  df_long$component,
+  levels = c("Damage", "Total cost (damage + penalty)", "Control cost (u = 0.6)")
+)
+
+fig1b <- ggplot(df_long, aes(x = N, y = value, linetype = component)) +
+  geom_line(linewidth = 0.9) +
+  geom_vline(xintercept = N_tol, linetype = "dotted") +
+  labs(
+    x = "Abundance N",
+    y = "Immediate cost",
+    linetype = NULL
+  ) +
+  theme_minimal() +
+  ggtitle("B.")
+fig1b
 
 # -----------------------------#
 # 6) Build transition kernel P and reward matrix R
@@ -191,10 +254,10 @@ str(sol)
 # -----------------------------#
 u_star <- seq_u[sol$policy]
 
-plot(seq_N, u_star, type = "l",
-     xlab = "Abundance N (state grid)",
-     ylab = "Optimal control effort u*",
-     main = "Optimal regulation policy for coypu (1D MDP)")
+# plot(seq_N, u_star, type = "l",
+#      xlab = "Abundance N (state grid)",
+#      ylab = "Optimal control effort u*",
+#      main = "Optimal regulation policy for coypu (1D MDP)")
 
 # -----------------------------#
 # 9) Simulate a trajectory under the optimal policy
@@ -238,15 +301,53 @@ simulate_policy <- function(N0, n_years = 30) {
 
 traj <- simulate_policy(N0 = 800, n_years = 40)
 
-plot(traj$year, traj$N, type = "l",
-     xlab = "Year",
-     ylab = "Abundance N",
-     main = "Population trajectory under optimal policy")
+#--------------------
 
-plot(traj$year, traj$u, type = "s",
-     xlab = "Year",
-     ylab = "Control effort u",
-     main = "Control effort over time under optimal policy")
+# optimal policy u*(N) 
+policy_df <- data.frame(
+  N = seq_N,
+  u_star = seq_u[sol$policy]
+)
+
+p_policy <- ggplot(policy_df, aes(x = N, y = u_star)) +
+  geom_line(linewidth = 0.9) +
+  labs(
+    title = "",
+    x = "Abundance N",
+    y = "Optimal effort u*"
+  ) +
+  theme_minimal() +
+  ggtitle("C.")
+p_policy
+
+# trajectory as facetted series (N and u) ----
+traj_long <- rbind(
+  data.frame(time = traj$year, variable = "Abundance N(t)", value = traj$N, series_type = "line"),
+  data.frame(time = traj$year, variable = "Effort u(t)",    value = traj$u, series_type = "step")
+)
+
+p_traj <- ggplot(traj_long, aes(x = time, y = value)) +
+  geom_line(data = subset(traj_long, series_type == "line"), linewidth = 0.9) +
+  geom_step(data = subset(traj_long, series_type == "step"), linewidth = 0.9, linetype = 2) +
+  facet_wrap(~ variable, ncol = 1, scales = "free_y") +
+  geom_hline(data = data.frame(variable = "Abundance N(t)", y = N_tol),
+             aes(yintercept = y), linetype = "dotted") +
+  labs(
+    title = "",
+    x = "Time step",
+    y = NULL
+  ) +
+  theme_minimal() +
+  ggtitle("D.")
+p_traj
+
+# combine all figures
+final_plot <- fig1a + fig1b + p_policy + p_traj + plot_layout(nrow = 2)
+
+ggsave("../SDPaper/figures/figure2.png", final_plot, dpi = 600, height = 6, width = 8)
+
+
+#--------------------
 
 # -----------------------------#
 # 10) Tiny demo: why round_to_grid()?

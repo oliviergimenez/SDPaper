@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.28 (TeX Live 2025) (preloaded format=pdflatex 2026.2.26)  13 MAY 2026 08:10
+This is pdfTeX, Version 3.141592653-2.6-1.40.28 (TeX Live 2025) (preloaded format=pdflatex 2026.2.26)  20 MAY 2026 20:41
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -530,125 +530,119 @@ LaTeX Font Info:    Font shape `U/msb/m/n' will be
 (Font)              scaled to size 7.91925pt on input line 162.
 LaTeX Font Info:    Font shape `U/msb/m/n' will be
 (Font)              scaled to size 6.25204pt on input line 162.
+LaTeX Font Info:    Font shape `U/msa/m/n' will be
+(Font)              scaled to size 11.40997pt on input line 174.
+LaTeX Font Info:    Font shape `U/msa/m/n' will be
+(Font)              scaled to size 8.33606pt on input line 174.
+LaTeX Font Info:    Font shape `U/msb/m/n' will be
+(Font)              scaled to size 11.40997pt on input line 174.
+LaTeX Font Info:    Font shape `U/msb/m/n' will be
+(Font)              scaled to size 8.33606pt on input line 174.
 [1
 
 {/Users/oliviergimenez/Library/TinyTeX/texmf-var/fonts/map/pdftex/updmap/pdftex.map}{/Users/oliviergimenez/Library/TinyTeX/texmf-dist/fonts/enc/dvips/base/8r.enc}] [2] [3]
-<bellman-fig.png, id=56, 1025.8325pt x 764.8575pt>
+<bellman-fig.png, id=57, 1025.8325pt x 764.8575pt>
 File: bellman-fig.png Graphic file (type png)
 <use bellman-fig.png>
-Package pdftex.def Info: bellman-fig.png  used on input line 214.
+Package pdftex.def Info: bellman-fig.png  used on input line 216.
 (pdftex.def)             Requested size: 407.66833pt x 303.95354pt.
-LaTeX Font Info:    Font shape `U/msa/m/n' will be
-(Font)              scaled to size 11.40997pt on input line 218.
-LaTeX Font Info:    Font shape `U/msa/m/n' will be
-(Font)              scaled to size 8.33606pt on input line 218.
-LaTeX Font Info:    Font shape `U/msb/m/n' will be
-(Font)              scaled to size 11.40997pt on input line 218.
-LaTeX Font Info:    Font shape `U/msb/m/n' will be
-(Font)              scaled to size 8.33606pt on input line 218.
-LaTeX Font Info:    Trying to load font information for TS1+ppl on input line 228.
+[4] [5 <./bellman-fig.png>]
+LaTeX Font Info:    Trying to load font information for TS1+ppl on input line 230.
 (/Users/oliviergimenez/Library/TinyTeX/texmf-dist/tex/latex/psnfss/ts1ppl.fd
 File: ts1ppl.fd 2001/06/04 font definitions for TS1/ppl.
-) [4] [5 <./bellman-fig.png>] [6] [7] [8] [9] [10] [11]
-<output/figures/fig-removal-fraction-1.pdf, id=110, 423.5825pt x 277.035pt>
-File: output/figures/fig-removal-fraction-1.pdf Graphic file (type pdf)
-<use output/figures/fig-removal-fraction-1.pdf>
-Package pdftex.def Info: output/figures/fig-removal-fraction-1.pdf  used on input line 396.
-(pdftex.def)             Requested size: 423.58147pt x 277.03432pt.
+) [6] [7] [8] [9] [10] [11]
 
-Underfull \hbox (badness 1377) in paragraph at lines 403--405
+LaTeX Warning: Reference `fig:fig-removal-fraction' on page 12 undefined on input line 396.
+
+<../figures/figure2.png, id=109, 578.16pt x 433.62pt>
+File: ../figures/figure2.png Graphic file (type png)
+<use ../figures/figure2.png>
+Package pdftex.def Info: ../figures/figure2.png  used on input line 399.
+(pdftex.def)             Requested size: 452.9679pt x 339.72418pt.
+
+LaTeX Warning: Reference `fig:fig-cost-components' on page 12 undefined on input line 402.
+
+[12] [13 <../figures/figure2.png>]
+Underfull \hbox (badness 1377) in paragraph at lines 405--407
 \T1/ppl/m/n/10.95 (+20) Damages in-crease non-linearly with abun-dance, here us-ing a sim-ple quadratic form
  []
 
-[12]
-<output/figures/fig-cost-components-1.pdf, id=119, 417.56pt x 277.035pt>
-File: output/figures/fig-cost-components-1.pdf Graphic file (type pdf)
-<use output/figures/fig-cost-components-1.pdf>
-Package pdftex.def Info: output/figures/fig-cost-components-1.pdf  used on input line 418.
-(pdftex.def)             Requested size: 417.55896pt x 277.03432pt.
-[13 <./output/figures/fig-removal-fraction-1.pdf>] [14 <./output/figures/fig-cost-components-1.pdf>]
-<output/figures/fig-policy-and-trajectory-1.pdf, id=145, 449.68pt x 412.54124pt>
-File: output/figures/fig-policy-and-trajectory-1.pdf Graphic file (type pdf)
-<use output/figures/fig-policy-and-trajectory-1.pdf>
-Package pdftex.def Info: output/figures/fig-policy-and-trajectory-1.pdf  used on input line 432.
-(pdftex.def)             Requested size: 449.6789pt x 412.54024pt.
-[15] [16 <./output/figures/fig-policy-and-trajectory-1.pdf>]
+[14]
 
-LaTeX Warning: Reference `fig:show-prob-curves' on page 17 undefined on input line 455.
+LaTeX Warning: Reference `fig:fig-policy-and-trajectory' on page 15 undefined on input line 422.
 
-[17]
-<output/figures/show-prob-curves-1.pdf, id=168, 456.70625pt x 210.7875pt>
-File: output/figures/show-prob-curves-1.pdf Graphic file (type pdf)
-<use output/figures/show-prob-curves-1.pdf>
-Package pdftex.def Info: output/figures/show-prob-curves-1.pdf  used on input line 475.
-(pdftex.def)             Requested size: 456.70512pt x 210.78699pt.
-[18 <./output/figures/show-prob-curves-1.pdf>]
-<output/figures/fig-tradeoff-1.pdf, id=183, 459.7175pt x 284.06125pt>
-File: output/figures/fig-tradeoff-1.pdf Graphic file (type pdf)
-<use output/figures/fig-tradeoff-1.pdf>
-Package pdftex.def Info: output/figures/fig-tradeoff-1.pdf  used on input line 503.
-(pdftex.def)             Requested size: 459.71637pt x 284.06053pt.
-<output/figures/fig-policy-heatmap-1.pdf, id=185, 441.65pt x 277.035pt>
-File: output/figures/fig-policy-heatmap-1.pdf Graphic file (type pdf)
-<use output/figures/fig-policy-heatmap-1.pdf>
-Package pdftex.def Info: output/figures/fig-policy-heatmap-1.pdf  used on input line 511.
-(pdftex.def)             Requested size: 441.64891pt x 277.03432pt.
-<output/figures/fig-cum-costs-1.pdf, id=187, 459.7175pt x 284.06125pt>
-File: output/figures/fig-cum-costs-1.pdf Graphic file (type pdf)
-<use output/figures/fig-cum-costs-1.pdf>
-Package pdftex.def Info: output/figures/fig-cum-costs-1.pdf  used on input line 519.
-(pdftex.def)             Requested size: 459.71637pt x 284.06053pt.
-[19]
-<output/figures/fig-site-dynamics-1.pdf, id=197, 459.7175pt x 409.53pt>
-File: output/figures/fig-site-dynamics-1.pdf Graphic file (type pdf)
-<use output/figures/fig-site-dynamics-1.pdf>
-Package pdftex.def Info: output/figures/fig-site-dynamics-1.pdf  used on input line 527.
-(pdftex.def)             Requested size: 459.71637pt x 409.52899pt.
-[20 <./output/figures/fig-tradeoff-1.pdf>] [21 <./output/figures/fig-policy-heatmap-1.pdf> <./output/figures/fig-cum-costs-1.pdf>] [22 <./output/figures/fig-site-dynamics-1.pdf>] [23] [24]
-<../figures/model_set_policies.png, id=264, 505.89pt x 216.81pt>
+
+LaTeX Warning: Reference `fig:fig-policy-and-trajectory' on page 15 undefined on input line 424.
+
+[15]
+
+LaTeX Warning: Reference `fig:show-prob-curves' on page 16 undefined on input line 445.
+
+[16]
+<../figures/figure3.png, id=136, 650.43pt x 433.62pt>
+File: ../figures/figure3.png Graphic file (type png)
+<use ../figures/figure3.png>
+Package pdftex.def Info: ../figures/figure3.png  used on input line 466.
+(pdftex.def)             Requested size: 452.9679pt x 301.98367pt.
+[17 <../figures/figure3.png>]
+
+LaTeX Warning: Reference `fig:fig-tradeoff' on page 18 undefined on input line 473.
+
+
+LaTeX Warning: Reference `fig:fig-policy-heatmap' on page 18 undefined on input line 493.
+
+[18]
+
+LaTeX Warning: Reference `fig:fig-cum-costs' on page 19 undefined on input line 495.
+
+
+LaTeX Warning: Reference `fig:fig-site-dynamics' on page 19 undefined on input line 497.
+
+[19] [20] [21] [22] [23] [24] [25]
+<../figures/model_set_policies.png, id=194, 505.89pt x 216.81pt>
 File: ../figures/model_set_policies.png Graphic file (type png)
 <use ../figures/model_set_policies.png>
-Package pdftex.def Info: ../figures/model_set_policies.png  used on input line 579.
+Package pdftex.def Info: ../figures/model_set_policies.png  used on input line 640.
 (pdftex.def)             Requested size: 407.66833pt x 174.7186pt.
-[25] [26 <../figures/model_set_policies.png>] [27] [28]
-<../figures/passive_AM.png, id=298, 289.08pt x 361.35pt>
+[26 <../figures/model_set_policies.png>] [27] [28]
+<../figures/passive_AM.png, id=223, 289.08pt x 361.35pt>
 File: ../figures/passive_AM.png Graphic file (type png)
 <use ../figures/passive_AM.png>
-Package pdftex.def Info: ../figures/passive_AM.png  used on input line 620.
+Package pdftex.def Info: ../figures/passive_AM.png  used on input line 681.
 (pdftex.def)             Requested size: 271.7835pt x 339.74625pt.
 [29] [30 <../figures/passive_AM.png>]
 
-LaTeX Warning: Command \textlangle invalid in math mode on input line 635.
+LaTeX Warning: Command \textlangle invalid in math mode on input line 696.
 
 LaTeX Info: Symbol \textlangle not provided by
             font family ppl in TS1 encoding.
-            Default family used instead on input line 635.
+            Default family used instead on input line 696.
 (/Users/oliviergimenez/Library/TinyTeX/texmf-dist/tex/latex/microtype/mt-cmr.cfg
 File: mt-cmr.cfg 2013/05/19 v2.2 microtype config. file: Computer Modern Roman (RS)
 )
 
-LaTeX Warning: Command \textlangle invalid in math mode on input line 635.
+LaTeX Warning: Command \textlangle invalid in math mode on input line 696.
 
 
-LaTeX Warning: Command \textlangle invalid in math mode on input line 635.
+LaTeX Warning: Command \textlangle invalid in math mode on input line 696.
 
 
-LaTeX Warning: Command \textrangle invalid in math mode on input line 635.
+LaTeX Warning: Command \textrangle invalid in math mode on input line 696.
 
 LaTeX Info: Symbol \textrangle not provided by
             font family ppl in TS1 encoding.
-            Default family used instead on input line 635.
+            Default family used instead on input line 696.
 
-LaTeX Warning: Command \textrangle invalid in math mode on input line 635.
+LaTeX Warning: Command \textrangle invalid in math mode on input line 696.
 
 
-LaTeX Warning: Command \textrangle invalid in math mode on input line 635.
+LaTeX Warning: Command \textrangle invalid in math mode on input line 696.
 
 [31]
-<../figures/active_AM.png, id=327, 433.62pt x 216.81pt>
+<../figures/active_AM.png, id=251, 433.62pt x 216.81pt>
 File: ../figures/active_AM.png Graphic file (type png)
 <use ../figures/active_AM.png>
-Package pdftex.def Info: ../figures/active_AM.png  used on input line 645.
+Package pdftex.def Info: ../figures/active_AM.png  used on input line 706.
 (pdftex.def)             Requested size: 407.66833pt x 203.84442pt.
 [32 <../figures/active_AM.png>] [33] [34] [35] [36] (./tuto-sdm-invasive-species.aux)
  ***********
@@ -660,18 +654,18 @@ LaTeX Warning: There were undefined references.
 
  ) 
 Here is how much of TeX's memory you used:
- 15029 strings out of 469471
- 239074 string characters out of 5466955
- 707773 words of memory out of 5000000
- 43048 multiletter control sequences out of 15000+600000
- 689000 words of font info for 335 fonts, out of 8000000 for 9000
+ 14997 strings out of 469471
+ 236985 string characters out of 5466955
+ 708908 words of memory out of 5000000
+ 43016 multiletter control sequences out of 15000+600000
+ 689428 words of font info for 339 fonts, out of 8000000 for 9000
  36 hyphenation exceptions out of 8191
- 83i,12n,93p,1418b,567s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 83i,12n,93p,1487b,567s stack positions out of 10000i,1000n,20000p,200000b,200000s
  </Users/oliviergimenez/Library/TinyTeX/texmf-var/fonts/pk/ljfour/jknappen/ec/ectt1095.600pk> </Users/oliviergimenez/Library/TinyTeX/texmf-var/fonts/pk/ljfour/jknappen/ec/ectt1000.600pk> </Users/oliviergimenez/Library/TinyTeX/texmf-var/fonts/pk/ljfour/jknappen/ec/ecss0800.450pk></Users/oliviergimenez/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></Users/oliviergimenez/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></Users/oliviergimenez/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></Users/oliviergimenez/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></Users/oliviergimenez/Library/TinyTeX/texmf-dist/fonts/type1/public/mathpazo/fplmr.pfb></Users/oliviergimenez/Library/TinyTeX/texmf-dist/fonts/type1/public/mathpazo/fplmri.pfb></Users/oliviergimenez/Library/TinyTeX/texmf-dist/fonts/type1/urw/palatino/uplb8a.pfb></Users/oliviergimenez/Library/TinyTeX/texmf-dist/fonts/type1/urw/palatino/uplr8a.pfb></Users/oliviergimenez/Library/TinyTeX/texmf-dist/fonts/type1/urw/palatino/uplri8a.pfb>
-Output written on tuto-sdm-invasive-species.pdf (36 pages, 958502 bytes).
+Output written on tuto-sdm-invasive-species.pdf (36 pages, 1938208 bytes).
 PDF statistics:
- 520 PDF objects out of 1000 (max. 8388607)
- 418 compressed objects within 5 object streams
- 99 named destinations out of 1000 (max. 500000)
- 73989 words of extra memory for PDF output out of 74296 (max. 10000000)
+ 450 PDF objects out of 1000 (max. 8388607)
+ 364 compressed objects within 4 object streams
+ 94 named destinations out of 1000 (max. 500000)
+ 73959 words of extra memory for PDF output out of 74296 (max. 10000000)
 
