@@ -149,7 +149,7 @@
 
 \title{Using dynamic programming for making decisions about invasive species}
 \author{Olivier Gimenez\textsuperscript{1}* \and Abby Keller\textsuperscript{2}* \and Lucile Marescot\textsuperscript{3}* \and Carl Boettiger\textsuperscript{2}* \and Cassie Speakman\textsuperscript{4,1}*}
-\date{2026-05-20}
+\date{2026-05-21}
 
 \begin{document}
 \maketitle
@@ -189,7 +189,7 @@ Invasive species are a major global concern, with wide-ranging impacts on ecosys
 
 This makes invasive species management a fundamentally dynamic decision problem. Predicting invasion dynamics or mapping risks is not sufficient unless these predictions are explicitly linked to management objectives, feasible actions, and measurable consequences. Decision-making is further complicated by the need to account for multiple, sometimes competing, criteria, including ecological effectiveness, economic costs, operational feasibility, and potential unintended consequences such as non-target impacts. In addition, management actions are embedded in social contexts, where stakeholder perceptions, acceptability of control measures, and underlying environmental values can strongly influence both implementation and outcomes (\citeproc{ref-simberloffImpactsBiologicalInvasions2013a}{Simberloff et al. 2013}, \citeproc{ref-estevezClarifyingValuesRisk2015}{Estévez et al. 2015}, \citeproc{ref-crowleyInvasiveSpeciesManagement2017}{Crowley et al. 2017})
 
-Structured decision-making (SDM) and adaptive management (AM) have long been advocated as frameworks to address the complexity of ecological management problems (\citeproc{ref-Williams2002}{Williams et al. 2002}, \citeproc{ref-Thompson2021}{Thompson et al. 2021}). These approaches emphasize the explicit formulation of objectives, the evaluation of alternative actions, and the incorporation of uncertainty into decision processes. However, despite their conceptual appeal, they remain underused in practice, in part because of the technical challenge of formally identifying, quantifying, and optimizing trade-offs among competing objectives over time. Stochastic dynamic programming (SDP), a core tool of decision theory, provides a powerful framework to address this challenge by treating management as a sequential decision problem under uncertainty. In this framework, optimal actions are derived as a function of the current state of the system (e.g.~infestation size, spatial extent, or local density), while explicitly accounting for stochastic dynamics and the future consequences of present decisions. SDP naturally accommodates a wide range of management actions, including prevention, surveillance, containment, control, eradication, or inaction, and allows their outcomes to be evaluated in terms of long-term ecological, economic, or social objectives.
+Structured decision-making (SDM) and adaptive management (AM) have long been advocated as frameworks to address the complexity of ecological management problems (\citeproc{ref-Williams2002}{Williams et al. 2002}, \citeproc{ref-Thompson2021}{Thompson et al. 2021}). These approaches emphasize the explicit formulation of objectives, the evaluation of alternative actions, and the incorporation of uncertainty into decision processes. However, despite their conceptual appeal, they remain underused in practice, in part because of the technical challenge of formally identifying, quantifying, and optimizing trade-offs among competing objectives over time. Stochastic dynamic programming (SDP), a core tool of decision theory, provides a powerful framework to address this challenge by treating management as a sequential decision problem under uncertainty. In this framework, optimal actions are derived as a function of the current state of the system (e.g.~infestation size, spatial extent, or local density), while explicitly accounting for stochastic dynamics and the future consequences of present decisions. SDP naturally accommodates a wide range of management actions, including prevention, surveillance, containment, control, eradication, or inaction, and allows their outcomes to be evaluated in terms of long-term ecological, economic, or social objectives (\citeproc{ref-marescotComplexDecisionsMade2013}{Marescot et al. 2013}).
 
 SDP has been successfully applied to a variety of invasive species management problems, including optimizing prevention versus control strategies for zebra mussels (\citeproc{ref-leungOuncePreventionPound2002}{Leung et al. 2002}), designing control policies for invasive plants such as leafy spurge (\citeproc{ref-hyderEcologySocietyIntegrating2008}{Hyder et al. 2008}), identifying state-dependent strategies for spatially structured invasions (\citeproc{ref-bogichSampleEradicateCost2008}{Bogich et al. 2008}), optimizing search effort for invasive insects (\citeproc{ref-baxterOptimizingSearchStrategies2011}{Baxter and Possingham 2011}), and comparing alternative strategies across invasion stages (\citeproc{ref-hyytiainenOptimizationFrameworkAddressing2013}{Hyytiäinen et al. 2013}). More recent developments, including partially observable Markov decision processes (POMDPs), allow decision-making under imperfect detection, while connections with reinforcement learning highlight promising avenues for scaling these approaches to complex, data-rich systems (e.g. Haubrock et al. (\citeproc{ref-Haubrock2025}{2025})) {[}Abby: Is this paper an example of reinforcement learning for invasive species management?{]}.
 
@@ -206,6 +206,8 @@ We do not want to rewrite Lucile's paper\ldots{}
 \subsection{Structured decision making}\label{structured-decision-making}
 
 {[}Abby: Maybe a good place to describe structured decision making and how the methods we present are mostly optimization methods useful for evaluating the consequences of actions (i.e., we're not addressing the aspects of SDM such as problem framing, eliciting objectives; we're instead assuming this has already been done){]}
+
+(\citeproc{ref-conroy2013decision}{Conroy and Peterson 2013}, \citeproc{ref-StructuredDecisionMaking2020}{Runge et al. 2020})
 
 Why and what (all)
 
@@ -267,6 +269,8 @@ P_{\text{Monitor}} =
 \end{array}
 \]
 
+{[}Mettre ce tableau avant l'équation, pour insister d'abord sur l'intuition.{]}
+
 If the system is eradicated, it remains so with probability 0.95 but may revert to a contained state with probability 0.05, reflecting a small risk of re-invasion. When the invasion is contained, it persists with probability 0.80 but may deteriorate to an established state with probability 0.20, indicating possible population growth without intervention. Once established, the system remains established with probability 1, meaning monitoring alone cannot reverse the invasion.
 
 In contrast, control shifts the system toward better states:
@@ -286,13 +290,15 @@ From an eradicated state, the system remains eradicated with probability 0.98 an
 
 Together, these transition matrices encode both ecological uncertainty and the imperfect effectiveness of management actions.
 
+{[}Mettre l'équation ici.{]}
+
 Next we define rewards. Rewards are defined as the negative of total costs, so that maximizing expected reward is equivalent to minimizing management and damage costs.
 
 \[
 R(s,a) = -(\text{damage}(s) + \text{cost}(a)).
 \]
 
-Damage depends on the invasion state (higher when the invasion is established), while management cost depends on the chosen action (higher for active control than monitoring). The reward matrix is constructed by combining these two components for all state--action pairs, yielding the immediate payoff used in the dynamic programming recursion.
+Damage depends on the invasion state (higher when the invasion is established), while management cost depends on the chosen action (higher for active control than monitoring). The reward matrix is constructed by combining these two components for all state-action pairs, yielding the immediate payoff used in the dynamic programming recursion.
 
 \[
 R =
@@ -309,7 +315,7 @@ R =
 
 For example, when the invasion is eradicated, monitoring yields a reward of -1, reflecting only minor surveillance costs, whereas applying control in the same state yields -6 due to higher intervention costs. When the population is contained, rewards are -5 for monitoring and -10 for control, representing moderate damages combined with the respective management costs. Finally, when the invasion is established, rewards drop to -15 under monitoring and -20 under control, reflecting both high ecological impacts and, in the latter case, substantial intervention effort. Overall, this reward structure captures the short-term trade-off between ecological impacts and management effort that underlies the decision problem.
 
-Solving the finite-horizon decision problem yields the optimal value function \(V_t(s)\), which represents the expected cumulative reward (i.e., negative total cost) obtained when starting from state \(s\) at time \(t\) and following the optimal policy thereafter. Values are more negative when the invasion is established, reflecting higher expected damages. Moreover, values increase (become less negative) as the horizon shortens because fewer future costs can accumulate.
+Solving the finite-horizon decision problem {[}ça va un peu vite, et il faut introduire la figure{]} yields the optimal value function \(V_t(s)\), which represents the expected cumulative reward (i.e., negative total cost) obtained when starting from state \(s\) at time \(t\) and following the optimal policy thereafter. Values are more negative when the invasion is established, reflecting higher expected damages. Moreover, values increase (become less negative) as the horizon shortens because fewer future costs can accumulate. {[}Détailler le calcul?{]}
 
 \[
 V_t(s) =
@@ -349,6 +355,8 @@ This toy example highlights key features of SDP:
   \textbf{Uncertainty}: decisions account for probabilistic transitions, not deterministic outcomes.
 \end{itemize}
 
+{[}Rappeller les différentes étapes, reprendre le papier de Lulu.{]}
+
 \section{Things to consider for before using this method}\label{things-to-consider-for-before-using-this-method}
 
 Applying stochastic dynamic programming (SDP) to ecological problems requires careful formulation of the decision context, as well as practical considerations regarding model structure, data, and computation.
@@ -374,8 +382,6 @@ A major limitation of SDP is the ``curse of dimensionality'', whereby the size o
 Although SDP can be implemented using simple or expert-based models, its relevance depends on the availability and quality of data describing system dynamics, management effects, and costs. In data-limited contexts, SDP may still provide valuable qualitative insights into decision structure and trade-offs, but quantitative recommendations should be interpreted with caution.
 
 \section{Worked examples}\label{worked-examples}
-
-``Papers should include at least two tutorials, with a step-by step demonstration of the method. Figures and mathematical formulations are particularly useful here. Where possible, tutorials and examples should include those using the R statistical package or other freeware.''
 
 Here explain that we use coypu IAS in Europe as a ``fil rouge''.
 
@@ -714,17 +720,9 @@ On a single species ; check out Conroy's book, there is a nice figure illustrati
 
 \url{https://onlinelibrary.wiley.com/doi/10.1002/ece3.71176}
 
-\section{Discussion (all)}\label{discussion-all}
+\section{Conclusion (all)}\label{conclusion-all}
 
-\subsection{Main messages}\label{main-messages}
-
-How is SDM/SDP relevant.
-
-\subsection{Limitations}\label{limitations}
-
-Curse of dimensionality.
-
-\subsection{Perspectives}\label{perspectives}
+Faire une conclusion courte, voir les exemples de How-to. Rappeler les main messages, how is SDM/SDP relevant et qqsperspectives
 
 \section{Acknowledgments}\label{acknowledgments}
 
@@ -781,6 +779,9 @@ Kurniawati, H., D. Hsu, W. S. Lee, and others. 2008. Sarsop: Efficient point-bas
 \bibitem[\citeproctext]{ref-leungOuncePreventionPound2002}
 Leung, B., D. M. Lodge, D. Finnoff, J. F. Shogren, M. A. Lewis, and G. Lamberti. 2002. An ounce of prevention or a pound of cure: Bioeconomic risk analysis of invasive species. Proceedings. Biological Sciences 269:2407--2413.
 
+\bibitem[\citeproctext]{ref-marescotComplexDecisionsMade2013}
+Marescot, L., G. Chapron, I. Chadès, P. L. Fackler, C. Duchamp, E. Marboutin, and O. Gimenez. 2013. Complex decisions made simple: A primer on stochastic dynamic programming. Methods in Ecology and Evolution 4:872--884.
+
 \bibitem[\citeproctext]{ref-Petr2020}
 Pyšek, P., P. E. Hulme, D. Simberloff, S. Bacher, T. M. Blackburn, J. T. Carlton, W. Dawson, F. Essl, L. C. Foxcroft, P. Genovesi, J. M. Jeschke, I. Kühn, A. M. Liebhold, N. E. Mandrak, L. A. Meyerson, A. Pauchard, J. Pergl, H. E. Roy, H. Seebens, M. van Kleunen, M. Vilà, M. J. Wingfield, and D. M. Richardson. 2020. Scientists' warning on invasive alien species. Biological Reviews 95:1511--1534.
 
@@ -792,6 +793,9 @@ Roy, H. E., A. Pauchard, P. J. Stoett, T. Renard Truong, L. A. Meyerson, S. Bach
 
 \bibitem[\citeproctext]{ref-runge2011uncertainty}
 Runge, M. C., S. J. Converse, and J. E. Lyons. 2011. Which uncertainty? Using expert elicitation and expected value of information to design an adaptive program. Biological Conservation 144:1214--1223.
+
+\bibitem[\citeproctext]{ref-StructuredDecisionMaking2020}
+Runge, M. C., S. J. Converse, J. E. Lyons, and D. R. Smith (Eds.). 2020. Structured {Decision Making}: {Case Studies} in {Natural Resource Management}. Johns Hopkins University Press, Baltimore, Maryland.
 
 \bibitem[\citeproctext]{ref-simberloffImpactsBiologicalInvasions2013a}
 Simberloff, D., J.-L. Martin, P. Genovesi, V. Maris, D. A. Wardle, J. Aronson, F. Courchamp, B. Galil, E. García-Berthou, M. Pascal, P. Pyšek, R. Sousa, E. Tabacchi, and M. Vilà. 2013. Impacts of biological invasions: What's what and the way forward. Trends in Ecology \& Evolution 28:58--66.
