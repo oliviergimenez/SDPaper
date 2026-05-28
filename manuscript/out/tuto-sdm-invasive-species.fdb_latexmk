@@ -1,12 +1,12 @@
 # Fdb version 4
-["pdflatex"] 1779931808.04826 "c:/Users/CESAB/Documents/GitHub/SDPaper/manuscript/tuto-sdm-invasive-species.tex" "out/tuto-sdm-invasive-species.pdf" "tuto-sdm-invasive-species" 1779931820.17668 0
+["pdflatex"] 1779937180.29424 "c:/Users/CESAB/Documents/GitHub/SDPaper/manuscript/tuto-sdm-invasive-species.tex" "out/tuto-sdm-invasive-species.pdf" "tuto-sdm-invasive-species" 1779937192.07783 2
   "../figures/active_AM.png" 1778724270 81367 ca9234de0b8d962afea9aeb655a73586 ""
   "../figures/figure2.png" 1779930646 422069 025813b5d8cd96ce7bf0b7a0315c5ddc ""
   "../figures/figure3.png" 1779930646 605270 a8585ad6c317e07d2a627699907c1d41 ""
   "../figures/model_set_policies.png" 1778724270 233323 f646f5c6f2ea348b23909f29c1a77ca4 ""
   "../figures/passive_AM.png" 1778724270 157502 e8581ff7d71966e2573faeaef4b55197 ""
   "bellman-fig.png" 1778724270 390301 ccc9345bfeaf643ab534d3af91ae3fac ""
-  "c:/Users/CESAB/Documents/GitHub/SDPaper/manuscript/tuto-sdm-invasive-species.tex" 1779931791 73338 fad73096862709bf6d63b9746976e47c ""
+  "c:/Users/CESAB/Documents/GitHub/SDPaper/manuscript/tuto-sdm-invasive-species.tex" 1779937163 74684 9f57f861c2b9b7c408d0a33f486f6278 ""
   "c:/texlive/2025/texmf-dist/fonts/enc/dvips/base/8r.enc" 1742311998 4850 80dc9bab7f31fb78a000ccfed0e27cab ""
   "c:/texlive/2025/texmf-dist/fonts/enc/dvips/cm-super/cm-super-t1.enc" 1742311372 2971 def0b6c1f0b107b3b936def894055589 ""
   "c:/texlive/2025/texmf-dist/fonts/map/fontname/texfonts.map" 1742312530 3524 cb3e574dea2d1052e39280babc910dc8 ""
@@ -148,8 +148,8 @@
   "c:/texlive/2025/texmf-var/fonts/map/pdftex/updmap/pdftex.map" 1742315629 5418047 22da0bce5424ad2e828d1c481bb5ff30 ""
   "c:/texlive/2025/texmf-var/web2c/pdftex/pdflatex.fmt" 1742316008 1985919 314b857c0b648fcb4fa075c4790c3676 ""
   "c:/texlive/2025/texmf.cnf" 1742315597 713 e69b156964470283e0530f5060668171 ""
-  "out/tuto-sdm-invasive-species.aux" 1779931819 24755 13e6b588b02ee2ede32f8ade283d2d54 "pdflatex"
-  "tuto-sdm-invasive-species.tex" 1779931791 73338 fad73096862709bf6d63b9746976e47c ""
+  "out/tuto-sdm-invasive-species.aux" 1779937191 24791 d0ebc1ec1224376ec24f56546543806d "pdflatex"
+  "tuto-sdm-invasive-species.tex" 1779937163 74684 9f57f861c2b9b7c408d0a33f486f6278 ""
   (generated)
   "out/tuto-sdm-invasive-species.aux"
   "out/tuto-sdm-invasive-species.log"
