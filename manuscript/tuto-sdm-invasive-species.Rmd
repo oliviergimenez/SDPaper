@@ -109,26 +109,24 @@ In this paper, we aim to bridge this gap by providing a practical guide to the u
 
 Here we present a minimal stochastic dynamic programming (SDP) example. The aim is purely pedagogical: to show how states, actions, transition probabilities, rewards, and time horizon combine to produce an optimal decision rule. 
 
-We consider a stylized invasion management problem with three qualitative states describing the invasion level:
+We consider a simplified invasion management problem with three qualitative states describing the invasion level:
 
-- Eradicated: no individuals detected (possible re-invasion risk)
-- Contained: invasion present but at low abundance
-- Established: invasion widespread with high impacts
+- Eradicated: no individuals detected (possible re-invasion risk);
+- Contained: invasion present but at low abundance;
+- Established: invasion widespread with high impacts.
 
 At each time step, the manager chooses between two actions:
 
-- Monitor: surveillance only (low cost, little effect)
-- Control: active management campaign (higher cost, improves state)
+- Monitor: surveillance only (low cost, little effect);
+- Control: active management campaign (higher cost, improves state).
 
-State dynamics are described by action-dependent transition matrices
+Transition matrices describe how the invasion state evolves from one time step to the next under each management action. We denote action-dependent transition matrices $P_a(s,s')$ where $a$ denotes an action, $s$ and $s'$ are for states:
 
 \[
 P_a(s,s') = \Pr(S_{t+1}=s' \mid S_t=s,\; A_t=a).
 \]
 
-Transition matrices describe how the invasion state evolves probabilistically from one time step to the next under each management action. Each row corresponds to the current state and each column to the next state, with entries giving transition probabilities. We build a transition matrix for each action. 
-
-Under monitoring, the transition is: 
+Each row corresponds to the current state and each column to the next state, with entries giving transition probabilities. We now build a transition matrix for each action. Under monitoring, the transition is: 
 
 \[
 P_{\text{Monitor}} =
@@ -140,8 +138,6 @@ P_{\text{Monitor}} =
 \text{Estab.} & 0.00 & 0.00 & 1.00 \\
 \end{array}
 \]
-
-[Mettre ce tableau avant l'équation, pour insister d'abord sur l'intuition.]
 
 If the system is eradicated, it remains so with probability 0.95 but may revert to a contained state with probability 0.05, reflecting a small risk of re-invasion. When the invasion is contained, it persists with probability 0.80 but may deteriorate to an established state with probability 0.20, indicating possible population growth without intervention. Once established, the system remains established with probability 1, meaning monitoring alone cannot reverse the invasion. 
 
@@ -162,15 +158,13 @@ From an eradicated state, the system remains eradicated with probability 0.98 an
 
 Together, these transition matrices encode both ecological uncertainty and the imperfect effectiveness of management actions.
 
-[Mettre l'équation ici.]
-
-Next we define rewards. Rewards are defined as the negative of total costs, so that maximizing expected reward is equivalent to minimizing management and damage costs. 
+Next we define the reward function denoted as $R(s,a)$. Rewards are defined as the negative of total costs, so that maximizing expected reward is equivalent to minimizing management and damage costs: 
 
 \[
 R(s,a) = -(\text{damage}(s) + \text{cost}(a)).
 \]
 
-Damage depends on the invasion state (higher when the invasion is established), while management cost depends on the chosen action (higher for active control than monitoring). The reward matrix is constructed by combining these two components for all state-action pairs, yielding the immediate payoff used in the dynamic programming recursion.
+Rows correspond to the current invasion state and columns to the management action. Damage depends on the invasion state (higher when the invasion is established), while management cost depends on the chosen action (higher for active control than monitoring). The reward matrix is constructed by combining these two components for all state-action pairs:
 
 \[
 R =
@@ -183,15 +177,20 @@ R =
 \end{array}
 \]
 
-(Rows correspond to the current invasion state and columns to the management action.)
-
 For example, when the invasion is eradicated, monitoring yields a reward of -1, reflecting only minor surveillance costs, whereas applying control in the same state yields -6 due to higher intervention costs. When the population is contained, rewards are -5 for monitoring and -10 for control, representing moderate damages combined with the respective management costs. Finally, when the invasion is established, rewards drop to -15 under monitoring and -20 under control, reflecting both high ecological impacts and, in the latter case, substantial intervention effort. Overall, this reward structure captures the short-term trade-off between ecological impacts and management effort that underlies the decision problem.
 
-```{r fig-bellman, echo=FALSE, out.width='90%', fig.align='center', fig.cap="Schematic representation of the Bellman recursion in stochastic dynamic programming. The value of being in a given state at time $t$, $V(X_t)$, is defined as the maximum, over all possible actions, of two components: (i) the immediate reward obtained by taking action $A_t$ in state $X_t$, and (ii) the expected discounted future value of subsequent states. The latter corresponds to the average (weighted by transition probabilities) of the optimal future values $V(X_{t+1})$ that can be reached from the current state-action pair, scaled by a discount factor $\\beta < 1$ to reflect that future payoffs are less valuable than present ones. This recursive equation highlights the fact that the value of a decision is not only determined by its immediate payoff, but also by how it shapes future opportunities. The optimal action is therefore the one that maximizes the sum of current rewards and expected future benefits."}
-knitr::include_graphics("bellman-fig.png")
+Together, the transition matrices and reward function provide all the ingredients needed to formulate the SDP problem. The key idea is that the value of a management decision depends not only on its immediate consequences, but also on how it influences future opportunities. This principle is formalized by the Bellman equation,
+
+$$V_t(s) = \max_a\left[R(s,a)+\beta\sum_{s'}P_a(s,s')V_{t+1}(s')\right]$$ 
+where $R(s,a)$ is the immediate reward, $P_a(s,s')$ the transition probability, $\beta$ the discount factor, and $V_{t+1}(s')$ the optimal future value (see Figure \@ref(fig:fig-bellman)).
+
+```{r fig-bellman, echo=FALSE, out.width='90%', fig.align='center', fig.cap="Schematic representation of the Bellman recursion in stochastic dynamic programming. The value of being in a given state at time $t$, $V_t(s)$, is defined as the maximum, over all possible actions, of two components: (i) the immediate reward obtained by taking action $a$ in state $s$, and (ii) the expected discounted future value of subsequent states. The latter corresponds to the average (weighted by transition probabilities) of the optimal future values $V_{t+1}(s')$ that can be reached from the current state-action pair, scaled by a discount factor $\\beta < 1$ to reflect that future payoffs are less valuable than present ones. This recursive equation highlights the fact that the value of a decision is not only determined by its immediate payoff, but also by how it shapes future opportunities. The optimal action is therefore the one that maximizes the sum of current rewards and expected future benefits."}
+knitr::include_graphics("bellman-fig-v2.png")
 ```
 
-Solving the finite-horizon decision problem [ça va un peu vite, et il faut introduire la figure] yields the optimal value function $V_t(s)$, which represents the expected cumulative reward (i.e., negative total cost) obtained when starting from state $s$ at time $t$ and following the optimal policy thereafter. Values are more negative when the invasion is established, reflecting higher expected damages. Moreover, values increase (become less negative) as the horizon shortens because fewer future costs can accumulate. [Détailler le calcul?]
+The Bellman recursion is solved by backward induction. At the final time step, no future rewards remain, so $V_T(s)=0$ for every state. The algorithm then proceeds backwards through time. At each state and time step, it evaluates every available action, combines the immediate reward with the expected future value, and selects the action that maximizes the total expected reward.
+
+Solving the finite-horizon decision problem yields the optimal value function $V_t(s)$, which represents the expected cumulative reward (i.e., negative total cost) obtained when starting from state $s$ at time $t$ and following the optimal policy thereafter: 
 
 \[
 V_t(s) =
@@ -204,7 +203,9 @@ s = \text{Estab.} & -49.26 & -42.05 & -34.47 & -26.8 & -15 & 0 \\
 \end{array}
 \]
 
-The associated optimal policy $\pi_t(s)$ specifies the best action to take in each state $s$ at each time step $t$. Overall, the policy indicates that monitoring is typically optimal when the system is eradicated, whereas control is recommended when the invasion is established due to the high expected damages. In the contained state, the optimal decision varies with the time horizon, reflecting the trade-off between immediate intervention costs and the risk of future deterioration.
+Values are more negative when the invasion is established, reflecting higher expected damages. Moreover, values increase (become less negative) as the horizon shortens because fewer future costs can accumulate.
+
+The associated optimal policy $\pi_t(s)$ specifies the best action to take in each state $s$ at each time step $t$:
 
 \[
 \pi_t(s) =
@@ -217,14 +218,7 @@ s = \text{Estab.} & \text{Control} & \text{Control} & \text{Control} & \text{Con
 \end{array}
 \]
 
-This toy example highlights key features of SDP:
-
-- **State dependence**: optimal decisions depend on invasion level.
-- **Trade-off**: control is costly but reduces future risk.
-- **Time horizon effects**: as the horizon shortens, actions may become more short-term oriented.
-- **Uncertainty**: decisions account for probabilistic transitions, not deterministic outcomes.
-
-[Rappeller les différentes étapes, reprendre le papier de Lulu.]
+The optimal policy illustrates one of the defining features ofstochastic dynamic programming: the best decision depends on the current state of the system. When the invasion has been eradicated, additional control provides little benefit relative to its cost, making monitoring the preferred strategy throughout the planning horizon. In contrast, once the invasion is established, immediate control is generally optimal because delaying intervention substantially increases expected future damages. The contained state lies between these two extremes, where the optimal decision depends on the remaining planning horizon and reflects the trade-off between the immediate cost of intervention and the long-term benefits of preventing further spread.
 
 # 3. Things to consider for before using this method
 
@@ -268,13 +262,13 @@ where the first term describes logistic growth and \(q(u)\) is the fraction of i
 \[
 q(u)=1-\exp(-\alpha u),
 \]
-with \(\alpha=1.5\), which implies diminishing returns of control effort (Figure \@ref(fig:fig-removal-fraction)). For example, an effort of \(u=0.5\) removes about 53% of the population, whereas maximum effort \(u=1\) removes about 78%, reflecting the fact that complete eradication is rarely achievable in a single step. 
+with \(\alpha=1.5\), which implies diminishing returns of control effort (Figure \@ref(fig:fig-pop)a). For example, an effort of \(u=0.5\) removes about 53% of the population, whereas maximum effort \(u=1\) removes about 78%, reflecting the fact that complete eradication is rarely achievable in a single step. 
 
 ```{r fig-pop, fig.cap="General title. (a). Removal fraction $q(u)$ as a function of control effort u. (b) Immediate cost components as functions of abundance. Damage increases nonlinearly with population size, leading to rapidly rising total costs (damage + penalty). The dotted line marks the tolerable threshold ($N_tol = 400$) above which an additional penalty is applied in the decision model, although it is not shown here for clarity. Control cost is illustrated for an example effort level ($u = 0.6$). (c) Optimal policy $u*(N)$ starting from $N0 = 800$. (d) An example trajectory under the optimal policy, facetted into abundance and effort, starting from $N0 = 800$.", echo=FALSE, out.width="100%"}
 knitr::include_graphics("../figures/figure2.png")
 ```
 
-Rewards are defined as the negative of total costs, so that maximizing expected reward is equivalent to minimizing long-term damages and management expenses (Figure \@ref(fig:fig-cost-components)):
+Rewards are defined as the negative of total costs, so that maximizing expected reward is equivalent to minimizing long-term damages and management expenses (Figure \@ref(fig:fig-pop)b):
 \[
 R(N,u)=-(\text{damage}(N)+\text{cost}(u)+\text{penalty}(N)).
 \]
@@ -296,10 +290,9 @@ The decision problem is solved using infinite-horizon discounted value iteration
 
 The decision problem is solved using infinite-horizon discounted value iteration (discount factor \(\gamma = 0.99\)). This yields (i) an optimal stationary policy, mapping each abundance class to a recommended control effort, and (ii) a value function (not shown) that summarizes the long-term expected net benefit when the policy is followed.
 
-Because damages and the penalty increase sharply with abundance, the optimal rule is “threshold-like” (top panel in Figure \@ref(fig:fig-policy-and-trajectory)). Effort is low at small \(N\), then increases rapidly as \(N\) approaches the tolerable threshold \(N_{\text{tol}}=400\), and remains high for large \(N\). Ecologically, this tells us that when the population is small, impacts are limited and additional control has diminishing returns, whereas once abundance enters an unacceptable zone, strong intervention is warranted to prevent sustained high impacts.
+Because damages and the penalty increase sharply with abundance, the optimal rule is “threshold-like” (top panel in Figure \@ref(fig:fig-pop)c). Effort is low at small \(N\), then increases rapidly as \(N\) approaches the tolerable threshold \(N_{\text{tol}}=400\), and remains high for large \(N\). Ecologically, this tells us that when the population is small, impacts are limited and additional control has diminishing returns, whereas once abundance enters an unacceptable zone, strong intervention is warranted to prevent sustained high impacts.
 
-The bottom panel of Figure \@ref(fig:fig-policy-and-trajectory) illustrates the dynamical consequences of applying this rule to a trajectory starting from \(N_0=800\). Control effort \(u(t)\) adjusts immediately to the current abundance class, and abundance \(N(t)\) responds through the logistic dynamics with removals. In this deterministic grid-based version, the system typically moves quickly toward a lower-abundance regime and then stabilizes around a band where the marginal benefit of additional control balances its marginal cost. 
-
+Figure \@ref(fig:fig-pop)d illustrates the dynamical consequences of applying this rule to a trajectory starting from \(N_0=800\). Control effort \(u(t)\) adjusts immediately to the current abundance class, and abundance \(N(t)\) responds through the logistic dynamics with removals. In this deterministic grid-based version, the system typically moves quickly toward a lower-abundance regime and then stabilizes around a band where the marginal benefit of additional control balances its marginal cost. 
 
 ## 4.2 Metapopulation
 
@@ -320,7 +313,7 @@ N_i(t+1) = N_i^{\text{grow}}(t+1)\,(1-h_a).
 
 This formulation captures the idea that control reduces numbers but does not eliminate underlying demographic regulation.
 
-Occupancy is updated stochastically based on local abundance and spatial context (Figure \@ref(fig:show-prob-curves)). When a site is occupied, extinction probability decreases with abundance according to
+Occupancy is updated stochastically based on local abundance and spatial context (Figures \@ref(fig:fig-metapop)a and \@ref(fig:fig-metapop)b). When a site is occupied, extinction probability decreases with abundance according to
 
 \[
 p_{\text{ext}}(N_i) = \exp(-\alpha N_i),
@@ -340,7 +333,7 @@ p_{\text{col}}(k_i) = 1-(1-\beta)^{k_i}.
 
 Together, these rules link local demography with spatial dynamics and create feedbacks between sites.  
 
-```{r fig-metapop, fig.cap="General title. (a) Extinction $p_{ext}(N)$. (b) Colonization  $p_{col}(k)$. (c) Cumulative cost: constant vs SDP-optimal strategies. Representation of the cost components on the log scale. Damage costs increase linearly with total abundance across sites, whereas control costs are fixed action-specific intercepts (none/moderate/strong). Stronger control increases immediate spending but can reduce future abundance and damages. (c) Optimal global action as a function of time and invasion level (measured as the number of occupied sites). Colors indicate the action recommended by the finite-horizon SDP (None/Moderate/Strong). This visualization highlights how stronger control becomes optimal as the invasion occupies more sites, and how recommendations may soften near the end of the planning horizon. (d) Cumulative costs over time under constant strategies (none, moderate, strong) versus the SDP-optimal policy. Costs combine damages proportional to total abundance and an action-specific control cost. (e) Site-level abundance dynamics under constant strategies and the SDP-optimal policy. Each panel corresponds to a site; trajectories highlight how spatial heterogeneity and network-driven recolonization can create uneven benefits of control across locations. (e) Containment success (sites with $\\le 5$ coypus).", echo=FALSE, out.width="100%"}
+```{r fig-metapop, fig.cap="General title. (a) Extinction $p_{ext}(N)$. (b) Colonization  $p_{col}(k)$. (c) Cumulative cost: constant vs SDP-optimal strategies. Representation of the cost components on the log scale. Damage costs increase linearly with total abundance across sites, whereas control costs are fixed action-specific intercepts (none/moderate/strong). Stronger control increases immediate spending but can reduce future abundance and damages. (c) Optimal global action as a function of time and invasion level (measured as the number of occupied sites). Colors indicate the action recommended by the finite-horizon SDP (None/Moderate/Strong). This visualization highlights how stronger control becomes optimal as the invasion occupies more sites, and how recommendations may soften near the end of the planning horizon. (d) Cumulative costs over time under constant strategies (none, moderate, strong) versus the SDP-optimal policy. Costs combine damages proportional to total abundance and an action-specific control cost. (e) Site-level abundance dynamics under constant strategies and the SDP-optimal policy. Each panel corresponds to a site; trajectories highlight how spatial heterogeneity and network-driven recolonization can create uneven benefits of control across locations. (f) Containment success (sites with $\\le 5$ coypus).", echo=FALSE, out.width="100%"}
 knitr::include_graphics("../figures/figure3.png")
 ```
 
@@ -352,7 +345,7 @@ Because the transition probabilities induced by these ecological rules are analy
 
 This Monte Carlo approach allows the decision model to incorporate nonlinear and stochastic ecological processes without requiring an explicit analytical expression for transition probabilities.
 
-Management decisions are evaluated through a cost function that balances ecological damages and intervention effort (Figure \@ref(fig:fig-tradeoff)). At each time step, total cost is defined as
+Management decisions are evaluated through a cost function that balances ecological damages and intervention effort (Figure \@ref(fig:fig-metapop)c). At each time step, total cost is defined as
 
 \[
 C(s,a) = c_d \sum_{i=1}^n N_i(t) + c_a(a),
@@ -372,11 +365,11 @@ R(s,a) = -C(s,a),
 
 so that maximizing expected reward is equivalent to minimizing long-term total costs.
 
-The resulting policy is illustrated in Figure \@ref(fig:fig-policy-heatmap). When few sites are occupied and populations remain small, limited intervention is often sufficient because damages are modest and extinction may occur naturally. As more sites become occupied or local abundances increase, stronger control becomes optimal in order to reduce future spread and prevent escalating impacts. Temporal variation in recommended actions arises because the finite planning horizon reduces the benefit of aggressive intervention late in the time period.
+The resulting policy is illustrated in Figure \@ref(fig:fig-metapop)d. When few sites are occupied and populations remain small, limited intervention is often sufficient because damages are modest and extinction may occur naturally. As more sites become occupied or local abundances increase, stronger control becomes optimal in order to reduce future spread and prevent escalating impacts. Temporal variation in recommended actions arises because the finite planning horizon reduces the benefit of aggressive intervention late in the time period.
 
-Comparing forward simulations under the optimal policy with simulations under constant strategies highlights the value of adaptive management (Figure \@ref(fig:fig-cum-costs)). The optimal strategy typically reduces cumulative costs by applying effort strategically in time rather than maintaining a fixed level of control.  
+Comparing forward simulations under the optimal policy with simulations under constant strategies highlights the value of adaptive management (Figure \@ref(fig:fig-metapop)e). The optimal strategy typically reduces cumulative costs by applying effort strategically in time rather than maintaining a fixed level of control.  
 
-Spatial trajectories further illustrate how coordinated management alters invasion dynamics across the network, with reductions in abundance and occupancy emerging progressively across sites (Figure \@ref(fig:fig-site-dynamics)).  
+Spatial trajectories further illustrate how coordinated management alters invasion dynamics across the network, with reductions in abundance and occupancy emerging progressively across sites (Figure \@ref(fig:fig-metapop)f).  
 
 In perspective, say that this can be used to model competition or predator-prey, or host-pathogen / disease thing. See SDP-species-interactions/ in Olivier biblio repo.
 
