@@ -91,7 +91,7 @@ cleanbib()
 cite_options(citation_format = "pandoc")
 ```
 
-# Introduction
+# 1. Introduction
 
 Invasive species are a major global concern, with wide-ranging impacts on ecosystems, economies, and public health [@Roy2024; @Petr2020]. Their management is inherently challenging, as it requires repeated decisions under uncertainty, limited budgets, and imperfect knowledge of ecological dynamics, which are often characterized by rapid spread, strong population fluctuations, and broad spatial distributions. In practice, managers must decide not only whether to intervene, but also when, where, and how intensively, while balancing short-term operational costs against long-term socio-ecological benefits [@hauserExperimentalPrecautionaryAdaptive2008].
 
@@ -105,11 +105,7 @@ Despite these advances, the practical implementation of SDP and related approach
 
 In this paper, we aim to bridge this gap by providing a practical guide to the use of stochastic dynamic programming and its extensions for invasive species management. Using the coypu (*Myocastor coypus*) as a running example, we illustrate how to formulate decision problems, implement models, and derive optimal management strategies across a range of ecological contexts, from single populations to metapopulations. We first introduce the core concepts of structured decision making and stochastic dynamic programming through a minimal, fully transparent example. We then develop a series of worked tutorials of increasing complexity, including spatial dynamics, imperfect detection using POMDPs, adaptive management under model uncertainty, and value-of-information analyses that quantify the benefits of learning before acting. Throughout, we provide reproducible implementations in `R` to facilitate uptake and adaptation by practitioners.
 
-# Explanation of the method
-
-```{r fig-bellman, echo=FALSE, out.width='90%', fig.align='center', fig.cap="Schematic representation of the Bellman recursion in stochastic dynamic programming. The value of being in a given state at time $t$, $V(X_t)$, is defined as the maximum, over all possible actions, of two components: (i) the immediate reward obtained by taking action $A_t$ in state $X_t$, and (ii) the expected discounted future value of subsequent states. The latter corresponds to the average (weighted by transition probabilities) of the optimal future values $V(X_{t+1})$ that can be reached from the current state-action pair, scaled by a discount factor $\\beta < 1$ to reflect that future payoffs are less valuable than present ones. This recursive equation highlights the fact that the value of a decision is not only determined by its immediate payoff, but also by how it shapes future opportunities. The optimal action is therefore the one that maximizes the sum of current rewards and expected future benefits."}
-knitr::include_graphics("bellman-fig.png")
-```
+# 2. Explanation of the method
 
 Here we present a minimal stochastic dynamic programming (SDP) example. The aim is purely pedagogical: to show how states, actions, transition probabilities, rewards, and time horizon combine to produce an optimal decision rule. 
 
@@ -129,8 +125,6 @@ State dynamics are described by action-dependent transition matrices
 \[
 P_a(s,s') = \Pr(S_{t+1}=s' \mid S_t=s,\; A_t=a).
 \]
-
-[Abby: Highlighting that we likely want to make a decision about shared syntax. For example, we use x and s interchangeably for the state]
 
 Transition matrices describe how the invasion state evolves probabilistically from one time step to the next under each management action. Each row corresponds to the current state and each column to the next state, with entries giving transition probabilities. We build a transition matrix for each action. 
 
@@ -193,6 +187,10 @@ R =
 
 For example, when the invasion is eradicated, monitoring yields a reward of -1, reflecting only minor surveillance costs, whereas applying control in the same state yields -6 due to higher intervention costs. When the population is contained, rewards are -5 for monitoring and -10 for control, representing moderate damages combined with the respective management costs. Finally, when the invasion is established, rewards drop to -15 under monitoring and -20 under control, reflecting both high ecological impacts and, in the latter case, substantial intervention effort. Overall, this reward structure captures the short-term trade-off between ecological impacts and management effort that underlies the decision problem.
 
+```{r fig-bellman, echo=FALSE, out.width='90%', fig.align='center', fig.cap="Schematic representation of the Bellman recursion in stochastic dynamic programming. The value of being in a given state at time $t$, $V(X_t)$, is defined as the maximum, over all possible actions, of two components: (i) the immediate reward obtained by taking action $A_t$ in state $X_t$, and (ii) the expected discounted future value of subsequent states. The latter corresponds to the average (weighted by transition probabilities) of the optimal future values $V(X_{t+1})$ that can be reached from the current state-action pair, scaled by a discount factor $\\beta < 1$ to reflect that future payoffs are less valuable than present ones. This recursive equation highlights the fact that the value of a decision is not only determined by its immediate payoff, but also by how it shapes future opportunities. The optimal action is therefore the one that maximizes the sum of current rewards and expected future benefits."}
+knitr::include_graphics("bellman-fig.png")
+```
+
 Solving the finite-horizon decision problem [ça va un peu vite, et il faut introduire la figure] yields the optimal value function $V_t(s)$, which represents the expected cumulative reward (i.e., negative total cost) obtained when starting from state $s$ at time $t$ and following the optimal policy thereafter. Values are more negative when the invasion is established, reflecting higher expected damages. Moreover, values increase (become less negative) as the horizon shortens because fewer future costs can accumulate. [Détailler le calcul?]
 
 \[
@@ -228,35 +226,35 @@ This toy example highlights key features of SDP:
 
 [Rappeller les différentes étapes, reprendre le papier de Lulu.]
 
-# Things to consider for before using this method
+# 3. Things to consider for before using this method
 
 Applying stochastic dynamic programming (SDP) to ecological problems requires careful formulation of the decision context, as well as practical considerations regarding model structure, data, and computation.
 
-## Problem formulation
+## 3.1 Problem formulation
 
 A prerequisite for SDP is a clear definition of the decision problem. This includes specifying management objectives, identifying feasible actions, defining the state variables that describe the system, and constructing a reward function that captures the trade-offs among ecological, economic, and social outcomes [@marescotComplexDecisionsMade2013]. Because SDP optimizes decisions given these elements, poorly specified objectives or unrealistic action sets can lead to misleading recommendations [@StructuredDecisionMaking2020; @gregory2012structured].
 
-## State definition and discretization
+## 3.2 State definition and discretization
 
 SDP typically requires a finite state space, whereas ecological systems are often described by continuous variables (e.g. abundance, spatial extent). Discretization is therefore necessary, but introduces a trade-off between realism and tractability. Fine discretization improves accuracy but increases computational cost, while coarse discretization may obscure important system dynamics [@nicol2012which; @chades2021pomdps]. Careful sensitivity analyses are often needed to ensure robust conclusions.
 
-## Model specification and uncertainty
+## 3.3 Model specification and uncertainty
 
 The performance of SDP depends on the specification of transition dynamics and reward functions, which are often uncertain in ecological systems. These uncertainties may arise from limited data, structural assumptions, or imperfect knowledge of management effectiveness [@regan2002taxonomy]. Ignoring uncertainty can result in suboptimal policies, motivating extensions such as adaptive management or POMDPs, which explicitly account for learning and imperfect information [@chades2021pomdps; @haight2010optimal; @williams2011adaptive].
 
-## Computational constraints
+## 3.4 Computational constraints
 
 A major limitation of SDP is the “curse of dimensionality”, whereby the size of the state and action space grows rapidly with system complexity. This can restrict the number of state variables, spatial resolution, or management options that can be included in a model. In practice, this often requires simplifying assumptions, state aggregation, or the use of simulation-based approaches to approximate optimal policies [@nicol2011beyond; @schapaugh2012simple; @marescotComplexDecisionsMade2013].
 
-## Data requirements and interpretation
+## 3.5 Data requirements and interpretation
 
 Although SDP can be implemented using simple or expert-based models [@moore2011expert; @chenery2020reducing], its relevance depends on the availability and quality of data describing system dynamics, management effects, and costs. In data-limited contexts, SDP may still provide valuable qualitative insights into decision structure and trade-offs, but quantitative recommendations should be interpreted with caution [@baxter2007optimal].
 
-# Worked examples
+# 4. Worked examples
 
 Here explain that we use coypu IAS in Europe as a "fil rouge". 
 
-## Single population (Olivier)
+## 4.1 Single population
 
 The objective of this example is to determine an optimal regulation policy for coypu based on their total abundance. We consider a stylized management problem in which a decision maker chooses, at each time step, the intensity of a control effort \(u \in [0,1]\). Low effort corresponds to minimal intervention, while high effort represents intensive removal. The management objective is to balance three competing components: ecological damages that increase with population size (e.g. crop losses, dike weakening, nuisance), management costs that increase with effort, and an additional penalty if abundance exceeds a tolerable level.
 
@@ -303,7 +301,7 @@ Because damages and the penalty increase sharply with abundance, the optimal rul
 The bottom panel of Figure \@ref(fig:fig-policy-and-trajectory) illustrates the dynamical consequences of applying this rule to a trajectory starting from \(N_0=800\). Control effort \(u(t)\) adjusts immediately to the current abundance class, and abundance \(N(t)\) responds through the logistic dynamics with removals. In this deterministic grid-based version, the system typically moves quickly toward a lower-abundance regime and then stabilizes around a band where the marginal benefit of additional control balances its marginal cost. 
 
 
-## Metapopulation (Olivier)
+## 4.2 Metapopulation
 
 We extend the single-population coypu example to a spatially structured invasion in which several sites are connected through dispersal. The aim is to explore how management effort should vary through time when local demographic processes and spatial spread interact. We consider a network of several sites that can be interpreted as cities or management units. At each monthly time step, a decision maker chooses a global management action corresponding to a harvest intensity applied simultaneously across all sites. Local populations then grow according to density dependence, are partially removed by management, and may subsequently undergo stochastic extinction or colonization depending on local abundance and the occupancy of neighboring sites.
 
@@ -383,7 +381,7 @@ Spatial trajectories further illustrate how coordinated management alters invasi
 In perspective, say that this can be used to model competition or predator-prey, or host-pathogen / disease thing. See SDP-species-interactions/ in Olivier biblio repo.
 
 
-## Acounting for observation error w/ POMDP (Cassie)
+## 4.3 Acounting for observation error with POMDP
 
 Illustrate POMDP. 
 
@@ -503,7 +501,7 @@ and the optimal action is the one associated with the vector giving the highest 
 
 This makes the example useful pedagogically: rather than assuming that the invasion status is known, the decision explicitly depends on the manager's uncertainty. When the belief state places high probability on establishment, more intensive control may become optimal despite its higher immediate cost. Conversely, if the system is probably eradicated or only weakly invaded, the optimal policy may favour less costly actions. The POMDP therefore formalises a key challenge in invasive species management: acting adaptively when both ecological dynamics and monitoring information are uncertain.
 
-## Reducing model uncertainty w/ adaptive management (Abby)
+## 4.4 Reducing model uncertainty with adaptive management
 
 Decision theoretic methods can be used to make control decisions not only in the face of uncertainty, but also to reduce uncertainty over time. Adaptive management, or “learning by doing”, involves making decisions to achieve a management objective while simultaneously learning about system dynamics to improve future management success [@holling1978adaptive; @walters1986adaptive; @conroy2013decision]. Adaptive management approaches differ based on whether they learn only from the past (passive adaptive management) or anticipate future learning (active adaptive management) [@chades2017optimization].
 
@@ -526,8 +524,7 @@ knitr::include_graphics("../figures/model_set_policies.png")
 ```
 
 
-
-## Value of Information
+### 4.4.1 Value of Information
 
 For a decision maker, uncertainty may not be important to resolve; learning may not be inherently valuable if it does not result in improved management outcomes. A Value of Information (VoI) analysis *a priori* quantifies the importance of reducing uncertainty, or the expected improvement on management objectives if uncertainty were resolved [@raiffa2000applied]. If the VOI is high, an adaptive management approach is typically justified.
 
@@ -541,7 +538,7 @@ In the context of coypu regulation, the EVPI represents the expected improvement
 
 Value of information analyses are typically applied for static, one-time conservation decisions, rather than sequential problems, often in the context of understanding when to act and when to delay action until after further research [@bolam2019using]. To better understand the value of information in the context of adaptive management, future work should investigate quantifying VOI by iteratively resolving uncertainty, requiring evaluating the gain of implementing an adaptive policy rather than a single action [@chades2017optimization].
 
-## Passive adaptive management
+### 4.4.2 Passive adaptive management
 
 Passive adaptive management involves learning from the outcomes of previous management actions to update knowledge about system dynamics and improve management performance over time. Decisions at each time step are optimized assuming that current knowledge of the system will not change into the future. Learning therefore occurs by monitoring the effect of an implemented action, rather than during the optimization procedure [@chades2017optimization].
 
@@ -565,9 +562,7 @@ For coypu control decisions, we solve the passive adaptive management problem by
 knitr::include_graphics("../figures/passive_AM.png")
 ```
 
-
-
-## Active adaptive management
+### 4.4.3 Active adaptive management
 
 In contrast to passive adaptive management, active adaptive management does not rely only on past experience and instead explicitly accounts for future learning opportunities to maximize the chance of achieving the objective. Instead of an optimization at every time step as in passive adaptive management, the optimization occurs once and requires that the trajectory of belief $b_t$ to $b_{t+1}$ and state transitions be calculated for all time steps [@chades2017optimization]. The optimal value function $V^*$ that characterizes the performance of a policy is a function of both the state of the system $s_t$ and belief over the models $b_t$:
 
@@ -589,31 +584,31 @@ knitr::include_graphics("../figures/active_AM.png")
 ```
 
 
-# Conclusion (all)
+# 5. Conclusion
 
 Faire une conclusion courte, voir les exemples de How-to. Rappeler les main messages, how is SDM/SDP relevant et qqsperspectives
-
-<<<<<<< HEAD
-"A very brief historical background. Why is the method useful for investigating or analysing the topic in question? Provide some details on the method's applications."
-
-We do not want to rewrite Lucile's paper... 
 
 Structured decision making: [Abby: Maybe a good place to describe structured decision making and how the methods we present are mostly optimization methods useful for evaluating the consequences of actions (i.e., we're not addressing the aspects of SDM such as problem framing, eliciting objectives; we're instead assuming this has already been done)]
 
 [@conroy2013decision; @StructuredDecisionMaking2020; @hemming2021]
 
 Why and what (all)
-=======
+
 Despite the flexibility of stochastic dynamic programming, its application to invasive species control decisions can be limited. First, the amount of biological realism in the model is constrained by computational demands of the optimization process, due to ‘the curse of dimensionality’ where the size of the DP problem increases exponentially with the number of state variables [@walters1978ecological]. While useful for decision making under uncertainty, these approaches require information often unknown in invasive species management, including specified probabilistic predictions about the system dynamics, effects of management policies, and benefits of ecosystem states [@polasky2011decision]. Though adaptive management can be useful when system dynamics are unknown, the ability to learn and make rational decisions requires that the true system dynamics are contained within, bounded by, or close to the model set used to capture uncertainty [@runge2016detecting]. These approaches will fall short if the true system dynamics lie far outside the set of articulated hypotheses, or if factors like climate change causes the system to change in unanticipated ways [@tucker2021optimal; @keller2025transition]. 
->>>>>>> c69574e2195a9cb92216146ab8e209b90e03517f
-
-
 
 # Acknowledgments
 
-## Data availability statement
+# Conflict of interest statement
 
-Data and code are available at \href{https://github.com/oliviergimenez/SDPaper}{https://github.com/oliviergimenez/SDPaper}.
+The authors have no conflict of interest.
+
+# Ethics statement
+
+Not applicable.
+
+# Data availability statement
+
+The code and data ucan be found at \href{https://github.com/oliviergimenez/SDPaper}{https://github.com/oliviergimenez/SDPaper}.
 
 # References
 
