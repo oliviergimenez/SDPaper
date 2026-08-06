@@ -50,7 +50,7 @@ links-as-notes: false
 \small
 
 ^1^ CEFE, Univ Montpellier, CNRS, EPHE, IRD, Montpellier, France
-^2^ University of California, Berkeley, Berkeley, California, USA
+^2^ Department of Environmental Science, Policy, and Management, University of California, Berkeley, Berkeley, California, USA
 ^3^ CBGP, INRAE, IRD, CIRAD, Institut Agro Montpellier, Univ Montpellier, Montpellier, France
 ^4^ FRB-CESAB, Montpellier, France
 
@@ -588,14 +588,12 @@ The active adaptive management solution describes the optimal action ($a_t$, rem
 knitr::include_graphics("../figures/active_AM.png")
 ```
 
-On a single species ; check out Conroy's book, there is a nice figure illustrating AM. 
-
-<https://onlinelibrary.wiley.com/doi/10.1002/ece3.71176>
 
 # Conclusion (all)
 
 Faire une conclusion courte, voir les exemples de How-to. Rappeler les main messages, how is SDM/SDP relevant et qqsperspectives
 
+<<<<<<< HEAD
 "A very brief historical background. Why is the method useful for investigating or analysing the topic in question? Provide some details on the method's applications."
 
 We do not want to rewrite Lucile's paper... 
@@ -605,6 +603,9 @@ Structured decision making: [Abby: Maybe a good place to describe structured dec
 [@conroy2013decision; @StructuredDecisionMaking2020; @hemming2021]
 
 Why and what (all)
+=======
+Despite the flexibility of stochastic dynamic programming, its application to invasive species control decisions can be limited. First, the amount of biological realism in the model is constrained by computational demands of the optimization process, due to ‘the curse of dimensionality’ where the size of the DP problem increases exponentially with the number of state variables [@walters1978ecological]. While useful for decision making under uncertainty, these approaches require information often unknown in invasive species management, including specified probabilistic predictions about the system dynamics, effects of management policies, and benefits of ecosystem states [@polasky2011decision]. Though adaptive management can be useful when system dynamics are unknown, the ability to learn and make rational decisions requires that the true system dynamics are contained within, bounded by, or close to the model set used to capture uncertainty [@runge2016detecting]. These approaches will fall short if the true system dynamics lie far outside the set of articulated hypotheses, or if factors like climate change causes the system to change in unanticipated ways [@tucker2021optimal; @keller2025transition]. 
+>>>>>>> c69574e2195a9cb92216146ab8e209b90e03517f
 
 
 
