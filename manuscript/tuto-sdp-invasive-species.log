@@ -1,9 +1,9 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.28 (TeX Live 2025) (preloaded format=pdflatex 2026.2.26)  7 AUG 2026 17:14
+This is pdfTeX, Version 3.141592653-2.6-1.40.28 (TeX Live 2025) (preloaded format=pdflatex 2026.2.26)  7 AUG 2026 17:22
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
-**tuto-sdm-invasive-species.tex
-(./tuto-sdm-invasive-species.tex
+**tuto-sdp-invasive-species.tex
+(./tuto-sdp-invasive-species.tex
 LaTeX2e <2025-11-01>
 L3 programming layer <2026-01-19>
 (/Users/oliviergimenez/Library/TinyTeX/texmf-dist/tex/latex/base/article.cls
@@ -397,8 +397,8 @@ File: t1ppl.fd 2001/06/04 font definitions for T1/ppl.
 ) (/Users/oliviergimenez/Library/TinyTeX/texmf-dist/tex/latex/l3backend/l3backend-pdftex.def
 File: l3backend-pdftex.def 2025-10-09 L3 backend support: PDF output (pdfTeX)
 \l__color_backend_stack_int=\count334
-) (./tuto-sdm-invasive-species.aux)
-\openout1 = `tuto-sdm-invasive-species.aux'.
+) (./tuto-sdp-invasive-species.aux)
+\openout1 = `tuto-sdp-invasive-species.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 156.
 LaTeX Font Info:    ... okay on input line 156.
@@ -611,7 +611,7 @@ File: ../figures/active_AM.png Graphic file (type png)
 <use ../figures/active_AM.png>
 Package pdftex.def Info: ../figures/active_AM.png  used on input line 690.
 (pdftex.def)             Requested size: 407.66833pt x 203.84442pt.
-[34] [35 <../figures/active_AM.png>] [36] [37] [38] [39] [40] [41] [42] (./tuto-sdm-invasive-species.aux)
+[34] [35 <../figures/active_AM.png>] [36] [37] [38] [39] [40] [41] [42] (./tuto-sdp-invasive-species.aux)
  ***********
 LaTeX2e <2025-11-01>
 L3 programming layer <2026-01-19>
@@ -620,13 +620,13 @@ L3 programming layer <2026-01-19>
 Here is how much of TeX's memory you used:
  15063 strings out of 469471
  238695 string characters out of 5466955
- 710649 words of memory out of 5000000
+ 710740 words of memory out of 5000000
  43038 multiletter control sequences out of 15000+600000
  691532 words of font info for 348 fonts, out of 8000000 for 9000
  36 hyphenation exceptions out of 8191
  83i,12n,93p,1510b,572s stack positions out of 10000i,1000n,20000p,200000b,200000s
  </Users/oliviergimenez/Library/TinyTeX/texmf-var/fonts/pk/ljfour/jknappen/ec/ectt1095.600pk> </Users/oliviergimenez/Library/TinyTeX/texmf-var/fonts/pk/ljfour/jknappen/ec/ectt1000.600pk> </Users/oliviergimenez/Library/TinyTeX/texmf-var/fonts/pk/ljfour/jknappen/ec/ecss0800.450pk></Users/oliviergimenez/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></Users/oliviergimenez/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></Users/oliviergimenez/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></Users/oliviergimenez/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></Users/oliviergimenez/Library/TinyTeX/texmf-dist/fonts/type1/public/mathpazo/fplmr.pfb></Users/oliviergimenez/Library/TinyTeX/texmf-dist/fonts/type1/public/mathpazo/fplmri.pfb></Users/oliviergimenez/Library/TinyTeX/texmf-dist/fonts/type1/urw/palatino/uplb8a.pfb></Users/oliviergimenez/Library/TinyTeX/texmf-dist/fonts/type1/urw/palatino/uplr8a.pfb></Users/oliviergimenez/Library/TinyTeX/texmf-dist/fonts/type1/urw/palatino/uplri8a.pfb>
-Output written on tuto-sdm-invasive-species.pdf (42 pages, 2831205 bytes).
+Output written on tuto-sdp-invasive-species.pdf (42 pages, 2831262 bytes).
 PDF statistics:
  572 PDF objects out of 1000 (max. 8388607)
  474 compressed objects within 5 object streams

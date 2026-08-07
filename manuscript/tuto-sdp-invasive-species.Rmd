@@ -1,5 +1,5 @@
 ---
-title: "Using dynamic programming for making decisions about invasive species"
+title: "Using stochastic dynamic programming for making decisions about invasive species"
 author:
   - Olivier Gimenez^1^*
   - Abigail G. Keller^2^*
