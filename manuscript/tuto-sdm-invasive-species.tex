@@ -301,7 +301,7 @@ In this first example, we consider a finite-horizon decision problem, where mana
 
 \begin{figure}
 
-{\centering \includegraphics[width=0.9\linewidth]{bellman-fig-v2} 
+{\centering \includegraphics[width=0.9\linewidth]{../figures/bellman-fig-v2} 
 
 }
 
@@ -366,7 +366,7 @@ Although SDP can be implemented using simple or expert-based models (\citeproc{r
 
 Throughout this paper, we use the coypu (\emph{Myocastor coypus}) as a running example to illustrate SDP. Native to South America, the coypu was introduced into Europe during the early twentieth century through the fur trade and has since established widespread invasive populations across many European countries (\citeproc{ref-Bonnet2023}{Bonnet et al. 2023}). Coypus damage crops, riverbanks and hydraulic infrastructures, while also acting as reservoirs of zoonotic pathogens such as Leptospira spp., making them both an ecological and public health concern (\citeproc{ref-Diagne2023}{Diagne et al. 2023}, \citeproc{ref-Bonnet2023}{Bonnet et al. 2023}). Their widespread distribution, rapid population growth and the need for repeated control interventions make coypus an ideal case study for illustrating sequential decision-making under uncertainty. The worked examples presented here build on the coypu case study developed in (\citeproc{ref-gimenez2025neobiota}{Gimenez 2025}), extending it from estimating population abundance to optimizing management decisions. In what follows, we use the \texttt{R} package \texttt{MDPtoolbox} (\citeproc{ref-chades2014ecography}{Chadès et al. 2014}) to compute optimal policies using stochastic dynamic programming, unless stated otherwise.
 
-\subsection{4.1 Single population}\label{single-population}
+\subsection{4.1 Regulating a single invasive population}\label{regulating-a-single-invasive-population}
 
 The objective of this example is to determine an optimal regulation policy for coypu based on their total abundance. We consider a management problem in which a decision maker chooses, at each time step, the intensity of a control effort \(u \in [0,1]\). Low effort corresponds to minimal intervention, while high effort represents intensive removal. The management objective is to balance three competing components: ecological damages that increase with population size (e.g.~crop losses, dike weakening), management costs that increase with effort, and an additional penalty if abundance exceeds a tolerable level.
 
@@ -408,82 +408,109 @@ The optimal policy exhibits a threshold-like pattern (Figure \ref{fig:fig-pop}c)
 
 Figure \ref{fig:fig-pop}d illustrates the resulting population dynamics for a system initially containing \(N_0 = 800\) individuals. At each time step, the control effort is adjusted according to the current abundance, and the population responds through the logistic growth model with removals. In this deterministic example, abundance rapidly declines from its initial level before converging towards an equilibrium where the marginal benefit of additional control is balanced by its marginal cost.
 
-\subsection{4.2 Metapopulation}\label{metapopulation}
+\subsection{4.2 Coordinating control across connected populations}\label{coordinating-control-across-connected-populations}
 
-We extend the single-population coypu example to a spatially structured invasion in which several sites are connected through dispersal. The aim is to explore how management effort should vary through time when local demographic processes and spatial spread interact. We consider a network of several sites that can be interpreted as cities or management units. At each monthly time step, a decision maker chooses a global management action corresponding to a harvest intensity applied simultaneously across all sites. Local populations then grow according to density dependence, are partially removed by management, and may subsequently undergo stochastic extinction or colonization depending on local abundance and the occupancy of neighboring sites.
+We now extend the previous example from a single population to a spatially structured invasion in which local populations are connected through dispersal. The aim is to illustrate how SDP can coordinate management across multiple sites when local extinction and recolonization interact. We consider a network of eight sites, representing cities or management units, connected by an illustrative dispersal network. The observed coypu abundances reported in (\citeproc{ref-gimenez2025neobiota}{Gimenez 2025}) are used only to define the initial pattern of occupied and unoccupied sites; thereafter, the decision model operates directly on occupancy states.
 
-At time \(t\), each site \(i\) is either occupied or empty, represented by the binary variable \(X_i(t)\in\{0,1\}\). When a site is empty its abundance is zero, whereas when it is occupied its population size follows discrete logistic growth with intrinsic rate \(r\) and carrying capacity \(K\). Denoting abundance by \(N_i(t)\), post-growth abundance is
-
-\[
-N_i^{\text{grow}}(t+1)
-= N_i(t) + r\,N_i(t)\!\left(1-\frac{N_i(t)}{K}\right).
-\]
-
-Management then removes a fraction \(h_a\) of the population, so that
+At time \(t\), each site \(i\) is either occupied or empty,
 
 \[
-N_i(t+1) = N_i^{\text{grow}}(t+1)\,(1-h_a).
+X_i(t) \in \{0,1\},
 \]
 
-This formulation captures the idea that control reduces numbers but does not eliminate underlying demographic regulation.
-
-Occupancy is updated stochastically based on local abundance and spatial context (Figures \ref{fig:fig-metapop}a and \ref{fig:fig-metapop}b). When a site is occupied, extinction probability decreases with abundance according to
+and the state of the whole system is the vector
 
 \[
-p_{\text{ext}}(N_i) = \exp(-\alpha N_i),
+\mathbf{X}(t) =
+\left(
+X_1(t),\ldots,X_n(t)
+\right).
 \]
 
-so that small populations are more vulnerable to disappearance. When a site is empty, colonization probability increases with the number of occupied neighbors
+With \(n=8\) sites, there are \(2^8=256\) possible spatial configurations. This is an important distinction from the previous worked example: rather than using local abundance as the state variable, we focus here on the spatial extent and configuration of the invasion.
+
+At each time step, the manager selects one of three global management actions---none, moderate, or strong control---which is applied across the network. Management affects two components of the invasion process. First, occupied sites may become locally extinct. In the absence of control, local extinction is unlikely, whereas increasingly intensive control raises the probability that an occupied site becomes empty (Figure \ref{fig:fig-metapop}a). We denote these action-dependent probabilities by
 
 \[
-k_i(t)=\sum_{j\neq i} A_{ij} X_j(t),
+p_{\mathrm{ext}}(a)
+=
+\Pr\{X_i(t+1)=0 \mid X_i(t)=1,a\}.
 \]
 
-through
+In our illustrative example, these probabilities are set to 0.02, 0.15, and 0.28 under no, moderate, and strong control, respectively.
+
+Second, empty sites may be recolonized from neighbouring occupied sites. Let
 
 \[
-p_{\text{col}}(k_i) = 1-(1-\beta)^{k_i}.
+k_i(t)
+=
+\sum_{j \neq i}
+A_{ij}X_j(t)
 \]
 
-Together, these rules link local demography with spatial dynamics and create feedbacks between sites.
+denote the number of occupied neighbours of site \(i\), where \(A_{ij}\) is the adjacency matrix describing connections among sites. Colonization probability increases with \(k_i(t)\) according to
+
+\[
+p_{\mathrm{col}}(k_i,a)
+=
+1-
+\left(
+1-\beta_a
+\right)^{k_i},
+\]
+
+where \(\beta_a\) is the effective per-neighbour colonization probability under management action \(a\). Control is assumed to reduce colonization pressure, for example by lowering source populations or limiting dispersal from occupied sites. Consequently, recolonization becomes increasingly likely as more neighbouring sites are occupied, but this risk is reduced under stronger management (Figure \ref{fig:fig-metapop}b).
+
+Together, local extinction and recolonization generate spatial feedbacks: management at one time step can influence not only whether individual sites remain occupied, but also the future risk of invasion elsewhere in the network. For each current spatial configuration and management action, we calculate the probability of every possible configuration at the next time step. Assuming that site-level transitions are conditionally independent given the current state and action, the transition probability between two network states can be obtained by combining the site-specific probabilities. Because the state space contains only 256 configurations, all transitions can be enumerated exactly, avoiding the Monte Carlo approximation that would be required for larger or more complex state spaces.
+
+Management decisions must balance the ecological costs associated with a widespread invasion against the costs of intervention. We assume that damage increases non-linearly with the number of occupied sites,
+
+\[
+D(n_{\mathrm{occ}})
+=
+c_1 n_{\mathrm{occ}}
++
+c_2 n_{\mathrm{occ}}^2,
+\]
+
+where \(n_{\mathrm{occ}}\) is the current number of occupied sites. The quadratic component represents accelerating impacts as the invasion spreads across the network. Management costs contain both a fixed cost of implementing action \(a\) and a component that increases with the number of occupied sites,
+
+\[
+C_{\mathrm{manage}}(n_{\mathrm{occ}},a)
+=
+c_{\mathrm{fixed}}(a)
++
+c_{\mathrm{site}}(a)n_{\mathrm{occ}}.
+\]
+
+Strong control is therefore more effective at promoting local extinction and limiting recolonization, but it is also substantially more expensive to maintain. The immediate reward is defined as the negative of total cost,
+
+\[
+R(s,a)
+=
+-
+\left[
+D(n_{\mathrm{occ}})
++
+C_{\mathrm{manage}}(n_{\mathrm{occ}},a)
+\right],
+\]
+
+so that maximizing expected reward is equivalent to minimizing long-term ecological damage and management expenditure.
+
+As in the introductory toy example, management is considered over a finite planning horizon of 60 time steps. We therefore solve the SDP by backward induction, using a discount factor of \(\beta=0.99\). The resulting policy specifies the optimal management action for every spatial configuration and time step. Importantly, two states containing the same number of occupied sites need not receive the same action because their spatial configurations---and hence their future recolonization risks---may differ.
+
+To evaluate the consequences of state-dependent management, we compared the SDP policy with three constant strategies in which no, moderate, or strong control is applied throughout the entire planning horizon. Because invasion dynamics are stochastic, each strategy was simulated repeatedly (100 times) rather than evaluated from a single trajectory. Figure \ref{fig:fig-metapop}c shows the resulting mean cumulative costs and their 90\% simulation intervals. Applying strong control continuously can achieve substantial ecological benefits, but at a high management cost. In contrast, the SDP balances these competing objectives by changing intervention intensity as the state of the network changes, thereby reducing expected cumulative costs.
+
+The same trade-off is apparent in the ecological outcomes (Figure \ref{fig:fig-metapop}d). Strategies differ in the expected number of occupied sites through time, with stronger control generally reducing invasion extent more rapidly. However, minimizing invasion extent alone is not necessarily optimal because maintaining strong control after the invasion has been substantially reduced can impose management costs that exceed the additional ecological benefits. Decomposing expected cumulative costs into ecological damage and management expenditure makes this trade-off explicit (Figure \ref{fig:fig-metapop}e).
+
+Finally, Figure \ref{fig:fig-metapop}f shows the frequency with which the SDP selects each management action across simulated trajectories. Rather than prescribing a single intervention intensity throughout the study period, the optimal policy switches among strong, moderate, and no control as invasion risk changes. This illustrates the main benefit of SDP in a spatial management context: management intensity can be coordinated through time in response to the current configuration of the invasion, rather than applying the same level of control everywhere and indefinitely.
 
 \begin{figure}
-\includegraphics[width=1\linewidth]{../figures/figure3} \caption{General title. (a) Extinction $p_{ext}(N)$. (b) Colonization  $p_{col}(k)$. (c) Cumulative cost: constant vs SDP-optimal strategies. Representation of the cost components on the log scale. Damage costs increase linearly with total abundance across sites, whereas control costs are fixed action-specific intercepts (none/moderate/strong). Stronger control increases immediate spending but can reduce future abundance and damages. (c) Optimal global action as a function of time and invasion level (measured as the number of occupied sites). Colors indicate the action recommended by the finite-horizon SDP (None/Moderate/Strong). This visualization highlights how stronger control becomes optimal as the invasion occupies more sites, and how recommendations may soften near the end of the planning horizon. (d) Cumulative costs over time under constant strategies (none, moderate, strong) versus the SDP-optimal policy. Costs combine damages proportional to total abundance and an action-specific control cost. (e) Site-level abundance dynamics under constant strategies and the SDP-optimal policy. Each panel corresponds to a site; trajectories highlight how spatial heterogeneity and network-driven recolonization can create uneven benefits of control across locations. (f) Containment success (sites with $\le 5$ coypus).}\label{fig:fig-metapop}
+\includegraphics[width=1\linewidth]{../figures/figure3} \caption{Spatial stochastic dynamic programming for coordinated management of connected invasive populations. (a) Local extinction probability under no, moderate, and strong control. (b) Colonization probability as a function of the number of occupied neighbouring sites under each management action. (c) Mean cumulative cost through time under three constant management strategies and the state-dependent SDP policy; shaded areas represent 90\% simulation intervals. (d) Mean number of occupied sites through time under each strategy, with 90\% simulation intervals. (e) Decomposition of expected cumulative cost at the end of the planning horizon into ecological damage and management expenditure. (f) Proportion of simulated trajectories in which the SDP selects no, moderate, or strong control at each time step.}\label{fig:fig-metapop}
 \end{figure}
 
-Because the transition probabilities induced by these ecological rules are analytically intractable, we approximate them using repeated simulations. Starting from a given state and management action, we simulate the ecological dynamics many times and record the frequency of each possible next state. In practice, the estimated probability of transitioning from state \(s\) to state \(s'\) under action \(a\) is the proportion of simulations that lead to \(s'\):
-
-This Monte Carlo approach allows the decision model to incorporate nonlinear and stochastic ecological processes without requiring an explicit analytical expression for transition probabilities.
-
-Management decisions are evaluated through a cost function that balances ecological damages and intervention effort (Figure \ref{fig:fig-metapop}c). At each time step, total cost is defined as
-
-\[
-C(s,a) = c_d \sum_{i=1}^n N_i(t) + c_a(a),
-\]
-
-where \(c_d\) represents the damage cost per individual (here \(c_d = 1\)) and \(c_a(a)\) is the management cost associated with action \(a\). In this example, we consider three possible actions corresponding to no control, moderate control, and strong control, with costs
-
-\[
-c_a(a) \in \{0,\;5,\;10\}.
-\]
-
-The reward used in the dynamic programming recursion is defined as the negative of this cost,
-
-\[
-R(s,a) = -C(s,a),
-\]
-
-so that maximizing expected reward is equivalent to minimizing long-term total costs.
-
-The resulting policy is illustrated in Figure \ref{fig:fig-metapop}d.~When few sites are occupied and populations remain small, limited intervention is often sufficient because damages are modest and extinction may occur naturally. As more sites become occupied or local abundances increase, stronger control becomes optimal in order to reduce future spread and prevent escalating impacts. Temporal variation in recommended actions arises because the finite planning horizon reduces the benefit of aggressive intervention late in the time period.
-
-Comparing forward simulations under the optimal policy with simulations under constant strategies highlights the value of adaptive management (Figure \ref{fig:fig-metapop}e). The optimal strategy typically reduces cumulative costs by applying effort strategically in time rather than maintaining a fixed level of control.
-
-Spatial trajectories further illustrate how coordinated management alters invasion dynamics across the network, with reductions in abundance and occupancy emerging progressively across sites (Figure \ref{fig:fig-metapop}f).
-
-In perspective, say that this can be used to model competition or predator-prey, or host-pathogen / disease thing. See SDP-species-interactions/ in Olivier biblio repo.
-
-\subsection{4.3 Acounting for observation error with POMDP}\label{acounting-for-observation-error-with-pomdp}
+\subsection{4.3 Managing under imperfect detection}\label{managing-under-imperfect-detection}
 
 Illustrate POMDP.
 
@@ -603,7 +630,7 @@ and the optimal action is the one associated with the vector giving the highest 
 
 This makes the example useful pedagogically: rather than assuming that the invasion status is known, the decision explicitly depends on the manager's uncertainty. When the belief state places high probability on establishment, more intensive control may become optimal despite its higher immediate cost. Conversely, if the system is probably eradicated or only weakly invaded, the optimal policy may favour less costly actions. The POMDP therefore formalises a key challenge in invasive species management: acting adaptively when both ecological dynamics and monitoring information are uncertain.
 
-\subsection{4.4 Reducing model uncertainty with adaptive management}\label{reducing-model-uncertainty-with-adaptive-management}
+\subsection{4.4 Learning while managing under model uncertainty with adaptive management}\label{learning-while-managing-under-model-uncertainty-with-adaptive-management}
 
 Decision theoretic methods can be used to make control decisions not only in the face of uncertainty, but also to reduce uncertainty over time. Adaptive management, or ``learning by doing'', involves making decisions to achieve a management objective while simultaneously learning about system dynamics to improve future management success (\citeproc{ref-holling1978adaptive}{Holling 1978}, \citeproc{ref-walters1986adaptive}{Walters 1986}, \citeproc{ref-conroy2013decision}{Conroy and Peterson 2013}). Adaptive management approaches differ based on whether they learn only from the past (passive adaptive management) or anticipate future learning (active adaptive management) (\citeproc{ref-chades2017optimization}{Chadès et al. 2017}).
 
@@ -697,7 +724,7 @@ The active adaptive management solution describes the optimal action (\(a_t\), r
 
 \section{5. Conclusion}\label{conclusion}
 
-Faire une conclusion courte, voir les exemples de How-to. Rappeler les main messages, how is SDM/SDP relevant et qqsperspectives
+Faire une conclusion courte, voir les exemples de How-to. Rappeler les main messages, how is SDM/SDP relevant et qqs perspectives. In perspective, say that spatial example can be used to model competition or predator-prey, or host-pathogen / disease thing. See SDP-species-interactions/ in Olivier biblio repo.
 
 Structured decision making: {[}Abby: Maybe a good place to describe structured decision making and how the methods we present are mostly optimization methods useful for evaluating the consequences of actions (i.e., we're not addressing the aspects of SDM such as problem framing, eliciting objectives; we're instead assuming this has already been done){]}
 
