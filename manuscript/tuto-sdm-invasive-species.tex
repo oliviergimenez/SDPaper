@@ -342,25 +342,29 @@ The optimal policy illustrates one of the defining features ofstochastic dynamic
 
 Applying stochastic dynamic programming (SDP) to ecological problems requires careful formulation of the decision context, as well as practical considerations regarding model structure, data, and computation.
 
+\section{3. Practical considerations and limitations}\label{practical-considerations-and-limitations}
+
+Applying stochastic dynamic programming (SDP) to ecological problems requires careful formulation of the decision context, as well as practical considerations regarding model structure, data availability, and computational complexity.
+
 \subsection{3.1 Problem formulation}\label{problem-formulation}
 
 A prerequisite for SDP is a clear definition of the decision problem. This includes specifying management objectives, identifying feasible actions, defining the state variables that describe the system, and constructing a reward function that captures the trade-offs among ecological, economic, and social outcomes (\citeproc{ref-marescotComplexDecisionsMade2013}{Marescot et al. 2013}). Because SDP optimizes decisions given these elements, poorly specified objectives or unrealistic action sets can lead to misleading recommendations (\citeproc{ref-gregory2012structured}{Gregory et al. 2012}, \citeproc{ref-StructuredDecisionMaking2020}{Runge et al. 2020}).
 
 \subsection{3.2 State definition and discretization}\label{state-definition-and-discretization}
 
-SDP typically requires a finite state space, whereas ecological systems are often described by continuous variables (e.g.~abundance, spatial extent). Discretization is therefore necessary, but introduces a trade-off between realism and tractability. Fine discretization improves accuracy but increases computational cost, while coarse discretization may obscure important system dynamics (\citeproc{ref-nicol2012which}{Nicol and Chadès 2012}, \citeproc{ref-chades2021pomdps}{Chadès et al. 2021}). Careful sensitivity analyses are often needed to ensure robust conclusions.
+SDP typically requires a finite state space, whereas ecological systems are often described by continuous variables (e.g.~abundance, spatial extent). Discretization is therefore necessary, but introduces a trade-off between realism and tractability. Fine discretization improves accuracy but increases computational cost, while coarse discretization may obscure important system dynamics (\citeproc{ref-nicol2012which}{Nicol and Chadès 2012}, \citeproc{ref-chades2021pomdps}{Chadès et al. 2021}). This reflects the well-known \emph{curse of dimensionality}, whereby computational requirements increase rapidly with the number of state variables and management actions (\citeproc{ref-walters1978ecological}{Walters and Hilborn 1978}). In practice, sensitivity analyses are often needed to ensure that management recommendations are robust to the chosen discretization.
 
 \subsection{3.3 Model specification and uncertainty}\label{model-specification-and-uncertainty}
 
-The performance of SDP depends on the specification of transition dynamics and reward functions, which are often uncertain in ecological systems. These uncertainties may arise from limited data, structural assumptions, or imperfect knowledge of management effectiveness (\citeproc{ref-regan2002taxonomy}{Regan et al. 2002}). Ignoring uncertainty can result in suboptimal policies, motivating extensions such as adaptive management or POMDPs, which explicitly account for learning and imperfect information (\citeproc{ref-haight2010optimal}{Haight and Polasky 2010}, \citeproc{ref-williams2011adaptive}{Williams et al. 2011}, \citeproc{ref-chades2021pomdps}{Chadès et al. 2021}).
+The performance of SDP depends critically on the specification of transition dynamics and reward functions, which are often uncertain in ecological systems. In practice, managers rarely know the true probabilities governing population dynamics, the effectiveness of alternative management actions, or the ecological and economic consequences associated with different system states (\citeproc{ref-polasky2011decision}{Polasky et al. 2011}). These uncertainties may arise from limited data, structural assumptions, or imperfect knowledge of ecological processes (\citeproc{ref-regan2002taxonomy}{Regan et al. 2002}). Ignoring them can lead to suboptimal management recommendations, motivating extensions such as partially observable Markov decision processes (POMDPs), which explicitly account for imperfect observations, and adaptive management, which incorporates learning about uncertain system dynamics over time (\citeproc{ref-haight2010optimal}{Haight and Polasky 2010}, \citeproc{ref-williams2011adaptive}{Williams et al. 2011}, \citeproc{ref-chades2021pomdps}{Chadès et al. 2021}).
 
 \subsection{3.4 Computational constraints}\label{computational-constraints}
 
-A major limitation of SDP is the ``curse of dimensionality'', whereby the size of the state and action space grows rapidly with system complexity. This can restrict the number of state variables, spatial resolution, or management options that can be included in a model. In practice, this often requires simplifying assumptions, state aggregation, or the use of simulation-based approaches to approximate optimal policies (\citeproc{ref-nicol2011beyond}{Nicol and Chadès 2011}, \citeproc{ref-schapaugh2012simple}{Schapaugh and Tyre 2012}, \citeproc{ref-marescotComplexDecisionsMade2013}{Marescot et al. 2013}).
+A major limitation of SDP is the \emph{curse of dimensionality}, whereby the size of the state and action space grows rapidly with system complexity. This can restrict the number of state variables, spatial resolution, or management options that can be included in a model. In practice, this often requires simplifying assumptions, state aggregation, or the use of simulation-based approaches to approximate optimal policies (\citeproc{ref-nicol2011beyond}{Nicol and Chadès 2011}, \citeproc{ref-schapaugh2012simple}{Schapaugh and Tyre 2012}, \citeproc{ref-marescotComplexDecisionsMade2013}{Marescot et al. 2013}).
 
 \subsection{3.5 Data requirements and interpretation}\label{data-requirements-and-interpretation}
 
-Although SDP can be implemented using simple or expert-based models (\citeproc{ref-moore2011expert}{Moore and McCarthy 2016}, \citeproc{ref-chenery2020reducing}{Chenery et al. 2020}), its relevance depends on the availability and quality of data describing system dynamics, management effects, and costs. In data-limited contexts, SDP may still provide valuable qualitative insights into decision structure and trade-offs, but quantitative recommendations should be interpreted with caution (\citeproc{ref-baxter2007optimal}{Baxter et al. 2007}).
+Although SDP can be implemented using simple or expert-based models (\citeproc{ref-moore2011expert}{Moore and McCarthy 2016}, \citeproc{ref-chenery2020reducing}{Chenery et al. 2020}), its usefulness ultimately depends on the quality of the ecological understanding used to parameterize the decision model. In adaptive management applications, learning is only possible if the candidate model set adequately represents the true system dynamics (\citeproc{ref-runge2016detecting}{Runge et al. 2016}). If the true dynamics lie outside the range of considered hypotheses, or if ecological conditions change in unexpected ways (e.g.~under climate change), management recommendations may become unreliable despite continued monitoring and learning (\citeproc{ref-tucker2021optimal}{Tucker and Runge 2021}, \citeproc{ref-keller2025transition}{Keller et al. 2025}). In data-limited contexts, SDP may still provide valuable qualitative insights into decision structure and trade-offs, but quantitative recommendations should be interpreted with caution (\citeproc{ref-baxter2007optimal}{Baxter et al. 2007}).
 
 \section{4. Worked examples}\label{worked-examples}
 
@@ -380,13 +384,13 @@ where the first term describes logistic growth and \(q(u)\) is the fraction of i
 \[
 q(u)=1-\exp(-\alpha u),
 \]
-with \(\alpha=1.5\), which implies diminishing returns of control effort (Figure \ref{fig:fig-pop}a). For example, an effort of \(u=0.5\) removes about \(53\%\) of the population, whereas maximum effort \(u=1\) removes about \(78\%\), reflecting the fact that complete eradication is rarely achievable in a single step.
+with \(\alpha=1.5\), which implies diminishing returns of control effort (Figure \ref{fig:fig-pop}A). For example, an effort of \(u=0.5\) removes about \(53\%\) of the population, whereas maximum effort \(u=1\) removes about \(78\%\), reflecting the fact that complete eradication is rarely achievable in a single step.
 
 \begin{figure}
-\includegraphics[width=1\linewidth]{../figures/figure2} \caption{Components and outputs of an infinite-horizon stochastic dynamic programming model for invasive species management. (a) Removal fraction $q(u)$ as a function of control effort $u$. (b) Immediate cost components as functions of abundance. Damage increases nonlinearly with population size. Above the tolerable threshold ($N_{\mathrm{tol}} = 400$), an additional penalty is added, resulting in rapidly increasing total costs (damage + penalty). Control cost is shown for an illustrative effort level ($u = 0.6$). (c) Optimal stationary policy $u^*(N)$, showing the recommended control effort for each abundance level. (d) Example trajectories of abundance and control effort under the optimal policy, starting from $N_0 = 800$.}\label{fig:fig-pop}
+\includegraphics[width=1\linewidth]{../figures/figure2} \caption{Components and outputs of an infinite-horizon stochastic dynamic programming model for invasive species management. (A) Removal fraction $q(u)$ as a function of control effort $u$. (B) Immediate cost components as functions of abundance. Damage increases nonlinearly with population size. Above the tolerable threshold ($N_{\mathrm{tol}} = 400$), an additional penalty is added, resulting in rapidly increasing total costs (damage + penalty). Control cost is shown for an illustrative effort level ($u = 0.6$). (C) Optimal stationary policy $u^*(N)$, showing the recommended control effort for each abundance level. (D) Example trajectories of abundance and control effort under the optimal policy, starting from $N_0 = 800$.}\label{fig:fig-pop}
 \end{figure}
 
-Rewards are defined as the negative of total costs, so that maximizing expected reward is equivalent to minimizing long-term damages and management expenses (Figure \ref{fig:fig-pop}b):
+Rewards are defined as the negative of total costs, so that maximizing expected reward is equivalent to minimizing long-term damages and management expenses (Figure \ref{fig:fig-pop}B):
 \[
 R(N,u)=-(\text{damage}(N)+\text{cost}(u)+\text{penalty}(N)).
 \]
@@ -404,9 +408,9 @@ This formulation implies that the penalty is zero below the threshold and then r
 
 Unlike the previous toy example, we no longer assume a fixed planning horizon. Instead, management is assumed to continue indefinitely. In this setting, the decision problem is solved using infinite-horizon discounted value iteration (discount factor \(\beta=0.99\)), an iterative algorithm that repeatedly applies the Bellman equation until the value function converges. The algorithm returns both a stationary optimal policy, which maps each abundance class to the recommended control effort, and a value function summarizing the expected long-term net benefit of following this policy from any initial abundance. Because the planning horizon is infinite, the optimal decision depends only on the current abundance and not on time.
 
-The optimal policy exhibits a threshold-like pattern (Figure \ref{fig:fig-pop}c). Control effort remains low when abundance is low because ecological damages are limited and additional removals provide little long-term benefit. As abundance approaches the tolerable threshold (\(N_{\mathrm{tol}} = 400\)), effort increases rapidly, reflecting the growing ecological and economic consequences of delaying intervention. Above this threshold, intensive control becomes optimal to prevent sustained high damages and penalties. More generally, this result illustrates a central feature of SDP: optimal management decisions emerge naturally from balancing immediate intervention costs against expected future consequences.
+The optimal policy exhibits a threshold-like pattern (Figure \ref{fig:fig-pop}C). Control effort remains low when abundance is low because ecological damages are limited and additional removals provide little long-term benefit. As abundance approaches the tolerable threshold (\(N_{\mathrm{tol}} = 400\)), effort increases rapidly, reflecting the growing ecological and economic consequences of delaying intervention. Above this threshold, intensive control becomes optimal to prevent sustained high damages and penalties. More generally, this result illustrates a central feature of SDP: optimal management decisions emerge naturally from balancing immediate intervention costs against expected future consequences.
 
-Figure \ref{fig:fig-pop}d illustrates the resulting population dynamics for a system initially containing \(N_0 = 800\) individuals. At each time step, the control effort is adjusted according to the current abundance, and the population responds through the logistic growth model with removals. In this deterministic example, abundance rapidly declines from its initial level before converging towards an equilibrium where the marginal benefit of additional control is balanced by its marginal cost.
+Figure \ref{fig:fig-pop}D illustrates the resulting population dynamics for a system initially containing \(N_0 = 800\) individuals. At each time step, the control effort is adjusted according to the current abundance, and the population responds through the logistic growth model with removals. In this deterministic example, abundance rapidly declines from its initial level before converging towards an equilibrium where the marginal benefit of additional control is balanced by its marginal cost.
 
 \subsection{4.2 Coordinating control across connected populations}\label{coordinating-control-across-connected-populations}
 
@@ -429,7 +433,7 @@ X_1(t),\ldots,X_n(t)
 
 With \(n=8\) sites, there are \(2^8=256\) possible spatial configurations. This is an important distinction from the previous worked example: rather than using local abundance as the state variable, we focus here on the spatial extent and configuration of the invasion.
 
-At each time step, the manager selects one of three global management actions---none, moderate, or strong control---which is applied across the network. Management affects two components of the invasion process. First, occupied sites may become locally extinct. In the absence of control, local extinction is unlikely, whereas increasingly intensive control raises the probability that an occupied site becomes empty (Figure \ref{fig:fig-metapop}a). We denote these action-dependent probabilities by
+At each time step, the manager selects one of three global management actions---none, moderate, or strong control---which is applied across the network. Management affects two components of the invasion process. First, occupied sites may become locally extinct. In the absence of control, local extinction is unlikely, whereas increasingly intensive control raises the probability that an occupied site becomes empty (Figure \ref{fig:fig-metapop}A). We denote these action-dependent probabilities by
 
 \[
 p_{\mathrm{ext}}(a)
@@ -459,7 +463,7 @@ p_{\mathrm{col}}(k_i,a)
 \right)^{k_i},
 \]
 
-where \(\beta_a\) is the effective per-neighbour colonization probability under management action \(a\). Control is assumed to reduce colonization pressure, for example by lowering source populations or limiting dispersal from occupied sites. Consequently, recolonization becomes increasingly likely as more neighbouring sites are occupied, but this risk is reduced under stronger management (Figure \ref{fig:fig-metapop}b).
+where \(\beta_a\) is the effective per-neighbour colonization probability under management action \(a\). Control is assumed to reduce colonization pressure, for example by lowering source populations or limiting dispersal from occupied sites. Consequently, recolonization becomes increasingly likely as more neighbouring sites are occupied, but this risk is reduced under stronger management (Figure \ref{fig:fig-metapop}B).
 
 Together, local extinction and recolonization generate spatial feedbacks: management at one time step can influence not only whether individual sites remain occupied, but also the future risk of invasion elsewhere in the network. For each current spatial configuration and management action, we calculate the probability of every possible configuration at the next time step. Assuming that site-level transitions are conditionally independent given the current state and action, the transition probability between two network states can be obtained by combining the site-specific probabilities. Because the state space contains only 256 configurations, all transitions can be enumerated exactly, avoiding the Monte Carlo approximation that would be required for larger or more complex state spaces.
 
@@ -500,139 +504,105 @@ so that maximizing expected reward is equivalent to minimizing long-term ecologi
 
 As in the introductory toy example, management is considered over a finite planning horizon of 60 time steps. We therefore solve the SDP by backward induction, using a discount factor of \(\beta=0.99\). The resulting policy specifies the optimal management action for every spatial configuration and time step. Importantly, two states containing the same number of occupied sites need not receive the same action because their spatial configurations---and hence their future recolonization risks---may differ.
 
-To evaluate the consequences of state-dependent management, we compared the SDP policy with three constant strategies in which no, moderate, or strong control is applied throughout the entire planning horizon. Because invasion dynamics are stochastic, each strategy was simulated repeatedly (100 times) rather than evaluated from a single trajectory. Figure \ref{fig:fig-metapop}c shows the resulting mean cumulative costs and their 90\% simulation intervals. Applying strong control continuously can achieve substantial ecological benefits, but at a high management cost. In contrast, the SDP balances these competing objectives by changing intervention intensity as the state of the network changes, thereby reducing expected cumulative costs.
+To evaluate the consequences of state-dependent management, we compared the SDP policy with three constant strategies in which no, moderate, or strong control is applied throughout the entire planning horizon. Because invasion dynamics are stochastic, each strategy was simulated repeatedly (100 times) rather than evaluated from a single trajectory. Figure \ref{fig:fig-metapop}C shows the resulting mean cumulative costs and their 90\% simulation intervals. Applying strong control continuously can achieve substantial ecological benefits, but at a high management cost. In contrast, the SDP balances these competing objectives by changing intervention intensity as the state of the network changes, thereby reducing expected cumulative costs.
 
-The same trade-off is apparent in the ecological outcomes (Figure \ref{fig:fig-metapop}d). Strategies differ in the expected number of occupied sites through time, with stronger control generally reducing invasion extent more rapidly. However, minimizing invasion extent alone is not necessarily optimal because maintaining strong control after the invasion has been substantially reduced can impose management costs that exceed the additional ecological benefits. Decomposing expected cumulative costs into ecological damage and management expenditure makes this trade-off explicit (Figure \ref{fig:fig-metapop}e).
+The same trade-off is apparent in the ecological outcomes (Figure \ref{fig:fig-metapop}D). Strategies differ in the expected number of occupied sites through time, with stronger control generally reducing invasion extent more rapidly. However, minimizing invasion extent alone is not necessarily optimal because maintaining strong control after the invasion has been substantially reduced can impose management costs that exceed the additional ecological benefits. Decomposing expected cumulative costs into ecological damage and management expenditure makes this trade-off explicit (Figure \ref{fig:fig-metapop}E).
 
-Finally, Figure \ref{fig:fig-metapop}f shows the frequency with which the SDP selects each management action across simulated trajectories. Rather than prescribing a single intervention intensity throughout the study period, the optimal policy switches among strong, moderate, and no control as invasion risk changes. This illustrates the main benefit of SDP in a spatial management context: management intensity can be coordinated through time in response to the current configuration of the invasion, rather than applying the same level of control everywhere and indefinitely.
+Finally, Figure \ref{fig:fig-metapop}F shows the frequency with which the SDP selects each management action across simulated trajectories. Rather than prescribing a single intervention intensity throughout the study period, the optimal policy switches among strong, moderate, and no control as invasion risk changes. This illustrates the main benefit of SDP in a spatial management context: management intensity can be coordinated through time in response to the current configuration of the invasion, rather than applying the same level of control everywhere and indefinitely.
 
 \begin{figure}
-\includegraphics[width=1\linewidth]{../figures/figure3} \caption{Spatial stochastic dynamic programming for coordinated management of connected invasive populations. (a) Local extinction probability under no, moderate, and strong control. (b) Colonization probability as a function of the number of occupied neighbouring sites under each management action. (c) Mean cumulative cost through time under three constant management strategies and the state-dependent SDP policy; shaded areas represent 90\% simulation intervals. (d) Mean number of occupied sites through time under each strategy, with 90\% simulation intervals. (e) Decomposition of expected cumulative cost at the end of the planning horizon into ecological damage and management expenditure. (f) Proportion of simulated trajectories in which the SDP selects no, moderate, or strong control at each time step.}\label{fig:fig-metapop}
+\includegraphics[width=1\linewidth]{../figures/figure3} \caption{Spatial stochastic dynamic programming for coordinated management of connected invasive populations. (A) Local extinction probability under no, moderate, and strong control. (B) Colonization probability as a function of the number of occupied neighbouring sites under each management action. (C) Mean cumulative cost through time under three constant management strategies and the state-dependent SDP policy; shaded areas represent 90\% simulation intervals. (D) Mean number of occupied sites through time under each strategy, with 90\% simulation intervals. (E) Decomposition of expected cumulative cost at the end of the planning horizon into ecological damage and management expenditure. (F) Proportion of simulated trajectories in which the SDP selects no, moderate, or strong control at each time step.}\label{fig:fig-metapop}
 \end{figure}
 
 \subsection{4.3 Managing under imperfect detection}\label{managing-under-imperfect-detection}
 
-Illustrate POMDP.
+The previous worked examples assumed that the manager always knows the true invasion state before making a decision. In practice, this assumption is rarely satisfied. Invasive species are often difficult to detect, particularly at low abundance or during the early stages of an invasion. Decisions must therefore be made under uncertainty, using imperfect monitoring information rather than the true ecological state. Partially observable Markov decision processes (POMDPs) provide a natural framework for addressing this problem by combining ecological dynamics with an explicit model of the observation process (\citeproc{ref-chades2021pomdps}{Chadès et al. 2021}, \citeproc{ref-waring2024mee}{Waring et al. 2024}).
 
-\url{https://besjournals.onlinelibrary.wiley.com/doi/10.1111/2041-210X.14374}
-\url{https://besjournals.onlinelibrary.wiley.com/doi/10.1111/2041-210X.13692}
-
-In an ideal world, invasive species management would be based on perfect knowledge of the state of the system. Yet ecological systems are inherently difficult to monitor, leading to imperfect knowledge of the system and its state. While ongoing monitoring can reduce uncertainties associated with the state of the system, invasive species management often requires timely decisions. In these cases, partially observable Markov decision process (POMDP) models can be used. POMDPs build on MDPs, dealing with uncertainty in both the model and state of the system. However, POMDPs are more computationally and mathematically challenging to solve due to the continuous and high-dimensional state space. A detailed primer on developing POMDPs for ecological problems already exists (Chades et al 2021), so here we will keep our description simple.
-
-POMDPs differ from MDPs by including an observation state (O), observation function (Z), and initial belief state (\(b_0\)). The observation state includes the set of observations perceived by the manager, while the observation function represents the conditional probability of a manager observing o' given that action a lead to state s'. In cases where state uncertainty cannot be reduced, the observation function is independent from the actions taken, and thus dependent only on state s'. The initial belief represents the believed state of the system at a given time.
-
-Because the states are themselves unobservable, the state of the system must be tracked with belief states. At any point in time, the actual (unobservable) state of the system influences the immediate returns, state transitions, and observations, but do not influence actions. The belief state is updated based on observations, which subsequently inform the action(s) to be selected. Lastly, actions drive the state transitions, rewards, and may influence the observations.
-
-{[}I think having a diagram to show the difference between MDP and POMDP, like Figure 1 in Chades et al 2021 or Fig 2-3 in Williams \& Brown 2022, could be helpful{]}
-{[}Also from Chades et al 2021: ``In the language of statistics, POMDPs are models that describe optimal control of hidden Markov models (HMMs). In this framing, the partially observed states of the model are latent variables that are inferred from the (fully observable) observation states.''{]}
-
-Chades et al (2021) identified three types of management problems that POMDPs can be used to solve:
-- Exploiting current knowledge or reducing uncertainty: Classic dilemma where managers have to choose between investing in reducing state uncertainty or exploiting current knowledge.
-- Managing under imperfect detection: Assumes that managers have no means of reducing uncertainty, but managers can invest in management actions for which effectiveness varies across the state space.
-- Adaptive management: Where the dynamics of the system are not observable.
-The authors included an example for the first type of problem from a conservation perspective. Here, we'll focus on an example for managing under imperfect detection, continuing with our coypu case study.
-
-Going back to a simple example in invasive species management, imagine we have \ldots.
-Occupancy model with uncertain detectability
-
-The invasive species can either be established or absent, with possible observations defined as present or absent denoting if the species was observed in a given time step.
-
-Partially observable Markov decision processes (POMDPs) extend the standard Markov decision process framework to situations in which the true state of the system is not known with certainty. This is particularly relevant for invasive species management, where managers rarely know the exact status of an invasion. Absence of observations does not necessarily mean true absence, and management decisions often have to be made from imperfect monitoring data.
-
-Here, we illustrate the approach with a deliberately simple toy example inspired by coypu (\emph{Myocastor coypus}) management. The system can occupy one of three ecological states:
+Again, we illustrate the approach using a coypu example. The ecological system can occupy one of three invasion states,
 
 \[
-s_t \in \{\text{Eradicated}, \text{Contained}, \text{Established}\}.
+s_t \in
+\{\text{Eradicated},
+\text{Contained},
+\text{Established}\},
 \]
 
-These states represent a gradient from no animals present, or at least no animals remaining after management, to a low-abundance contained population, and finally to an established population generating high ecological or socio-economic damage. At each time step, the manager chooses one of three actions:
+while the manager chooses one of three management actions,
 
 \[
-a_t \in \{\text{Do nothing}, \text{Fertility control}, \text{Lethal control}\}.
+a_t \in
+\{\text{Do nothing},
+\text{Fertility control},
+\text{Lethal control}\}.
 \]
 
-Each action affects the probability that the system moves from its current state to a future state. This is described by a transition matrix:
+The ecological dynamics are described by the same transition probabilities used in the previous toy example. Doing nothing allows contained populations to become established, fertility control partially reduces invasion pressure, and lethal control provides the highest probability of returning the system towards eradication.
+
+Unlike the previous examples, the invasion state is no longer directly observable. Instead, after each management action the manager receives an imperfect observation,
 
 \[
-P_a(s,s') = \Pr(s_{t+1}=s' \mid s_t=s, a_t=a),
+o_t \in
+\{\text{Undetected},
+\text{Detected}\},
 \]
 
-where rows correspond to current states and columns to next states. For example, doing nothing is cheap but allows contained populations to become established, while an established population remains established in the absence of control. Fertility control partially reduces invasion pressure, whereas lethal control gives the highest probability of moving the system back towards the eradicated or contained states.
-
-Unlike a fully observable MDP, the manager does not directly observe the state \(s_t\). Instead, they receive an observation:
+whose probability depends on both the true ecological state and the management action,
 
 \[
-o_t \in \{\text{Absent}, \text{Present}\}.
+O_a(s,o)
+=
+\Pr(o_t=o \mid s_t=s,a_t=a).
 \]
 
-The observation process is governed by detection probabilities:
+In this illustrative example, active management improves detection because field operations increase opportunities to observe coypu. Consequently, detection probabilities are higher under fertility or lethal control than when no management is undertaken (Figure \ref{fig:fig-pomdp}A). Detection also increases with invasion severity, with established populations being more likely to be detected than contained populations.
+
+Because the true invasion state is unknown, decisions are based on a belief state, denoted \(b_t\), rather than on the ecological state itself. The belief state is a probability distribution over all possible invasion states,
 
 \[
-O_a(s,o) = \Pr(o_t=o \mid s_t=s, a_t=a).
-\]
-
-In the example, detection depends both on the true state and on the action taken. Detection is lower when no management is implemented, reflecting reduced monitoring effort. In contrast, both fertility control and lethal control are assumed to involve field activities that increase the probability of detecting coypu. Detection also increases with invasion status: observations of presence are more likely when the population is established than when it is contained.
-
-Because the true state is uncertain, decisions are based on a \textbf{belief state}, denoted \(b_t\). This belief state is a probability distribution over the possible ecological states:
-
-\[
-b_t(s) = \Pr(s_t=s \mid \text{past actions and observations}),
+b_t(s)
+=
+\Pr(s_t=s
+\mid
+\text{past actions and observations}),
 \]
 
 with
 
 \[
-\sum_s b_t(s) = 1.
+\sum_s b_t(s)=1.
 \]
 
-For instance, a belief state such as
+For example,
 
 \[
-b_t = (0.10, 0.15, 0.75)
+b_t=(0.10,\;0.15,\;0.75)
 \]
 
-means that, given all available information, the manager assigns probabilities 0.10, 0.15 and 0.75 to the system being eradicated, contained and established, respectively. In ecological terms, the manager strongly suspects that the invasion is established, but still acknowledges uncertainty.
+indicates that the manager assigns probabilities of 0.10, 0.15 and 0.75 to the invasion being eradicated, contained and established, respectively. Geometrically, every possible belief corresponds to a point within the triangular belief simplex shown in Figure \ref{fig:fig-pomdp}B. Rather than mapping ecological states to management actions, the optimal policy maps belief states to actions.
 
-The objective is to choose actions that maximise expected long-term reward. Rewards combine ecological or socio-economic damage and management cost. In this example, the reward is defined as a negative cost:
+After each observation, the belief state is updated using Bayes' rule by combining the previous belief, the ecological transition model and the observation model. Intuitively, the manager first predicts how the invasion is expected to evolve under the chosen management action and then revises this prediction after observing whether coypu are detected or remain undetected. Figure \ref{fig:fig-pomdp}C illustrates this process for a representative belief state. Following a non-detection, the probability that the invasion has been eradicated increases substantially, whereas a detection shifts belief towards the contained and established states. These updated beliefs then determine the next management decision.
+
+As in the previous examples, rewards are defined as the negative of total costs,
 
 \[
-R(s,a) = -\{D(s) + C(a)\},
+R(s,a)
+=
+-\{D(s)+C(a)\},
 \]
 
-where \(D(s)\) is the damage associated with state \(s\), and \(C(a)\) is the cost of action \(a\). Thus, higher rewards correspond to better outcomes, because they represent lower total damage and lower management cost. Eradication has no damage, containment has moderate damage, and establishment has high damage. Doing nothing has no management cost, fertility control has an intermediate cost, and lethal control has the highest cost.
+where ecological damage increases from eradicated to established states and management costs increase from doing nothing to lethal control. The POMDP is solved using the \texttt{pomdp} package (\citeproc{ref-hahsler2025}{Hahsler and Cassandra 2025}), which computes an approximately optimal policy over the continuous belief space using sets of \(\alpha\)-vectors. For any current belief state, the recommended management action is simply the one with the highest expected long-term value.
 
-The POMDP solution identifies an optimal policy, that is, a rule mapping belief states to actions:
+To illustrate the benefit of explicitly accounting for imperfect detection, we compared the POMDP policy with two alternative strategies. The first is a naive strategy that bases decisions solely on the most recent observation (detected versus undetected), implicitly assuming that observations perfectly reveal the invasion state. The second is an idealized benchmark in which the true ecological state is known without error. Repeated forward simulations show that the POMDP consistently reduces long-term management costs relative to the naive strategy, although some performance is inevitably lost compared with the unrealistic case of perfect information (Figure \ref{fig:fig-pomdp}D). This example highlights the central advantage of POMDPs: management decisions are informed not only by what has been observed, but also by the uncertainty associated with those observations.
 
-\[
-\pi^*(b_t) = \arg\max_a \; V(b_t,a),
-\]
-
-where the value of a belief state is the maximum expected discounted reward over current and future decisions:
-
-\[
-V(b_t) = \max_{a_t} \left[ \sum_s b_t(s) R(s,a_t)
-+ \gamma \sum_o \Pr(o_{t+1}=o \mid b_t,a_t) V(b_{t+1}) \right].
-\]
-
-Here, \(\gamma\) is the discount factor, set to 0.95 in the example, meaning that future outcomes are valued almost as much as immediate outcomes. The updated belief state \(b_{t+1}\) is obtained by combining the transition model and the observation model using Bayes' rule. In words, the manager first predicts how the system may change under the chosen action, then updates their belief after observing whether coypu are detected or not.
-
-The model can be solved using standard POMDP algorithms. In the code, the same problem is implemented with the \texttt{pomdp} package and with \texttt{sarsop}. The solution is represented by a set of \(\alpha\)-vectors. For any belief state \(b\), the value of each candidate policy vector is obtained by a dot product:
-
-\[
-V_i(b) = b^\top \alpha_i,
-\]
-
-and the optimal action is the one associated with the vector giving the highest value:
-
-\[
-\pi^*(b) = a_{i^*}, \qquad i^* = \arg\max_i b^\top \alpha_i.
-\]
-
-This makes the example useful pedagogically: rather than assuming that the invasion status is known, the decision explicitly depends on the manager's uncertainty. When the belief state places high probability on establishment, more intensive control may become optimal despite its higher immediate cost. Conversely, if the system is probably eradicated or only weakly invaded, the optimal policy may favour less costly actions. The POMDP therefore formalises a key challenge in invasive species management: acting adaptively when both ecological dynamics and monitoring information are uncertain.
+\begin{figure}
+\includegraphics[width=1\linewidth]{../figures/figure4} \caption{Managing invasive species under imperfect detection using a partially observable Markov decision process (POMDP). (A) Probability of detecting coypu as a function of the true invasion state under each management action. Active management is assumed to improve detection relative to no intervention. (B) Optimal management policy across the belief simplex. Each point represents a possible belief state (probability distribution over the three invasion states), and colours indicate the optimal management action. The white point corresponds to the example belief state used in the text. (C) Bayesian updating of the belief state following either a non-detection or a detection. The updated belief depends jointly on the previous belief, the ecological transition model and the observation model. (D) Mean cumulative management cost through time under three strategies: a naive observation-based policy, the optimal POMDP policy, and an ideal benchmark assuming perfect information. Shaded areas represent 90\% simulation intervals.}\label{fig:fig-pomdp}
+\end{figure}
 
 \subsection{4.4 Learning while managing under model uncertainty with adaptive management}\label{learning-while-managing-under-model-uncertainty-with-adaptive-management}
 
 Decision theoretic methods can be used to make control decisions not only in the face of uncertainty, but also to reduce uncertainty over time. Adaptive management, or ``learning by doing'', involves making decisions to achieve a management objective while simultaneously learning about system dynamics to improve future management success (\citeproc{ref-holling1978adaptive}{Holling 1978}, \citeproc{ref-walters1986adaptive}{Walters 1986}, \citeproc{ref-conroy2013decision}{Conroy and Peterson 2013}). Adaptive management approaches differ based on whether they learn only from the past (passive adaptive management) or anticipate future learning (active adaptive management) (\citeproc{ref-chades2017optimization}{Chadès et al. 2017}).
+
+So far, we assumed that the ecological model governing population dynamics was known. In reality, managers are often uncertain about the mechanisms driving population growth. Adaptive management addresses this problem by treating alternative ecological models as competing hypotheses, updating their credibility as monitoring data accumulate, and adapting management decisions accordingly.
 
 Here we apply adaptive management strategies to inform control decisions for a single coypu population and to learn about and reduce uncertainty in the per-capita growth rate. We will use the following discrete-time population model, where \(r\) is the intrinsic rate of growth; \(K\) is the carrying capacity; \(q(u)\) is the harvest rate as a function of action \(u\); \(R\) is the per-capita growth rate; \(m\) describes whether the per-capita growth rate is linear, concave, or convex; and \(\epsilon\) is log-normally distributed noise:
 
@@ -645,7 +615,7 @@ R(N_t) = r \times (1 - (N_t / K) ^ m)
 
 If \(m > 1\), most density---dependent change occurs at high population levels (close to the carrying capacity), which is theoretically common for species with life history strategies typical of large mammals. If \(m < 1\), most density-dependent change occurs at low population levels, which is theoretically common for species with life history strategies typical of insects and some fishes (\citeproc{ref-fowler1981density}{Fowler 1981}).
 
-We will consider a model set with five possible values of \(m\). This model bounds, but does not contain, the true model we will use to simulate dynamics in the passive adaptive management approach (Figure 1A). These different values of \(m\) result in different optimal policies when system dynamics are known perfectly (Figure 1B).
+We will consider a model set with five possible values of \(m\). This model bounds, but does not contain, the true model we will use to simulate dynamics in the passive adaptive management approach (Figure \ref{fig:model-set}A). These different values of \(m\) result in different optimal policies when system dynamics are known perfectly (Figure \ref{fig:model-set}B).
 
 \begin{figure}[H]
 
@@ -653,12 +623,12 @@ We will consider a model set with five possible values of \(m\). This model boun
 
 }
 
-\caption{$A.$ Model set representing structural uncertainty in the per-capita growth rate. $B.$ Optimal state-dependent removal actions assuming perfectly known population dynamics, solved with stochastic dynamic programming. In both panels, colors correpond to different values of $m$ in the model set, and the red dashed line corresponds to the true model dynamics used for simulation in the passive adaptive management approach.}\label{fig:model-set}
+\caption{Structural uncertainty in population dynamics and its consequences for optimal management. (A) Model set representing structural uncertainty in the per-capita growth rate. (B) Optimal state-dependent removal policies assuming each model is known perfectly and solved using stochastic dynamic programming. Colours correspond to different values of $m$ in the model set, and the red dashed line represents the true population dynamics used in the passive adaptive management example.}\label{fig:model-set}
 \end{figure}
 
 \subsubsection{4.4.1 Value of Information}\label{value-of-information}
 
-For a decision maker, uncertainty may not be important to resolve; learning may not be inherently valuable if it does not result in improved management outcomes. A Value of Information (VoI) analysis \emph{a priori} quantifies the importance of reducing uncertainty, or the expected improvement on management objectives if uncertainty were resolved (\citeproc{ref-raiffa2000applied}{Raiffa and Schlaifer 2000}). If the VOI is high, an adaptive management approach is typically justified.
+For a decision maker, uncertainty may not be important to resolve; learning may not be inherently valuable if it does not result in improved management outcomes. A Value of Information (VoI) analysis \emph{a priori} quantifies the importance of reducing uncertainty, or the expected improvement on management objectives if uncertainty were resolved (\citeproc{ref-raiffa2000applied}{Raiffa and Schlaifer 1961}). If the VOI is high, an adaptive management approach is typically justified.
 
 The expected value of perfect information (EVPI) is measured as the difference between 1) \(PI\), or the expected value once uncertainty has been resolved because the optimal action is chosen after knowing which model best describes the system, and 2) \(NL\), or the expected value in the face of uncertainty because the optimal action is chosen with no learning about the system (\citeproc{ref-runge2011uncertainty}{Runge et al. 2011}). The difference between these terms, \(\text{EVPI} = PI - NL\), is the expected improvement in management performance due to acquiring perfect information.
 
@@ -686,7 +656,7 @@ During the updating step, the resulting state, \(s_{t+1}\), after taking action 
 b_{t+1}(k|s_t, a_t, s_{t+1}, b_t) = \frac{P_k(s_{t+1}|s_t,a_t)b_t(k)}{\sum_{k \in K}P_k(s_{t+1}|s_t,a_t)b_t(k)}
 \]
 
-For coypu control decisions, we solve the passive adaptive management problem by updating the belief about the coypu population dynamics to improve management performance over time. We begin with an equal belief, \(b_{t=1}(k) = 1 / 5\), across the five models in the model set (Figure 1A). We iterate between 1) calculating the optimal action given the current belief state, 2) implementing the optimal action and simulating the next state, \(s_{t+1}\), given the true population dynamics, and 3) updating the belief state based observing the next state given action \(a_t\). Here we assume the state is perfectly observed. We simulate the application of passive adaptive management over 30 time steps. The belief in each model changes over time (Figure 2A), resulting in the highest belief for the two models closest to the true population dynamics \(m = 1\) and \(m = 1.3\) (Figure 1A). Through updating the belief state over time and implementing the optimal action given the current belief state, the management performance improves over time (Figure 2B).
+For coypu control decisions, we solve the passive adaptive management problem by updating the belief about the coypu population dynamics to improve management performance over time. We begin with an equal belief, \(b_{t=1}(k) = 1 / 5\), across the five models in the model set (Figure 1A). We iterate between 1) calculating the optimal action given the current belief state, 2) implementing the optimal action and simulating the next state, \(s_{t+1}\), given the true population dynamics, and 3) updating the belief state based observing the next state given action \(a_t\). Here we assume the state is perfectly observed. We simulate the application of passive adaptive management over 30 time steps. The belief in each model changes over time (Figure 2A), resulting in the highest belief for the two models closest to the true population dynamics \(m = 1\) and \(m = 1.3\) (Figure \ref{fig:passive-plot}A). Through updating the belief state over time and implementing the optimal action given the current belief state, the management performance improves over time (Figure \ref{fig:passive-plot}B).
 
 \begin{figure}[H]
 
@@ -694,12 +664,14 @@ For coypu control decisions, we solve the passive adaptive management problem by
 
 }
 
-\caption{$A.$ Belief state for each model $k$ at time $t$. Colors correspond to different values of $m$, representing structural uncertainty in the per-capita growth rate. $B.$ Reward, $r(s_t,a_t)$, at time $t$ in passive adaptive management problem.}\label{fig:passive-plot}
+\caption{Passive adaptive management under structural uncertainty. (A) Evolution of the belief assigned to each candidate population model through time. Colours correspond to different values of $m$, representing alternative hypotheses about density dependence. (B) Reward obtained through time as management decisions are updated using the current belief state. As learning progresses, belief concentrates on the models closest to the true dynamics, leading to improved management performance.}\label{fig:passive-plot}
 \end{figure}
 
 \subsubsection{4.4.3 Active adaptive management}\label{active-adaptive-management}
 
-In contrast to passive adaptive management, active adaptive management does not rely only on past experience and instead explicitly accounts for future learning opportunities to maximize the chance of achieving the objective. Instead of an optimization at every time step as in passive adaptive management, the optimization occurs once and requires that the trajectory of belief \(b_t\) to \(b_{t+1}\) and state transitions be calculated for all time steps (\citeproc{ref-chades2017optimization}{Chadès et al. 2017}). The optimal value function \(V^*\) that characterizes the performance of a policy is a function of both the state of the system \(s_t\) and belief over the models \(b_t\):
+Passive adaptive management chooses the action that is optimal given current knowledge, then learns from the outcome. In contrast, active adaptive management explicitly values future learning when selecting today's action. Management actions are therefore chosen not only because they improve the ecological state immediately, but also because they are expected to reveal information that will improve future decisions and maximize the chance of achieving the objective.
+
+Instead of an optimization at every time step as in passive adaptive management, the optimization occurs once and requires that the trajectory of belief \(b_t\) to \(b_{t+1}\) and state transitions be calculated for all time steps (\citeproc{ref-chades2017optimization}{Chadès et al. 2017}). The optimal value function \(V^*\) that characterizes the performance of a policy is a function of both the state of the system \(s_t\) and belief over the models \(b_t\):
 
 \[
 V^*(s_t,b_t) = \text{max}_{a \in A} \left\{ \sum_{k \in K}b_t(k)r(s_t, a_t) + \gamma \sum_{s_{t+1}} \left\{\sum_{k\in K}b_t(k)P_k(s_{t+1}|s_t, a_t) \times V^*(s_{t+1},b_t)\right\} \right\}
@@ -711,7 +683,7 @@ For coypu control decisions, we solve the active adaptive management problem by 
 
 We also use the coypu example to demonstrate the ``dual control problem'' (\citeproc{ref-walters1978ecological}{Walters and Hilborn 1978}). A management action altering a poorly understood system can produce two types of benefits: 1) short-term payoffs and 2) learning about the system so as to improve payoffs in the long-term. There is a trade-off between these two benefits, as large disturbances allow for rapid learning yet may incur high costs; the challenge is to optimally balance these benefits. Here we explore the dual control problem by selecting two different discount factors, \(\gamma \in \{0.95, 0.75 \}\). The higher of which represents a decision maker who values long-term rewards more highly, and the lower of which represents a decision maker who values short-term rewards more highly.
 
-The active adaptive management solution describes the optimal action (\(a_t\), removal effort), given the state (\(s_t\), coypu abundance), initial belief (\(b_{t=1}\), uniform across models), and discount factor (Figure 3). The solution differs depending on how future rewards are discounted in the optimization. At low coypu abundance, the optimal removal effort increases as the discount factor increases. With a higher discount factor, future system states are valued more highly; even though a higher removal effort is costly today, this higher removal effort will accelerate learning to yield higher rewards in the long term (Figure 3A). In contrast, with a lower discount factor, active learning becomes less useful, as the price paid for not following the passive-adaptive (optimal right now) solution exceeds the information gained from learning (Figure 3B).
+The active adaptive management solution describes the optimal action (\(a_t\), removal effort), given the state (\(s_t\), coypu abundance), initial belief (\(b_{t=1}\), uniform across models), and discount factor (Figure 3). The solution differs depending on how future rewards are discounted in the optimization. At low coypu abundance, the optimal removal effort increases as the discount factor increases. With a higher discount factor, future system states are valued more highly; even though a higher removal effort is costly today, this higher removal effort will accelerate learning to yield higher rewards in the long term (Figure \ref{fig:active-plot}A). In contrast, with a lower discount factor, active learning becomes less useful, as the price paid for not following the passive-adaptive (optimal right now) solution exceeds the information gained from learning (Figure \ref{fig:active-plot}B).
 
 \begin{figure}[H]
 
@@ -719,22 +691,20 @@ The active adaptive management solution describes the optimal action (\(a_t\), r
 
 }
 
-\caption{$A.$ State-dependent active adaptive management solution, given an initial uniform belief across models and a higher discount factor representing a decision maker who values long-term payoffs more highly. $B.$ State-dependent active adaptive management solution, given an initial uniform belief across models and a lower discount factor representing a decision maker who values short-term payoffs more highly.}\label{fig:active-plot}
+\caption{Active adaptive management balances immediate management performance with future learning opportunities. (A) Optimal state-dependent removal policy for an initial uniform belief across models and a high discount factor, representing a decision maker who places greater value on future rewards. (B) Optimal policy for the same initial belief but a lower discount factor, representing a decision maker who prioritizes short-term rewards.}\label{fig:active-plot}
 \end{figure}
 
-\section{5. Conclusion}\label{conclusion}
+\section{6. Conclusions}\label{conclusions}
 
-Faire une conclusion courte, voir les exemples de How-to. Rappeler les main messages, how is SDM/SDP relevant et qqs perspectives. In perspective, say that spatial example can be used to model competition or predator-prey, or host-pathogen / disease thing. See SDP-species-interactions/ in Olivier biblio repo.
+Stochastic dynamic programming provides a powerful and flexible framework for linking ecological models directly to management decisions. Rather than focusing solely on predicting invasion dynamics, SDP identifies state-dependent management policies that explicitly account for ecological uncertainty, future consequences of present actions, and the trade-offs between management costs and ecological impacts (\citeproc{ref-bellman1957dynamic}{Bellman 1957}, \citeproc{ref-williams1982analysis}{Williams 1982}). The worked examples presented here illustrate how the same decision-theoretic framework can accommodate progressively richer sources of uncertainty, from stochastic population dynamics and spatial spread to imperfect detection and uncertainty about ecological processes themselves. Together, these approaches provide a coherent framework for making transparent, reproducible, and objective management decisions for invasive species.
 
-Structured decision making: {[}Abby: Maybe a good place to describe structured decision making and how the methods we present are mostly optimization methods useful for evaluating the consequences of actions (i.e., we're not addressing the aspects of SDM such as problem framing, eliciting objectives; we're instead assuming this has already been done){]}
+Several methodological developments offer promising opportunities for extending these approaches. Future work could focus on scaling dynamic programming methods to larger spatial systems and higher-dimensional state spaces through approximate dynamic programming and reinforcement learning (\citeproc{ref-powellApproximateDynamicProgramming2011}{Powell 2011}, \citeproc{ref-bertsekas2012dynamic}{Bertsekas 2012}), improving the representation of ecological processes and observation uncertainty, and incorporating multiple management objectives such as biodiversity conservation, ecosystem services, economic costs, and social acceptability within a unified decision framework (\citeproc{ref-gregory2012structured}{Gregory et al. 2012}).
 
-(\citeproc{ref-conroy2013decision}{Conroy and Peterson 2013}, \citeproc{ref-StructuredDecisionMaking2020}{Runge et al. 2020}, \citeproc{ref-hemming2021}{Hemming et al. 2022})
-
-Why and what (all)
-
-Despite the flexibility of stochastic dynamic programming, its application to invasive species control decisions can be limited. First, the amount of biological realism in the model is constrained by computational demands of the optimization process, due to `the curse of dimensionality' where the size of the DP problem increases exponentially with the number of state variables (\citeproc{ref-walters1978ecological}{Walters and Hilborn 1978}). While useful for decision making under uncertainty, these approaches require information often unknown in invasive species management, including specified probabilistic predictions about the system dynamics, effects of management policies, and benefits of ecosystem states (\citeproc{ref-polasky2011decision}{Polasky et al. 2011}). Though adaptive management can be useful when system dynamics are unknown, the ability to learn and make rational decisions requires that the true system dynamics are contained within, bounded by, or close to the model set used to capture uncertainty (\citeproc{ref-runge2016detecting}{Runge et al. 2016}). These approaches will fall short if the true system dynamics lie far outside the set of articulated hypotheses, or if factors like climate change causes the system to change in unanticipated ways (\citeproc{ref-tucker2021optimal}{Tucker and Runge 2021}, \citeproc{ref-keller2025transition}{Keller et al. 2025}).
+Although stochastic dynamic programming remains computationally demanding for complex ecological systems, continuing advances in optimization algorithms, statistical modelling, and computing power are rapidly expanding its practical applicability (\citeproc{ref-nicol2011beyond}{Nicol and Chadès 2011}, \citeproc{ref-bertsekas2012dynamic}{Bertsekas 2012}). Ultimately, successful invasive species management depends not only on understanding ecological systems, but also on making better decisions. By explicitly linking ecological predictions to management actions, stochastic dynamic programming provides a principled framework for translating ecological knowledge into effective management. We hope that the worked examples and reproducible \texttt{R} code presented here will encourage ecologists and practitioners to adopt decision-theoretic approaches and help bridge the gap between ecological prediction and conservation action.
 
 \section{Acknowledgments}\label{acknowledgments}
+
+\textbf{Add what we need here.}
 
 \section{Conflict of interest statement}\label{conflict-of-interest-statement}
 
@@ -758,6 +728,12 @@ Baxter, P. W. J., and H. P. Possingham. 2011. Optimizing search strategies for i
 \bibitem[\citeproctext]{ref-baxter2007optimal}
 Baxter, P. W. J., C. Wilcox, M. A. McCarthy, and H. P. Possingham. 2007. Optimal management of an annual weed: A stochastic dynamic programming approach. Pages 2223--2229 Proceedings of MODSIM 2007 international congress on modelling and simulation. Modelling; Simulation Society of Australia; New Zealand.
 
+\bibitem[\citeproctext]{ref-bellman1957dynamic}
+Bellman, R. 1957. Dynamic programming. Princeton University Press, Princeton, NJ.
+
+\bibitem[\citeproctext]{ref-bertsekas2012dynamic}
+Bertsekas, D. P. 2012. Dynamic programming and optimal control. Fourth edition. Athena Scientific, Belmont, MA.
+
 \bibitem[\citeproctext]{ref-bogichSampleEradicateCost2008}
 Bogich, T. L., A. M. Liebhold, and K. Shea. 2008. To sample or eradicate? {A} cost minimization model for monitoring and managing an invasive species. Journal of Applied Ecology 45:1134--1142.
 
@@ -777,7 +753,7 @@ Chadès, I., S. Nicol, T. M. Rout, M. Péron, Y. Dujardin, J.-B. Pichancourt, A.
 Chadès, I., L. V. Pascal, S. Nicol, C. S. Fletcher, and J. Ferrer-Mestres. 2021. A primer on partially observable markov decision processes (POMDPs). Methods in Ecology and Evolution 12:2058--2072.
 
 \bibitem[\citeproctext]{ref-chenery2020reducing}
-Chenery, A. M., L. Blackwood, C. M. Tortorelli, and others. 2020. Reducing uncertainty in species management: Forecasting secondary spread with expert opinion and mechanistic models. Ecosphere 11:e03011.
+Chenery, E. S., D. A. R. Drake, and N. E. Mandrak. 2020. Reducing uncertainty in species management: Forecasting secondary spread with expert opinion and mechanistic models. Ecosphere 11:e03011.
 
 \bibitem[\citeproctext]{ref-conroy2013decision}
 Conroy, M. J., and J. T. Peterson. 2013. Decision making in natural resource management: A structured, adaptive approach. John Wiley \& Sons.
@@ -800,20 +776,20 @@ Gimenez, O. 2025. Estimating invasive rodent abundance using removal data and hi
 \bibitem[\citeproctext]{ref-gregory2012structured}
 Gregory, R., L. Failing, M. Harstone, G. Long, T. McDaniels, and D. Ohlson. 2012. Structured decision making: A practical guide to environmental management choices. Wiley-Blackwell, Chichester, West Sussex.
 
+\bibitem[\citeproctext]{ref-hahsler2025}
+Hahsler, M., and A. R. Cassandra. 2025. Pomdp: A computational infrastructure for partially observable markov decision processes. The R Journal 16:116--133.
+
 \bibitem[\citeproctext]{ref-haight2010optimal}
 Haight, R. G., and S. Polasky. 2010. Optimal control of an invasive species with imperfect information about the level of infestation. Resource and Energy Economics 32:519--533.
 
 \bibitem[\citeproctext]{ref-hauserExperimentalPrecautionaryAdaptive2008}
 Hauser, C. E., and H. P. Possingham. 2008. Experimental or precautionary? {Adaptive} management over a range of time horizons. Journal of Applied Ecology 45:72--81.
 
-\bibitem[\citeproctext]{ref-hemming2021}
-Hemming, V., A. E. Camaclang, M. S. Adams, M. Burgman, K. Carbeck, J. Carwardine, I. Chadès, L. Chalifour, S. J. Converse, L. N. K. Davidson, G. E. Garrard, R. Finn, J. R. Fleri, J. Huard, H. J. Mayfield, E. M. Madden, I. Naujokaitis-Lewis, H. P. Possingham, L. Rumpff, M. C. Runge, D. Stewart, V. J. D. Tulloch, T. Walshe, and T. G. Martin. 2022. An introduction to decision science for conservation. Conservation Biology 36:e13868.
-
 \bibitem[\citeproctext]{ref-holling1978adaptive}
 Holling, C. S. 1978. Adaptive environmental assessment and management. John Wiley \& Sons.
 
 \bibitem[\citeproctext]{ref-hyderEcologySocietyIntegrating2008}
-Hyder, A., B. Leung, and Z. Miao. 2008. Ecology and {Society}: {Integrating Data}, {Biology}, and {Decision Models} for {Invasive Species Management}: {Application} to {Leafy Spurge} ({\emph{Euphorbia}}{ \emph{Esula}}). Ecology and Society 13.
+Hyder, A., B. Leung, and Z. Miao. 2008. {Integrating Data}, {Biology}, and {Decision Models} for {Invasive Species Management}: {Application} to {Leafy Spurge} ({\emph{Euphorbia}}{ \emph{Esula}}). Ecology and Society 13.
 
 \bibitem[\citeproctext]{ref-hyytiainenOptimizationFrameworkAddressing2013}
 Hyytiäinen, K., M. Lehtiniemi, J. K. Niemi, and K. Tikka. 2013. An optimization framework for addressing aquatic invasive species. Ecological Economics 91:69--79.
@@ -825,7 +801,7 @@ Keller, A. G., T. D. Counihan, E. D. Grosholz, and C. Boettiger. 2025. The trans
 Kurniawati, H., D. Hsu, W. S. Lee, and others. 2008. Sarsop: Efficient point-based pomdp planning by approximating optimally reachable belief spaces. Robotics: Science and systems. Zurich, Switzerland.
 
 \bibitem[\citeproctext]{ref-leungOuncePreventionPound2002}
-Leung, B., D. M. Lodge, D. Finnoff, J. F. Shogren, M. A. Lewis, and G. Lamberti. 2002. An ounce of prevention or a pound of cure: Bioeconomic risk analysis of invasive species. Proceedings. Biological Sciences 269:2407--2413.
+Leung, B., D. M. Lodge, D. Finnoff, J. F. Shogren, M. A. Lewis, and G. Lamberti. 2002. An ounce of prevention or a pound of cure: Bioeconomic risk analysis of invasive species. Proceedings of the Royal Society B: Biological Sciences 269:2407--2413.
 
 \bibitem[\citeproctext]{ref-marescotComplexDecisionsMade2013}
 Marescot, L., G. Chapron, I. Chadès, P. L. Fackler, C. Duchamp, E. Marboutin, and O. Gimenez. 2013. Complex decisions made simple: A primer on stochastic dynamic programming. Methods in Ecology and Evolution 4:872--884.
@@ -842,11 +818,14 @@ Nicol, S., and I. Chadès. 2012. Which states matter? An application of an intel
 \bibitem[\citeproctext]{ref-polasky2011decision}
 Polasky, S., S. R. Carpenter, C. Folke, and B. Keeler. 2011. Decision-making under great uncertainty: Environmental management in an era of global change. Trends in ecology \& evolution 26:398--404.
 
+\bibitem[\citeproctext]{ref-powellApproximateDynamicProgramming2011}
+Powell, W. B. 2011. Approximate dynamic programming: Solving the curses of dimensionality. Second edition. John Wiley \& Sons, Hoboken, NJ.
+
 \bibitem[\citeproctext]{ref-Petr2020}
 Pyšek, P., P. E. Hulme, D. Simberloff, S. Bacher, T. M. Blackburn, J. T. Carlton, W. Dawson, F. Essl, L. C. Foxcroft, P. Genovesi, J. M. Jeschke, I. Kühn, A. M. Liebhold, N. E. Mandrak, L. A. Meyerson, A. Pauchard, J. Pergl, H. E. Roy, H. Seebens, M. van Kleunen, M. Vilà, M. J. Wingfield, and D. M. Richardson. 2020. Scientists' warning on invasive alien species. Biological Reviews 95:1511--1534.
 
 \bibitem[\citeproctext]{ref-raiffa2000applied}
-Raiffa, H., and R. Schlaifer. 2000. Applied statistical decision theory. John Wiley \& Sons.
+Raiffa, H., and R. Schlaifer. 1961. Applied statistical decision theory. Boston: Clinton Press, Inc.
 
 \bibitem[\citeproctext]{ref-regan2002taxonomy}
 Regan, H. M., M. Colyvan, and M. A. Burgman. 2002. A taxonomy and treatment of uncertainty for ecology and conservation biology. Ecological Applications 12:618--628.
@@ -880,6 +859,12 @@ Walters, C. J. 1986. Adaptive management of renewable resources. Macmillan Publi
 
 \bibitem[\citeproctext]{ref-walters1978ecological}
 Walters, C. J., and R. Hilborn. 1978. Ecological optimization and adaptive management. Annual review of Ecology and Systematics 9:157--188.
+
+\bibitem[\citeproctext]{ref-waring2024mee}
+Waring, T. K., V. L. J. Somers, M. A. McCarthy, and C. M. Baker. 2024. When to monitor or control: Informed invasive species management using a partially observable markov decision process (POMDP) framework. Methods in Ecology and Evolution 15:1667--1676.
+
+\bibitem[\citeproctext]{ref-williams1982analysis}
+Williams, B. K. 1982. Optimal stochastic control in natural resource management: Framework and examples. Ecological Modelling 16:275--297.
 
 \bibitem[\citeproctext]{ref-williams2011adaptive}
 Williams, B. K., M. J. Eaton, and D. R. Breininger. 2011. Adaptive resource management and the value of information. Ecological Modelling 222:3429--3436.
