@@ -163,34 +163,128 @@ u_example <- 0.6
 # Abundance grid
 N <- seq(0, 2000, length.out = 300)
 
-# Components
-damage  <- 0.1 * N + 0.001 * N^2
-penalty <- ifelse(N > N_tol, 2000 * (N - N_tol) / N_tol, 0)
+# Cost components
+damage <- 0.1 * N + 0.001 * N^2
+
+penalty <- ifelse(
+  N > N_tol,
+  2000 * (N - N_tol) / N_tol,
+  0
+)
+
 damage_plus_penalty <- damage + penalty
-control_cost <- rep(50 * u_example + 200 * u_example^2, length(N))
 
-# Long format (without plotting penalty)
-df_long <- rbind(
-  data.frame(N = N, component = "Damage", value = damage),
-  data.frame(N = N, component = "Total cost (damage + penalty)", value = damage_plus_penalty),
-  data.frame(N = N, component = "Control cost (u = 0.6)", value = control_cost)
+control_cost_value <- 50 * u_example + 200 * u_example^2
+
+# Data for plotting
+df_cost <- rbind(
+  data.frame(
+    N = N,
+    component = "Damage",
+    value = damage
+  ),
+  data.frame(
+    N = N,
+    component = "Damage + penalty",
+    value = damage_plus_penalty
+  )
 )
 
-df_long$component <- factor(
-  df_long$component,
-  levels = c("Damage", "Total cost (damage + penalty)", "Control cost (u = 0.6)")
+df_cost$component <- factor(
+  df_cost$component,
+  levels = c("Damage", "Damage + penalty")
 )
 
-fig1b <- ggplot(df_long, aes(x = N, y = value, linetype = component)) +
+# Values near the right edge for label placement
+x_label <- 1800
+
+y_damage_label <-
+  0.1 * x_label +
+  0.001 * x_label^2
+
+y_penalty_label <-
+  y_damage_label +
+  2000 * (x_label - N_tol) / N_tol
+
+
+fig1b <- ggplot(
+  df_cost,
+  aes(x = N, y = value, linetype = component)
+) +
+  
   geom_line(linewidth = 0.9) +
-  geom_vline(xintercept = N_tol, linetype = "dotted") +
+  
+  # Control cost
+  geom_hline(
+    yintercept = control_cost_value,
+    linetype = "dotdash",
+    linewidth = 0.7
+  ) +
+  
+  # Tolerance threshold
+  geom_vline(
+    xintercept = N_tol,
+    linetype = "dotted",
+    linewidth = 0.7
+  ) +
+  
+  # Threshold annotation
+  annotate(
+    "text",
+    x = N_tol + 30,
+    y = 5900,
+    label = "N[tol] == 400",
+    parse = TRUE,
+    hjust = 0,
+    size = 3
+  ) +
+  
+  # Curve labels
+  annotate(
+    "text",
+    x = x_label,
+    y = y_penalty_label + 450,
+    label = "Damage + penalty",
+    hjust = 1,
+    size = 3
+  ) +
+  
+  annotate(
+    "text",
+    x = x_label,
+    y = y_damage_label + 300,
+    label = "Damage",
+    hjust = 1,
+    size = 3
+  ) +
+  
+  annotate(
+    "text",
+    x = x_label,
+    y = control_cost_value + 320,
+    label = "Control cost",
+    hjust = 1,
+    size = 3
+  ) +
+  
+  scale_linetype_manual(
+    values = c(
+      "Damage" = "solid",
+      "Damage + penalty" = "dashed"
+    )
+  ) +
+  
   labs(
     x = "Abundance N",
-    y = "Immediate cost",
-    linetype = NULL
+    y = "Immediate cost"
   ) +
+  
+  guides(linetype = "none") +
+  
   theme_minimal() +
+  
   ggtitle("B.")
+
 fig1b
 
 # -----------------------------#

@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.28 (TeX Live 2025) (preloaded format=pdflatex 2026.2.26)  7 AUG 2026 11:57
+This is pdfTeX, Version 3.141592653-2.6-1.40.28 (TeX Live 2025) (preloaded format=pdflatex 2026.2.26)  7 AUG 2026 12:27
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -612,15 +612,15 @@ L3 programming layer <2026-01-19>
  ***********
  ) 
 Here is how much of TeX's memory you used:
- 15037 strings out of 469471
- 237763 string characters out of 5466955
- 709337 words of memory out of 5000000
+ 15034 strings out of 469471
+ 237739 string characters out of 5466955
+ 709403 words of memory out of 5000000
  43014 multiletter control sequences out of 15000+600000
- 690214 words of font info for 349 fonts, out of 8000000 for 9000
+ 690065 words of font info for 347 fonts, out of 8000000 for 9000
  36 hyphenation exceptions out of 8191
  83i,12n,93p,1510b,572s stack positions out of 10000i,1000n,20000p,200000b,200000s
  </Users/oliviergimenez/Library/TinyTeX/texmf-var/fonts/pk/ljfour/jknappen/ec/ectt1095.600pk> </Users/oliviergimenez/Library/TinyTeX/texmf-var/fonts/pk/ljfour/jknappen/ec/ectt1000.600pk> </Users/oliviergimenez/Library/TinyTeX/texmf-var/fonts/pk/ljfour/jknappen/ec/ecss0800.450pk></Users/oliviergimenez/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></Users/oliviergimenez/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></Users/oliviergimenez/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></Users/oliviergimenez/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></Users/oliviergimenez/Library/TinyTeX/texmf-dist/fonts/type1/public/mathpazo/fplmr.pfb></Users/oliviergimenez/Library/TinyTeX/texmf-dist/fonts/type1/public/mathpazo/fplmri.pfb></Users/oliviergimenez/Library/TinyTeX/texmf-dist/fonts/type1/urw/palatino/uplb8a.pfb></Users/oliviergimenez/Library/TinyTeX/texmf-dist/fonts/type1/urw/palatino/uplr8a.pfb></Users/oliviergimenez/Library/TinyTeX/texmf-dist/fonts/type1/urw/palatino/uplri8a.pfb>
-Output written on tuto-sdm-invasive-species.pdf (41 pages, 1998572 bytes).
+Output written on tuto-sdm-invasive-species.pdf (41 pages, 2037112 bytes).
 PDF statistics:
  544 PDF objects out of 1000 (max. 8388607)
  445 compressed objects within 5 object streams
