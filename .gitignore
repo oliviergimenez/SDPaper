@@ -5,12 +5,10 @@
 .DS_Store
 biblio
 SDPtalk
-.gitignore
-manuscript/feedback
-manuscript/out
-manuscript/output/figures
+manuscript/feedback/
+manuscript/out/
+manuscript/output/figures/
 manuscript/*.key
 manuscript/bellman1.png
 manuscript/bellman2.png
 manuscript/bellman-fig.png
-.gitignore
