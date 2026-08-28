@@ -10,14 +10,6 @@
 #   - Strong control is effective but expensive
 #   - SDP can therefore use strong control when invasion is widespread, then
 #     relax to moderate control as the network becomes less invaded
-#
-# Compared with the previous version:
-#   1) the MDP state is now fully consistent with the ecological process:
-#      occupancy only (no hidden continuous abundance variable);
-#   2) transition probabilities are calculated exactly rather than by Monte Carlo;
-#   3) costs are scaled so that Strong is not trivially optimal everywhere;
-#   4) strategy comparisons are based on repeated stochastic simulations;
-#   5) the main contrast is ecological performance versus management cost.
 ###############################################################################
 
 # -----------------------------#

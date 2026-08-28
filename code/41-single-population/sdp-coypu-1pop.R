@@ -276,8 +276,8 @@ fig1b <- ggplot(
   
   labs(
     x = "Abundance N",
-    y = "Immediate cost"
-  ) +
+    y = expression("Immediate cost " * R(N,u))
+    ) +
   
   guides(linetype = "none") +
   
