@@ -51,7 +51,7 @@ m_plot <- ggplot() +
 # policies with known dynamics
 
 # read in data
-known_policies <- read.csv("data/passive_known_dynamics.csv")
+known_policies <- read.csv("../SDPaper/code/44-adaptive-management/data/passive_known_dynamics.csv")
 
 # plot
 plot_known_policies <- ggplot() +
@@ -72,7 +72,7 @@ plot_known_policies <- ggplot() +
 final_plot <- m_plot + plot_known_policies + plot_layout(nrow = 1)
 
 # save
-ggsave("figures/model_set_policies.png", final_plot, dpi = 400,
+ggsave("../SDPaper/figures/model_set_policies.png", final_plot, dpi = 400,
        width = 7, height = 3)
 
 
@@ -83,9 +83,9 @@ ggsave("figures/model_set_policies.png", final_plot, dpi = 400,
 ###############################
 
 # read in data
-posterior <- read.csv("data/passive_am_belief.csv")[, -1]
+posterior <- read.csv("../SDPaper/code/44-adaptive-management/data/passive_am_belief.csv")[, -1]
 colnames(posterior) <- m[c(1:3, 5, 6)]
-am_data <- read.csv("data/passive_am_data.csv")
+am_data <- read.csv("../SDPaper/code/44-adaptive-management/data/passive_am_data.csv")
 
 # convert posterior to long
 Tmax <- 30
@@ -112,7 +112,7 @@ plot_reward <- ggplot(data = am_data) +
 plot_passive <- plot_belief + plot_reward + plot_layout(ncol = 1)
 
 # save
-ggsave("figures/passive_AM.png", plot_passive, dpi = 400,
+ggsave("../SDPaper/figures/passive_AM.png", plot_passive, dpi = 400,
        width = 4, height = 5)
 
 
@@ -126,9 +126,9 @@ ggsave("figures/passive_AM.png", plot_passive, dpi = 400,
 seq_N_am <- seq(0, K, by = 100)
 
 # read in data
-discount_high <- read.csv("data/active_am_data_highdiscount.csv") %>% 
+discount_high <- read.csv("../SDPaper/code/44-adaptive-management/data/active_am_data_highdiscount.csv") %>% 
   mutate(N = seq_N_am)
-discount_low <- read.csv("data/active_am_data_lowdiscount.csv") %>% 
+discount_low <- read.csv("../SDPaper/code/44-adaptive-management/data/active_am_data_lowdiscount.csv") %>% 
   mutate(N = seq_N_am)
 
 # plot
@@ -145,5 +145,6 @@ plot_low <- ggplot(data = discount_low) +
   theme_minimal()  
 
 final_active <- plot_high + plot_low + plot_layout(nrow = 1)
-ggsave("figures/active_AM.png", final_active, dpi = 400,
+
+ggsave("../SDPaper/code/figures/active_AM.png", final_active, dpi = 400,
        width = 6, height = 3)

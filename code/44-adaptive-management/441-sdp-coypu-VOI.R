@@ -33,7 +33,7 @@
 library(tidyverse)
 library(MDPtoolbox)
 
-source("code/AM_utils.R")
+source("../SDPaper/code/44-adaptive-management/AM_utils.R")
 
 # -----------------------------#
 # 1) State and action grids
@@ -64,7 +64,7 @@ true_m <- m[4]
 model_set <- m[!m %in% true_m]
 
 # -----------------------------#
-# 2) Parameters (toy / to calibrate)
+# 2) Parameters 
 # -----------------------------#
 
 # Intrinsic growth rate (logistic dynamics): controls growth at low N
@@ -148,16 +148,16 @@ sim_next <- function(N, u, m, sigma) {
 # - penalty(N): soft constraint if N > N_tol (risk aversion / unacceptable state)
 reward_fun <- function(N, u) {
   
-  # Damages (toy): linear + quadratic
+  # Damages: linear + quadratic
   # - linear = baseline nuisance
   # - quadratic = rapidly increasing impacts at high N
   damage <- 0.1 * N + 0.001 * N ^ 2
   
-  # Management cost (toy): convex in u
+  # Management cost: convex in u
   # - proportional part + quadratic part for increasing marginal costs
   cost <- 500 * u + 1000 * u ^ 2
   
-  # Penalty above threshold (toy): increases linearly beyond N_tol
+  # Penalty above threshold: increases linearly beyond N_tol
   penalty <- if (N > N_tol) 2000 * (N - N_tol) / N_tol else 0
   
   # Reward = negative costs (maximize reward <=> minimize cost)
@@ -225,7 +225,7 @@ for (s in seq_len(S)) {
 }
 
 # -----------------------------#
-# 7) Solve infinite-horizon discounted MDP with known dynamics
+# 7) Solve infinite-horizon discounted SDP with known dynamics
 # -----------------------------#
 
 # create list of solutions for known dynamics
@@ -236,7 +236,7 @@ for (i in 1:length(P)) {
 }
 
 # -----------------------------#
-# 8) Solve infinite-horizon discounted MDP with unknown dynamics
+# 8) Solve infinite-horizon discounted SDP with unknown dynamics
 # -----------------------------#
 
 b <- 1 / length(P)
@@ -269,7 +269,7 @@ simulate_policy <- function(N0, n_years = 30, sol, m) {
     u_path[t] <- u
     reward_path[t] <- reward_fun(N_path[t], u)
     
-    # Step forward under dynamics and snap to grid (consistent with the MDP)
+    # Step forward under dynamics and snap to grid
     Nnext <- sim_next(N_path[t], u, m, sigma)
     N_path[t + 1] <- round_to_grid(Nnext, seq_N)
   }
@@ -318,3 +318,4 @@ out_df$reward <- as.numeric(out_df$reward)
 PI <- mean(out_df[out_df$policy == "known", "reward"])
 NL <- mean(out_df[out_df$policy == "bet", "reward"])
 PI - NL
+

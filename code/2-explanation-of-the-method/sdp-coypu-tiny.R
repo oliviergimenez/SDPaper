@@ -1,8 +1,8 @@
-# -------------------------------------------------------------------------
-# Tiny stochastic dynamic programming example for an invasive species
-# -------------------------------------------------------------------------
+# ----------------------------------------------------------------------------------
+# Introductory stochastic dynamic programming (SDP) example for an invasive species
+# ----------------------------------------------------------------------------------
 # Goal:
-# Illustrate how a finite-horizon Markov Decision Process (MDP) can be used
+# Illustrate how a finite-horizon SDP can be used
 # to determine optimal management decisions (Monitor vs Control)
 # depending on the invasion state (Eradicated, Contained, Established).
 # -------------------------------------------------------------------------
@@ -37,14 +37,14 @@ P <- list(
   
   # Dynamics under control intervention
   Control = matrix(c(
-    0.98, 0.02, 0.00,   # From Eradicated → control slightly reduces reinvasion risk
+    0.98, 0.02, 0.00,   # From Eradicated → control slightly reduces re-invasion risk
     0.20, 0.75, 0.05,   # From Contained → may eradicate or stay contained
     0.05, 0.75, 0.20    # From Established → usually improves but not always
   ), nrow = 3, byrow = TRUE,
   dimnames = list(states, states))
 )
 
-# Optional check: each row should sum to 1 (valid probability distributions)
+# check: each row should sum to 1 (valid probability distributions)
 lapply(P, rowSums)
 
 
@@ -118,7 +118,6 @@ policy_named
 # -------------------------------------------------------------------------
 # 5) Solve the same problem with MDPtoolbox
 # -------------------------------------------------------------------------
-# This provides a built-in implementation of finite-horizon SDP.
 
 library(MDPtoolbox)
 
@@ -129,3 +128,4 @@ res$V
 
 # Optimal policy (action index → convert to labels)
 actions[res$policy]
+

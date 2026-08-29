@@ -41,7 +41,7 @@
 library(tidyverse)
 library(MDPtoolbox)
 
-source("code/AM_utils.R")
+source("../SDPaper/code/44-adaptive-management/AM_utils.R")
 
 # -----------------------------#
 # 1) State and action grids
@@ -72,7 +72,7 @@ true_m <- m[4]
 model_set <- m[!m %in% true_m]
 
 # -----------------------------#
-# 2) Parameters (toy / to calibrate)
+# 2) Parameters 
 # -----------------------------#
 
 # Intrinsic growth rate (logistic dynamics): controls growth at low N
@@ -146,16 +146,16 @@ step_fun <- function(N, u, m, sigma) {
 # - penalty(N): soft constraint if N > N_tol (risk aversion / unacceptable state)
 reward_fun <- function(N, u) {
   
-  # Damages (toy): linear + quadratic
+  # Damages: linear + quadratic
   # - linear = baseline nuisance
   # - quadratic = rapidly increasing impacts at high N
   damage <- 0.1 * N + 0.001 * N ^ 2
   
-  # Management cost (toy): convex in u
+  # Management cost: convex in u
   # - proportional part + quadratic part for increasing marginal costs
   cost <- 500 * u + 1000 * u ^ 2
   
-  # Penalty above threshold (toy): increases linearly beyond N_tol
+  # Penalty above threshold: increases linearly beyond N_tol
   penalty <- if (N > N_tol) 2000 * (N - N_tol) / N_tol else 0
   
   # Reward = negative costs (maximize reward <=> minimize cost)
@@ -228,9 +228,9 @@ for (s in seq_len(S)) {
 }
 
 # -----------------------------#
-# 8) Solve infinite-horizon discounted MDP with known dynamics
+# 8) Solve infinite-horizon discounted SDP with known dynamics
 # -----------------------------#
-# For comparison, first solve the MDP when the system dynamics are known.
+# For comparison, first solve the SDP when the system dynamics are known.
 # Use value iteration algorithm in MDPtoolbox.
 #
 
@@ -250,8 +250,7 @@ for (i in 1:length(P)) {
 }
 
 # save
-write.csv(known_policies, "data/passive_known_dynamics.csv")
-
+write.csv(known_policies, "../SDPaper/code/44-adaptive-management/data/passive_known_dynamics.csv")
 
 # -----------------------------#
 # 9) Solve passive adaptive management with unknown dynamics
@@ -317,10 +316,11 @@ for (t in time){
 # save change in belief state over time
 posterior <- as.data.frame(belief[time, ])
 colnames(posterior) <- m[c(1:3, 5, 6)]
-write.csv(posterior, "data/passive_am_belief.csv")
+write.csv(posterior, "../SDPaper/code/44-adaptive-management/data/passive_am_belief.csv")
 
 # save states, actions, and reward over time
 df <- data.frame(time = 1:Tmax, state = state[time],
                  action = action[time],
                  value = value[time])
-write.csv(df, "data/passive_am_data.csv")
+write.csv(df, "../SDPaper/code/44-adaptive-management/data/passive_am_data.csv")
+

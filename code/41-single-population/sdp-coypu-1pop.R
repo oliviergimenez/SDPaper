@@ -1,5 +1,5 @@
 ###############################################################################
-# 1D Stochastic Dynamic Programming (SDP) / MDP for coypu (ragondin) regulation
+# 1D Stochastic Dynamic Programming (SDP)  for coypu regulation
 # ---------------------------------------------------------------------------
 # Goal:
 #   Find an optimal control policy u*(N) that trades off:
@@ -27,7 +27,7 @@
 # Notes:
 #   - Transitions are deterministic on the grid because we "snap" N_{t+1}
 #     to the nearest grid point (round_to_grid).
-#   - You can later add stochasticity by spreading probability mass across
+#   - Can later add stochasticity by spreading probability mass across
 #     nearby grid points instead of using a single next state.
 ###############################################################################
 
@@ -61,7 +61,7 @@ cat("Number of states S =", S, "\n")
 cat("Number of actions A =", A, "\n")
 
 # -----------------------------#
-# 2) Parameters (toy / to calibrate)
+# 2) Parameters 
 # -----------------------------#
 
 # Intrinsic growth rate (logistic dynamics): controls growth at low N
@@ -82,7 +82,7 @@ N_tol <- 400
 clamp <- function(x, lo, hi) pmin(pmax(x, lo), hi)
 
 # Project a continuous value onto a discrete grid by nearest neighbor
-# (this is the "state discretization" step).
+# This is the "state discretization" step
 round_to_grid <- function(x, grid) {
   grid[which.min((grid - x)^2)]
 }
@@ -107,9 +107,7 @@ df <- data.frame(
 
 fig1a <- ggplot(df, aes(x = u, y = q)) +
   geom_line(linewidth = 1) +
-  #  geom_hline(yintercept = 0.5, linetype = "dashed") +
   labs(
-    #title = "Saturating removal function",
     x = "Control effort u",
     y = "Removal fraction q(u)"
   ) +
@@ -140,16 +138,16 @@ step_fun <- function(N, u) {
 # - penalty(N): soft constraint if N > N_tol (risk aversion / unacceptable state)
 reward_fun <- function(N, u) {
   
-  # Damages (toy): linear + quadratic
+  # Damages: linear + quadratic
   # - linear = baseline nuisance
   # - quadratic = rapidly increasing impacts at high N
   damage <- 0.1 * N + 0.001 * N^2
   
-  # Management cost (toy): convex in u
+  # Management cost: convex in u
   # - proportional part + quadratic part for increasing marginal costs
   cost <- 50 * u + 200 * u^2
   
-  # Penalty above threshold (toy): increases linearly beyond N_tol
+  # Penalty above threshold: increases linearly beyond N_tol
   penalty <- if (N > N_tol) 2000 * (N - N_tol) / N_tol else 0
   
   # Reward = negative costs (maximize reward <=> minimize cost)
@@ -333,7 +331,7 @@ for (s in seq_len(S)) {
 mdp_check(P, R)
 
 # -----------------------------#
-# 7) Solve infinite-horizon discounted MDP (value iteration)
+# 7) Solve infinite-horizon discounted (value iteration)
 # -----------------------------#
 # discount must satisfy 0 <= gamma < 1
 # epsilon controls convergence tolerance
@@ -347,11 +345,6 @@ str(sol)
 # 8) Extract optimal policy u*(N) and plot
 # -----------------------------#
 u_star <- seq_u[sol$policy]
-
-# plot(seq_N, u_star, type = "l",
-#      xlab = "Abundance N (state grid)",
-#      ylab = "Optimal control effort u*",
-#      main = "Optimal regulation policy for coypu (1D MDP)")
 
 # -----------------------------#
 # 9) Simulate a trajectory under the optimal policy
@@ -380,7 +373,7 @@ simulate_policy <- function(N0, n_years = 30) {
     u_path[t] <- u
     reward_path[t] <- reward_fun(N_path[t], u)
     
-    # Step forward under dynamics and snap to grid (consistent with the MDP)
+    # Step forward under dynamics and snap to grid
     Nnext <- step_fun(N_path[t], u)
     N_path[t + 1] <- round_to_grid(Nnext, seq_N)
   }
@@ -414,7 +407,7 @@ p_policy <- ggplot(policy_df, aes(x = N, y = u_star)) +
   ggtitle("C.")
 p_policy
 
-# trajectory as facetted series (N and u) ----
+# trajectory as facetted series (N and u)
 traj_long <- rbind(
   data.frame(time = traj$year, variable = "Abundance N(t)", value = traj$N, series_type = "line"),
   data.frame(time = traj$year, variable = "Effort u(t)",    value = traj$u, series_type = "step")
@@ -441,12 +434,10 @@ final_plot <- fig1a + fig1b + p_policy + p_traj + plot_layout(nrow = 2)
 ggsave("../SDPaper/figures/figure2.png", final_plot, dpi = 600, height = 6, width = 8)
 
 
-#--------------------
-
 # -----------------------------#
 # 10) Tiny demo: why round_to_grid()?
 # -----------------------------#
-# Ecological dynamics are continuous (e.g., Nnext = 437.6), but MDP states are
+# Ecological dynamics are continuous (e.g., Nnext = 437.6), but SDP states are
 # discrete (e.g., 0, 20, 40, ...). We therefore map continuous outcomes to the
 # nearest grid state.
 x <- 437.6

@@ -29,6 +29,7 @@ set.seed(666)
 # -----------------------------#
 
 # Towns used in the previous coypu abundance analysis
+# https://neobiota.pensoft.net/article/145876/
 villes <- c(
   "Candillargues",
   "La Grande-Motte",
@@ -47,8 +48,7 @@ pop_est <- c(80, 0, 125, 0, 50, 15, 0, 200)
 state_init <- as.integer(pop_est > 0)
 n_sites <- length(villes)
 
-# Illustrative connected network.
-# This is deliberately schematic and is not intended to reproduce geography.
+# Illustrative connected network
 edges <- matrix(
   c(
     1, 2,
@@ -81,18 +81,18 @@ adj <- as.matrix(adj)
 action_names <- c("None", "Moderate", "Strong")
 n_actions <- length(action_names)
 
-# Local extinction probability for an occupied site.
-# Control makes local extinction more likely.
+# Local extinction probability for an occupied site
+# Control makes local extinction more likely
 p_ext <- c(
   None     = 0.02,
   Moderate = 0.15,
   Strong   = 0.28
 )
 
-# Baseline colonisation probability contributed by each occupied neighbour.
+# Baseline colonisation probability contributed by each occupied neighbour
 beta_col <- 0.12
 
-# Control also reduces the effective colonisation pressure.
+# Control also reduces the effective colonisation pressure
 # For example, Strong reduces per-neighbour colonisation pressure by 20%.
 col_suppression <- c(
   None     = 0.00,
@@ -194,10 +194,6 @@ site_occ_prob <- function(state, i, a) {
 }
 
 # Exact transition probability from current state s to every possible next state.
-# Conditional on the current occupancy configuration, local transitions are
-# treated as independent. With only 256 states, exact enumeration is transparent
-# and avoids Monte Carlo noise in the transition matrices.
-
 transition_row <- function(state, a) {
 
   p_occ_next <- vapply(
@@ -395,10 +391,6 @@ strategies <- c(
   "SDP"
 )
 
-# Using paired seeds means each strategy is evaluated over the same set of
-# replicate numbers. This does not force identical trajectories, because actions
-# alter transition probabilities, but makes the simulation experiment reproducible.
-
 sim_all <- map_dfr(
   seq_len(n_rep),
   function(rep_id) {
@@ -544,9 +536,6 @@ p2 <- ggplot(
 p2
 
 # C. Mean cumulative total cost, with 90% stochastic interval
-# ------------------------------------------------------------
-# Consistent colours across all worked examples
-# ------------------------------------------------------------
 
 cols <- c(
   None     = "grey80",
@@ -561,10 +550,6 @@ lts <- c(
   "Strong"   = "dotdash",
   "SDP"      = "solid"
 )
-
-# ------------------------------------------------------------
-# C. Mean cumulative total cost
-# ------------------------------------------------------------
 
 p_costs <-
   ggplot(
@@ -627,9 +612,7 @@ p_costs <-
 
 p_costs
 
-# ------------------------------------------------------------
 # D. Mean number of occupied sites through time
-# ------------------------------------------------------------
 
 p_occ <-
   ggplot(
@@ -698,10 +681,8 @@ p_occ <-
 
 p_occ
 
-# ------------------------------------------------------------
 # E. Decompose final expected cost into damage
 #    and management expenditure
-# ------------------------------------------------------------
 
 df_cost_components <- summary_final %>%
   select(
@@ -754,9 +735,7 @@ p_components <-
 
 p_components
 
-# ------------------------------------------------------------
 # F. Which actions does the SDP actually use?
-# ------------------------------------------------------------
 
 action_cols <- c(
   "None"     = "grey75",
@@ -805,58 +784,58 @@ p_action <-
 
 p_action
 
-# -----------------------------#
-# 14) Optional policy plot
-# -----------------------------#
-
-# This panel shows how the SDP recommendation changes with invasion extent
-# and remaining time. Because spatial configuration matters, multiple actions
-# can be optimal for the same number of occupied sites; we therefore show the
-# proportion of configurations assigned to each action.
-
-# ------------------------------------------------------------
-# Optional policy plot
-# ------------------------------------------------------------
-
-p_policy <-
-  ggplot(
-    df_policy_summary,
-    aes(
-      x = Time,
-      y = OccupiedSites,
-      fill = Action,
-      alpha = Proportion
-    )
-  ) +
-  
-  geom_tile() +
-  
-  scale_fill_manual(
-    values = action_cols
-  ) +
-  
-  scale_y_continuous(
-    breaks = 0:n_sites
-  ) +
-  
-  scale_alpha_continuous(
-    range = c(0.15, 1),
-    guide = "none"
-  ) +
-  
-  labs(
-    x = "Time step",
-    y = "Number of occupied sites",
-    fill = NULL
-  ) +
-  
-  theme_minimal() +
-  theme(
-    panel.grid = element_blank(),
-    legend.position = "bottom"
-  )
-
-p_policy
+# # -----------------------------#
+# # 14) Optional policy plot
+# # -----------------------------#
+# 
+# # This panel shows how the SDP recommendation changes with invasion extent
+# # and remaining time. Because spatial configuration matters, multiple actions
+# # can be optimal for the same number of occupied sites; we therefore show the
+# # proportion of configurations assigned to each action.
+# 
+# # ------------------------------------------------------------
+# # Optional policy plot
+# # ------------------------------------------------------------
+# 
+# p_policy <-
+#   ggplot(
+#     df_policy_summary,
+#     aes(
+#       x = Time,
+#       y = OccupiedSites,
+#       fill = Action,
+#       alpha = Proportion
+#     )
+#   ) +
+#   
+#   geom_tile() +
+#   
+#   scale_fill_manual(
+#     values = action_cols
+#   ) +
+#   
+#   scale_y_continuous(
+#     breaks = 0:n_sites
+#   ) +
+#   
+#   scale_alpha_continuous(
+#     range = c(0.15, 1),
+#     guide = "none"
+#   ) +
+#   
+#   labs(
+#     x = "Time step",
+#     y = "Number of occupied sites",
+#     fill = NULL
+#   ) +
+#   
+#   theme_minimal() +
+#   theme(
+#     panel.grid = element_blank(),
+#     legend.position = "bottom"
+#   )
+# 
+# p_policy
 
 # -----------------------------#
 # 15) Assemble and save main figure
@@ -877,4 +856,5 @@ ggsave(
 )
 
 final_plot
+
 

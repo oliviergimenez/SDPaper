@@ -5,7 +5,7 @@
 #   Find an optimal control policy u*(N) under structural uncertainty using an
 #   active adaptive management strategy. The problem is formulated as a 
 #   partially observable Markov Decision Process (POMDP), where the belief 
-#   state enters the state space of the MDP. The POMDP is solved using the 
+#   state enters the state space of the SDP. The POMDP is solved using the 
 #   SARSOP (Successive Approximations of the Reachable Space under
 #   Optimal Policies) algorithm (Kurniawati et al., 2008).
 #
@@ -76,7 +76,7 @@ model_set <- c(0.7, 1.3)
 n <- length(model_set)
 
 # -----------------------------#
-# 2) Parameters (toy / to calibrate)
+# 2) Parameters
 # -----------------------------#
 
 # Intrinsic growth rate (logistic dynamics): controls growth at low N
@@ -150,16 +150,16 @@ step_fun <- function(N, u, m, sigma) {
 # - penalty(N): soft constraint if N > N_tol (risk aversion / unacceptable state)
 reward_fun <- function(N, u) {
   
-  # Damages (toy): linear + quadratic
+  # Damages: linear + quadratic
   # - linear = baseline nuisance
   # - quadratic = rapidly increasing impacts at high N
   damage <- 0.1 * N + 0.001 * N ^ 2
   
-  # Management cost (toy): convex in u
+  # Management cost: convex in u
   # - proportional part + quadratic part for increasing marginal costs
   cost <- 500 * u + 1000 * u ^ 2
   
-  # Penalty above threshold (toy): increases linearly beyond N_tol
+  # Penalty above threshold: increases linearly beyond N_tol
   penalty <- if (N > N_tol) 2000 * (N - N_tol) / N_tol else 0
   
   # Reward = negative costs (maximize reward <=> minimize cost)
@@ -339,14 +339,14 @@ alpha1 <- sarsop(
   discount = discount1
 )
 time2 <- Sys.time()
-time2 - time1
+time2 - time1 # A few minutes later...
 # Note: Each alpha-vector is associated with an action.
 
 # compute policy based on alpha vectors
 df1 <- compute_policy(alpha1, transition, observation, reward, b)
 
 # save data
-write.csv(df1, "data/active_am_data_highdiscount.csv")
+write.csv(df1, "../SDPaper/code/44-adaptive-management/data/active_am_data_highdiscount.csv")
 
 ## solve POMDP with lower discount factor
 # generate alpha vectors, approximation of V(b)
@@ -358,10 +358,11 @@ alpha2 <- sarsop(
   discount = discount2
 )
 time2 <- Sys.time()
-time2 - time1
+time2 - time1 # A few minutes later...
 
 # compute policy based on alpha vectors
 df2 <- compute_policy(alpha2, transition, observation, reward, b)
 
 # save data
-write.csv(df2, "data/active_am_data_lowdiscount.csv")
+write.csv(df2, "../SDPaper/code/44-adaptive-management/data/active_am_data_lowdiscount.csv")
+

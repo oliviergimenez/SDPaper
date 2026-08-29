@@ -69,7 +69,7 @@ lapply(P_pomdp, rowSums)
 #-----------------------------#
 # 2) Reward matrix R[s,a]
 #-----------------------------#
-# Here we use a toy "net benefit" style reward:
+# Here we use a "net benefit" style reward:
 #   reward = -(damage + cost)
 #
 # Eradicated: no damage
@@ -102,7 +102,7 @@ R_pomdp <- rbind(
 # 4) Detection probabilities O[s,a]
 #-----------------------------#
 # Here we assume that detectability is dependent on the state of the system and the action take.
-# That is, we assume that 'DoNothing' reduces our ability to detect coypu, while both control measures
+# That is, we assume that 'Do Nothing' reduces our ability to detect coypu, while both control measures
 # have the same detection probabilities.
 # Detection increases with the relative abundance of the coypu population. 
 
