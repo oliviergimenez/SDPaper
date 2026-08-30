@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.28 (TeX Live 2025) (preloaded format=pdflatex 2026.8.20)  29 AUG 2026 16:58
+This is pdfTeX, Version 3.141592653-2.6-1.40.28 (TeX Live 2025) (preloaded format=pdflatex 2026.8.20)  30 AUG 2026 23:56
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -571,70 +571,61 @@ File: ../figures/figure4.png Graphic file (type png)
 Package pdftex.def Info: ../figures/figure4.png  used on input line 605.
 (pdftex.def)             Requested size: 452.9679pt x 402.64488pt.
 [26] [27 <../figures/figure4.png>]
-<../figures/model_set_policies.png, id=284, 505.89pt x 216.81pt>
-File: ../figures/model_set_policies.png Graphic file (type png)
-<use ../figures/model_set_policies.png>
-Package pdftex.def Info: ../figures/model_set_policies.png  used on input line 629.
-(pdftex.def)             Requested size: 407.66833pt x 174.7186pt.
-[28] [29 <../figures/model_set_policies.png>] [30] [31]
-<../figures/passive_AM.png, id=322, 289.08pt x 361.35pt>
-File: ../figures/passive_AM.png Graphic file (type png)
-<use ../figures/passive_AM.png>
-Package pdftex.def Info: ../figures/passive_AM.png  used on input line 670.
-(pdftex.def)             Requested size: 271.7835pt x 339.74625pt.
-[32] [33 <../figures/passive_AM.png>]
+<../figures/figure5.png, id=284, 650.43pt x 722.7pt>
+File: ../figures/figure5.png Graphic file (type png)
+<use ../figures/figure5.png>
+Package pdftex.def Info: ../figures/figure5.png  used on input line 631.
+(pdftex.def)             Requested size: 452.9679pt x 503.3061pt.
 
-LaTeX Warning: Command \textlangle invalid in math mode on input line 687.
+LaTeX Warning: Float too large for page by 17.03471pt on input line 636.
+
+[28] [29 <../figures/figure5.png>] [30] [31] [32]
+
+LaTeX Warning: Command \textlangle invalid in math mode on input line 680.
 
 LaTeX Info: Symbol \textlangle not provided by
             font family ppl in TS1 encoding.
-            Default family used instead on input line 687.
+            Default family used instead on input line 680.
 (/Users/oliviergimenez/Library/TinyTeX/texmf-dist/tex/latex/microtype/mt-cmr.cfg
 File: mt-cmr.cfg 2013/05/19 v2.2 microtype config. file: Computer Modern Roman (RS)
 )
 
-LaTeX Warning: Command \textlangle invalid in math mode on input line 687.
+LaTeX Warning: Command \textlangle invalid in math mode on input line 680.
 
 
-LaTeX Warning: Command \textlangle invalid in math mode on input line 687.
+LaTeX Warning: Command \textlangle invalid in math mode on input line 680.
 
 
-LaTeX Warning: Command \textrangle invalid in math mode on input line 687.
+LaTeX Warning: Command \textrangle invalid in math mode on input line 680.
 
 LaTeX Info: Symbol \textrangle not provided by
             font family ppl in TS1 encoding.
-            Default family used instead on input line 687.
+            Default family used instead on input line 680.
 
-LaTeX Warning: Command \textrangle invalid in math mode on input line 687.
+LaTeX Warning: Command \textrangle invalid in math mode on input line 680.
 
 
-LaTeX Warning: Command \textrangle invalid in math mode on input line 687.
+LaTeX Warning: Command \textrangle invalid in math mode on input line 680.
 
-[34]
-<../figures/active_AM.png, id=348, 433.62pt x 216.81pt>
-File: ../figures/active_AM.png Graphic file (type png)
-<use ../figures/active_AM.png>
-Package pdftex.def Info: ../figures/active_AM.png  used on input line 697.
-(pdftex.def)             Requested size: 407.66833pt x 203.84442pt.
-[35] [36 <../figures/active_AM.png>] [37] [38] [39] [40] [41] [42] [43] (./tuto-sdp-invasive-species.aux)
+[33] [34] [35] [36] [37] [38] [39] [40] [41] [42] (./tuto-sdp-invasive-species.aux)
  ***********
 LaTeX2e <2025-11-01>
 L3 programming layer <2026-01-19>
  ***********
  ) 
 Here is how much of TeX's memory you used:
- 15098 strings out of 469471
- 239424 string characters out of 5466955
- 714794 words of memory out of 5000000
- 43080 multiletter control sequences out of 15000+600000
+ 15070 strings out of 469471
+ 238572 string characters out of 5466955
+ 713527 words of memory out of 5000000
+ 43055 multiletter control sequences out of 15000+600000
  691040 words of font info for 342 fonts, out of 8000000 for 9000
  36 hyphenation exceptions out of 8191
- 83i,12n,93p,1393b,570s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 83i,12n,93p,1492b,570s stack positions out of 10000i,1000n,20000p,200000b,200000s
  </Users/oliviergimenez/Library/TinyTeX/texmf-var/fonts/pk/ljfour/jknappen/ec/ectt1095.600pk> </Users/oliviergimenez/Library/TinyTeX/texmf-var/fonts/pk/ljfour/jknappen/ec/ectt1000.600pk> </Users/oliviergimenez/Library/TinyTeX/texmf-var/fonts/pk/ljfour/jknappen/ec/ecss0800.450pk></Users/oliviergimenez/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></Users/oliviergimenez/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></Users/oliviergimenez/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></Users/oliviergimenez/Library/TinyTeX/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></Users/oliviergimenez/Library/TinyTeX/texmf-dist/fonts/type1/public/mathpazo/fplmr.pfb></Users/oliviergimenez/Library/TinyTeX/texmf-dist/fonts/type1/public/mathpazo/fplmri.pfb></Users/oliviergimenez/Library/TinyTeX/texmf-dist/fonts/type1/urw/palatino/uplb8a.pfb></Users/oliviergimenez/Library/TinyTeX/texmf-dist/fonts/type1/urw/palatino/uplr8a.pfb></Users/oliviergimenez/Library/TinyTeX/texmf-dist/fonts/type1/urw/palatino/uplri8a.pfb>
-Output written on tuto-sdp-invasive-species.pdf (43 pages, 2853746 bytes).
+Output written on tuto-sdp-invasive-species.pdf (42 pages, 3154341 bytes).
 PDF statistics:
- 579 PDF objects out of 1000 (max. 8388607)
- 480 compressed objects within 5 object streams
- 129 named destinations out of 1000 (max. 500000)
- 69836 words of extra memory for PDF output out of 74296 (max. 10000000)
+ 569 PDF objects out of 1000 (max. 8388607)
+ 473 compressed objects within 5 object streams
+ 126 named destinations out of 1000 (max. 500000)
+ 69826 words of extra memory for PDF output out of 74296 (max. 10000000)
 

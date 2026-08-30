@@ -39,6 +39,22 @@ library(tidyverse)
 library(patchwork)
 set.seed(666)
 
+# ------------------------------------------------------------
+# Common visual identity
+# ------------------------------------------------------------
+
+col_grey   <- "grey55"
+col_dark   <- "grey25"
+col_orange <- "#E69F00"
+col_red    <- "#D55E00"
+col_blue   <- "#0072B2"
+
+theme_sdp <- theme_minimal() +
+  theme(
+    panel.grid.minor = element_blank(),
+    legend.position = "bottom"
+  )
+
 # -----------------------------#
 # 1) State and action grids
 # -----------------------------#
@@ -106,13 +122,17 @@ df <- data.frame(
 )
 
 fig1a <- ggplot(df, aes(x = u, y = q)) +
-  geom_line(linewidth = 1) +
+  geom_line(
+    linewidth = 1.1,
+    colour = col_orange
+  ) +
   labs(
     x = "Control effort u",
     y = "Removal fraction q(u)"
   ) +
-  theme_minimal() +
+  theme_sdp +
   ggtitle("A.")
+
 fig1a
 
 # -----------------------------#
@@ -205,25 +225,32 @@ y_penalty_label <-
   2000 * (x_label - N_tol) / N_tol
 
 
+cost_cols <- c(
+  "Damage" = col_grey,
+  "Damage + penalty" = col_red
+)
+
 fig1b <- ggplot(
   df_cost,
-  aes(x = N, y = value, linetype = component)
+  aes(x = N, y = value, colour = component)
 ) +
   
-  geom_line(linewidth = 0.9) +
+  geom_line(linewidth = 1.0) +
   
   # Control cost
   geom_hline(
     yintercept = control_cost_value,
+    colour = col_orange,
     linetype = "dotdash",
-    linewidth = 0.7
+    linewidth = 0.8
   ) +
   
   # Tolerance threshold
   geom_vline(
     xintercept = N_tol,
+    colour = col_grey,
     linetype = "dotted",
-    linewidth = 0.7
+    linewidth = 0.8
   ) +
   
   # Threshold annotation
@@ -243,6 +270,7 @@ fig1b <- ggplot(
     x = x_label,
     y = y_penalty_label + 450,
     label = "Damage + penalty",
+    colour = col_red,
     hjust = 1,
     size = 3
   ) +
@@ -252,6 +280,7 @@ fig1b <- ggplot(
     x = x_label,
     y = y_damage_label + 300,
     label = "Damage",
+    colour = col_grey,
     hjust = 1,
     size = 3
   ) +
@@ -261,29 +290,24 @@ fig1b <- ggplot(
     x = x_label,
     y = control_cost_value + 320,
     label = "Control cost",
+    colour = col_orange,
     hjust = 1,
     size = 3
   ) +
   
-  scale_linetype_manual(
-    values = c(
-      "Damage" = "solid",
-      "Damage + penalty" = "dashed"
-    )
-  ) +
+  scale_colour_manual(values = cost_cols) +
   
   labs(
     x = "Abundance N",
     y = expression("Immediate cost " * R(N,u))
-    ) +
+  ) +
   
-  guides(linetype = "none") +
-  
-  theme_minimal() +
-  
+  guides(colour = "none") +
+  theme_sdp +
   ggtitle("B.")
 
 fig1b
+
 
 # -----------------------------#
 # 6) Build transition kernel P and reward matrix R
@@ -396,15 +420,27 @@ policy_df <- data.frame(
   u_star = seq_u[sol$policy]
 )
 
-p_policy <- ggplot(policy_df, aes(x = N, y = u_star)) +
-  geom_line(linewidth = 0.9) +
+p_policy <- ggplot(
+  policy_df,
+  aes(x = N, y = u_star)
+) +
+  geom_line(
+    linewidth = 1.1,
+    colour = col_blue
+  ) +
+  geom_vline(
+    xintercept = N_tol,
+    colour = col_grey,
+    linetype = "dotted",
+    linewidth = 0.7
+  ) +
   labs(
-    title = "",
     x = "Abundance N",
     y = "Optimal effort u*"
   ) +
-  theme_minimal() +
+  theme_sdp +
   ggtitle("C.")
+
 p_policy
 
 # trajectory as facetted series (N and u)
@@ -413,23 +449,62 @@ traj_long <- rbind(
   data.frame(time = traj$year, variable = "Effort u(t)",    value = traj$u, series_type = "step")
 )
 
-p_traj <- ggplot(traj_long, aes(x = time, y = value)) +
-  geom_line(data = subset(traj_long, series_type == "line"), linewidth = 0.9) +
-  geom_step(data = subset(traj_long, series_type == "step"), linewidth = 0.9, linetype = 2) +
-  facet_wrap(~ variable, ncol = 1, scales = "free_y") +
-  geom_hline(data = data.frame(variable = "Abundance N(t)", y = N_tol),
-             aes(yintercept = y), linetype = "dotted") +
+p_traj <- ggplot(
+  traj_long,
+  aes(x = time, y = value)
+) +
+  
+  geom_line(
+    data = subset(
+      traj_long,
+      series_type == "line"
+    ),
+    colour = col_dark,
+    linewidth = 1.0
+  ) +
+  
+  geom_step(
+    data = subset(
+      traj_long,
+      series_type == "step"
+    ),
+    colour = col_blue,
+    linewidth = 1.0
+  ) +
+  
+  facet_wrap(
+    ~ variable,
+    ncol = 1,
+    scales = "free_y"
+  ) +
+  
+  geom_hline(
+    data = data.frame(
+      variable = "Abundance N(t)",
+      y = N_tol
+    ),
+    aes(yintercept = y),
+    colour = col_grey,
+    linetype = "dotted",
+    linewidth = 0.7
+  ) +
+  
   labs(
-    title = "",
     x = "Time step",
     y = NULL
   ) +
-  theme_minimal() +
+  
+  theme_sdp +
+  theme(
+    legend.position = "none"
+  ) +
   ggtitle("D.")
+
 p_traj
 
 # combine all figures
 final_plot <- fig1a + fig1b + p_policy + p_traj + plot_layout(nrow = 2)
+final_plot
 
 ggsave("../SDPaper/figures/figure2.png", final_plot, dpi = 600, height = 6, width = 8)
 

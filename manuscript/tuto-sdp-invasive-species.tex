@@ -152,7 +152,7 @@
 
 \title{Using stochastic dynamic programming for making decisions about invasive species}
 \author{Olivier Gimenez\textsuperscript{1}* \and Abigail G. Keller\textsuperscript{2}* \and Lucile Marescot\textsuperscript{3}* \and Carl Boettiger\textsuperscript{2}* \and Cassie Speakman\textsuperscript{4,1}*}
-\date{2026-08-29}
+\date{2026-08-30}
 
 \begin{document}
 \maketitle
@@ -376,7 +376,7 @@ q(u)=1-\exp(-\alpha u),
 with \(\alpha=1.5\), which implies diminishing returns of control effort (Figure \ref{fig:fig-pop}A). For example, an effort of \(u=0.5\) removes about \(53\%\) of the population, whereas maximum effort \(u=1\) removes about \(78\%\), reflecting the fact that complete eradication is rarely achievable in a single step.
 
 \begin{figure}
-\includegraphics[width=1\linewidth]{../figures/figure2} \caption{Components and outputs of an infinite-horizon stochastic dynamic programming model for invasive species management. (A) Removal fraction $q(u)$ as a function of control effort $u$. (B) Immediate cost components as functions of abundance. Damage increases nonlinearly with population size. Above the tolerable threshold ($N_{\mathrm{tol}} = 400$), an additional penalty is added, resulting in rapidly increasing total costs (damage + penalty). Control cost is shown for an illustrative effort level ($u = 0.6$). (C) Optimal stationary policy $u^*(N)$, showing the recommended control effort for each abundance level. (D) Example trajectories of abundance and control effort under the optimal policy, starting from $N_0 = 800$.}\label{fig:fig-pop}
+\includegraphics[width=1\linewidth]{../figures/figure2} \caption{Components and outputs of an infinite-horizon stochastic dynamic programming model for invasive species management. (A) Removal fraction $q(u)$ as a function of control effort $u$. (B) Immediate cost components as functions of abundance. Damage increases nonlinearly with population size, and above the tolerable threshold ($N_{\mathrm{tol}} = 400$), an additional penalty is added, resulting in rapidly increasing total costs. Control cost is shown for an illustrative effort level ($u = 0.6$). (C) Optimal stationary policy $u^*(N)$, showing the recommended control effort for each abundance level; the dotted vertical line indicates the tolerable abundance threshold. (D) Example trajectories of abundance and optimal control effort under the policy, starting from $N_0 = 800$; the dotted horizontal line indicates $N_{\mathrm{tol}}$.}\label{fig:fig-pop}
 \end{figure}
 
 Rewards are defined as the negative of total costs, so that maximizing expected reward is equivalent to minimizing long-term damages and management expenses (Figure \ref{fig:fig-pop}B):
@@ -622,15 +622,17 @@ R(N_t) = r \times (1 - (N_t / K) ^ m)
 
 If \(m > 1\), most density---dependent change occurs at high population levels (close to the carrying capacity), which is common for species with life history strategies typical of large mammals. If \(m < 1\), most density-dependent change occurs at low population levels, which is common for species with life history strategies typical of insects and some fishes (\citeproc{ref-fowler1981density}{Fowler 1981}).
 
-We will consider a model set with five possible values of \(m\). This model bounds, but does not contain, the true model we will use to simulate dynamics in the passive adaptive management approach (Figure \ref{fig:model-set}A). These different values of \(m\) result in different optimal policies when system dynamics are known perfectly (Figure \ref{fig:model-set}B).
+We will consider a model set with five possible values of \(m\). This model bounds, but does not contain, the true model we will use to simulate dynamics in the passive adaptive management approach (Figure \ref{fig:adaptive-plot}A). These different values of \(m\) result in different optimal policies when system dynamics are known perfectly (Figure \ref{fig:adaptive-plot}B).
 
-\begin{figure}[H]
 
-{\centering \includegraphics[width=0.9\linewidth]{../figures/model_set_policies} 
+
+\begin{figure}
+
+{\centering \includegraphics[width=1\linewidth]{../figures/figure5} 
 
 }
 
-\caption{Structural uncertainty in population dynamics and its consequences for optimal management. (A) Model set representing structural uncertainty in the per-capita growth rate. (B) Optimal state-dependent removal policies assuming each model is known perfectly and solved using stochastic dynamic programming. Colours correspond to different values of $m$ in the model set, and the red dashed line represents the true population dynamics used in the passive adaptive management example.}\label{fig:model-set}
+\caption[Adaptive management under structural uncertainty in population dynamics.]{Adaptive management under structural uncertainty in population dynamics. (A) Model set representing structural uncertainty in the per-capita growth rate. (B) Optimal state-dependent removal policies assuming each model is known perfectly and solved using stochastic dynamic programming. Colours in (A-B) correspond to different values of \(m\), with the red dashed line representing the true population dynamics used in the adaptive management examples. (C) Evolution of the belief assigned to each candidate population model through time under passive adaptive management; colours correspond to different values of \(m\), representing alternative hypotheses about density dependence. (D) Reward obtained through time as management decisions are updated using the current belief state. As learning progresses, belief concentrates on the models closest to the true dynamics, leading to improved management performance. (E-F) Optimal state-dependent removal policies under active adaptive management for an initial uniform belief across models, with discount factors of (E) \(\gamma=0.95\) and (F) \(\gamma=0.75\). The higher discount factor places greater value on future rewards and hence on opportunities for learning, whereas the lower discount factor gives relatively greater weight to short-term rewards.}\label{fig:adaptive-plot}
 \end{figure}
 
 \subsubsection{4.4.1 Value of Information}\label{value-of-information}
@@ -663,16 +665,7 @@ During the updating step, the resulting state, \(s_{t+1}\), after taking action 
 b_{t+1}(k|s_t, a_t, s_{t+1}, b_t) = \frac{P_k(s_{t+1}|s_t,a_t)b_t(k)}{\sum_{k \in K}P_k(s_{t+1}|s_t,a_t)b_t(k)}
 \]
 
-For coypu control decisions, we solve the passive adaptive management problem by updating the belief about the coypu population dynamics to improve management performance over time. We begin with an equal belief, \(b_{t=1}(k) = 1 / 5\), across the five models in the model set (Figure 1A). We iterate between 1) calculating the optimal action given the current belief state, 2) implementing the optimal action and simulating the next state, \(s_{t+1}\), given the true population dynamics, and 3) updating the belief state based observing the next state given action \(a_t\). Here we assume the state is perfectly observed. We simulate the application of passive adaptive management over 30 time steps. The belief in each model changes over time (Figure 2A), resulting in the highest belief for the two models closest to the true population dynamics \(m = 1\) and \(m = 1.3\) (Figure \ref{fig:passive-plot}A). Through updating the belief state over time and implementing the optimal action given the current belief state, the management performance improves over time (Figure \ref{fig:passive-plot}B).
-
-\begin{figure}[H]
-
-{\centering \includegraphics[width=0.6\linewidth]{../figures/passive_AM} 
-
-}
-
-\caption{Passive adaptive management under structural uncertainty. (A) Evolution of the belief assigned to each candidate population model through time. Colours correspond to different values of $m$, representing alternative hypotheses about density dependence. (B) Reward obtained through time as management decisions are updated using the current belief state. As learning progresses, belief concentrates on the models closest to the true dynamics, leading to improved management performance.}\label{fig:passive-plot}
-\end{figure}
+For coypu control decisions, we solve the passive adaptive management problem by updating the belief about the coypu population dynamics to improve management performance over time. We begin with an equal belief, \(b_{t=1}(k) = 1 / 5\), across the five models in the model set (Figure 1A). We iterate between 1) calculating the optimal action given the current belief state, 2) implementing the optimal action and simulating the next state, \(s_{t+1}\), given the true population dynamics, and 3) updating the belief state based observing the next state given action \(a_t\). Here we assume the state is perfectly observed. We simulate the application of passive adaptive management over 30 time steps. The belief in each model changes over time (Figure 2A), resulting in the highest belief for the two models closest to the true population dynamics \(m = 1\) and \(m = 1.3\) (Figure \ref{fig:adaptive-plot}C). Through updating the belief state over time and implementing the optimal action given the current belief state, the management performance improves over time (Figure \ref{fig:adaptive-plot}D).
 
 \subsubsection{4.4.3 Active adaptive management}\label{active-adaptive-management}
 
@@ -690,16 +683,7 @@ For coypu control decisions, we solve the active adaptive management problem by 
 
 We also use the coypu example to demonstrate the ``dual control problem'' (\citeproc{ref-walters1978ecological}{Walters and Hilborn 1978}). A management action altering a poorly understood system can produce two types of benefits: 1) short-term payoffs and 2) learning about the system so as to improve payoffs in the long-term. There is a trade-off between these two benefits, as more intensive management actions may generate information more rapidly but can also incur higher short-term costs; the challenge is to optimally balance these benefits. Here we explore the dual control problem by selecting two different discount factors, \(\gamma \in \{0.95, 0.75 \}\). The higher of which represents a decision maker who values long-term rewards more highly, and the lower of which represents a decision maker who values short-term rewards more highly.
 
-The active adaptive management solution describes the optimal action (\(a_t\), removal effort), given the state (\(s_t\), coypu abundance), initial belief (\(b_{t=1}\), uniform across models), and discount factor (Figure 3). The solution differs depending on how future rewards are discounted in the optimization. At low coypu abundance, the optimal removal effort increases as the discount factor increases. With a higher discount factor, future system states are valued more highly; even though a higher removal effort is costly today, this higher removal effort will accelerate learning to yield higher rewards in the long term (Figure \ref{fig:active-plot}A). In contrast, with a lower discount factor, active learning becomes less useful, as the price paid for not following the passive-adaptive (optimal right now) solution exceeds the information gained from learning (Figure \ref{fig:active-plot}B).
-
-\begin{figure}[H]
-
-{\centering \includegraphics[width=0.9\linewidth]{../figures/active_AM} 
-
-}
-
-\caption{Active adaptive management balances immediate management performance with future learning opportunities. (A) Optimal state-dependent removal policy for an initial uniform belief across models and a high discount factor, representing a decision maker who places greater value on future rewards. (B) Optimal policy for the same initial belief but a lower discount factor, representing a decision maker who prioritizes short-term rewards.}\label{fig:active-plot}
-\end{figure}
+The active adaptive management solution describes the optimal action (\(a_t\), removal effort), given the state (\(s_t\), coypu abundance), initial belief (\(b_{t=1}\), uniform across models), and discount factor (Figure 3). The solution differs depending on how future rewards are discounted in the optimization. At low coypu abundance, the optimal removal effort increases as the discount factor increases. With a higher discount factor, future system states are valued more highly; even though a higher removal effort is costly today, this higher removal effort will accelerate learning to yield higher rewards in the long term (Figure \ref{fig:adaptive-plot}E). In contrast, with a lower discount factor, active learning becomes less useful, as the price paid for not following the passive-adaptive (optimal right now) solution exceeds the information gained from learning (Figure \ref{fig:adaptive-plot}F).
 
 \section{6. Conclusions}\label{conclusions}
 
