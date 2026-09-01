@@ -33,7 +33,7 @@
 library(tidyverse)
 library(MDPtoolbox)
 
-source("../SDPaper/code/44-adaptive-management/AM_utils.R")
+source("../code/44-adaptive-management/AM_utils.R")
 
 # -----------------------------#
 # 1) State and action grids
