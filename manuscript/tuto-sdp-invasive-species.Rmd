@@ -63,7 +63,7 @@ links-as-notes: false
 
 This research was supported by the ExposUM Institute of the University of Montpellier and the ANR through the project NACHOS for “Interdisciplinary approach to small carnivores - humans relationships” (grant ANR-25-CE03-5469). This research is also based upon work supported by the U.S. Department of Energy, Office of Science, Office of Advanced Scientific Computing Research, under Award Number DE-SC0024386 and the U.S. National Science Foundation under Grant No. DBI-1942280. 
 
-\paragraph{DConflict of interest:} The author declares that he has no known competing financial interests or personal relationships that could have appeared to influence the work reported in this paper.
+\paragraph{Conflict of interest:} The author declares that he has no known competing financial interests or personal relationships that could have appeared to influence the work reported in this paper.
 
 \paragraph{Declaration of generative AI and AI-assisted technologies in the writing process:} During the preparation of this work, the author used ChatGPT to polish the text and enhance the English language. After using this tool, the author reviewed and edited the content as needed and take full responsibility for the content of the published article.
 
